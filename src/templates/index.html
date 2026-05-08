@@ -28,6 +28,21 @@ html,body{margin:0;padding:0;height:100%;overflow:hidden;
 }
 .oa-header h1{font-size:.95rem;font-weight:700;margin:0;letter-spacing:.5px}
 .oa-header h1 span{color:var(--accent2)}
+
+/* Header chip buttons — unified look */
+.header-chip{
+  font-size:.64rem;padding:4px 12px;border-radius:999px;
+  border:1px solid var(--border);background:var(--bg3);color:var(--muted);
+  cursor:pointer;font-weight:600;transition:.15s;letter-spacing:.2px;
+}
+.header-chip:hover{background:rgba(22,119,255,.08);color:var(--text);border-color:rgba(22,119,255,.3)}
+.header-chip.primary{border-color:rgba(22,119,255,.35);background:rgba(22,119,255,.1);color:var(--accent)}
+.header-chip.warn{border-color:rgba(245,158,11,.35);background:rgba(245,158,11,.12);color:var(--accent2)}
+#licenseBadge{
+  font-size:.62rem;padding:4px 12px;border-radius:999px;font-weight:600;
+  letter-spacing:.2px;transition:.15s;
+}
+
 .oa-body{display:flex;height:100vh;padding-top:var(--header-h);overflow:hidden}
 
 /* ── Sidebar ── */
@@ -257,11 +272,11 @@ html,body{margin:0;padding:0;height:100%;overflow:hidden;
 .metric-label{font-size:.65rem;color:var(--muted);margin-top:3px}
 
 /* ── Settings Modal ── */
-#settingsModal,#activateModal,#initGuideModal,#wechatQrModal,#zsxqQrModal{
+#settingsModal,#activateModal,#initGuideModal{
   display:none;position:fixed;inset:0;z-index:998;
   background:rgba(0,0,0,.7);align-items:center;justify-content:center;
 }
-#settingsModal.open,#activateModal.open,#initGuideModal.open,#wechatQrModal.open,#zsxqQrModal.open{display:flex}
+#settingsModal.open,#activateModal.open,#initGuideModal.open{display:flex}
 .settings-box{
   background:var(--bg2);border:1px solid var(--border);border-radius:12px;
   padding:0;width:520px;max-width:96vw;max-height:88vh;overflow:hidden;
@@ -310,13 +325,11 @@ html,body{margin:0;padding:0;height:100%;overflow:hidden;
 <!-- ── Header ── -->
 <div class="oa-header">
   <h1>&#x1F6CD;&#xFE0F; BSC <span>OPC Agent OS</span></h1>
-  <div style="display:flex;align-items:center;gap:8px;">
-    <button onclick="openInitGuide()" style="font-size:.68rem;padding:4px 10px;border-radius:10px;border:1px solid var(--accent);background:rgba(22,119,255,.1);color:var(--accent);cursor:pointer;font-weight:600;">系统初始化</button>
-    <span id="licenseBadge" style="font-size:.62rem;padding:3px 10px;border-radius:10px;">加载中...</span>
-    <button id="btnActivate" onclick="openActivationDialog()" style="display:none;font-size:.62rem;padding:3px 10px;border-radius:10px;border:1px solid var(--accent2);background:rgba(245,158,11,.15);color:var(--accent2);cursor:pointer;font-weight:600;">激活</button>
-    <button onclick="window.open('https://mp.weixin.qq.com/s/ELqVN48oMEfngUOCBgmD6Q','_blank')" title="关于商海蟹" style="font-size:.62rem;padding:3px 10px;border-radius:10px;border:1px solid var(--border);background:var(--bg3);color:var(--muted);cursor:pointer;">关于商海蟹</button>
-    <button onclick="openWechatQr()" title="关注商海蟹公众号" style="font-size:.62rem;padding:3px 10px;border-radius:10px;border:1px solid rgba(34,197,94,.4);background:rgba(34,197,94,.1);color:var(--green);cursor:pointer;">关注公众号</button>
-    <button onclick="openZsxqQr()" title="加入商海蟹知识星球" style="font-size:.62rem;padding:3px 10px;border-radius:10px;border:1px solid rgba(245,158,11,.4);background:rgba(245,158,11,.1);color:var(--accent2);cursor:pointer;">加入知识星球</button>
+  <div style="display:flex;align-items:center;gap:6px;">
+    <button class="header-chip primary" onclick="openInitGuide()">系统初始化</button>
+    <span id="licenseBadge">加载中...</span>
+    <button id="btnActivate" class="header-chip warn" onclick="openActivationDialog()" style="display:none;">激活</button>
+    <button class="header-chip" onclick="window.open('https://mp.weixin.qq.com/s/ELqVN48oMEfngUOCBgmD6Q','_blank')" title="关于商海蟹">关于</button>
     <button class="btn-icon" onclick="openSettings()" title="设置">&#x2699;&#xFE0F;</button>
   </div>
 </div>
@@ -373,10 +386,9 @@ html,body{margin:0;padding:0;height:100%;overflow:hidden;
         </div>
       </div>
 
-      <!-- Logo + Copyright -->
-      <div style="padding:10px;text-align:center;border-top:1px solid var(--border);">
-        <img src="/logo.png" alt="商海蟹" style="width:110px;opacity:.85;margin-bottom:4px;">
-        <div style="font-size:.65rem;color:var(--muted);font-weight:600;">版权所有 &copy; 商海蟹</div>
+      <!-- Logo -->
+      <div style="padding:12px 10px 14px;text-align:center;border-top:1px solid var(--border);">
+        <img src="/logo.png" alt="Logo" style="width:100px;opacity:.8;">
       </div>
 
     </div>
@@ -446,34 +458,6 @@ html,body{margin:0;padding:0;height:100%;overflow:hidden;
 <!-- Image Preview Modal -->
 <div id="previewModal"><button class="close-btn" onclick="closePreview()">&times;</button><img id="previewImg" src="" alt=""></div>
 
-<!-- WeChat QR Modal -->
-<div id="wechatQrModal">
-  <div class="settings-box" style="width:320px;">
-    <div class="settings-head">
-      <h3 style="margin:0;font-size:.85rem;">关注商海蟹公众号</h3>
-      <button class="btn-icon" onclick="closeWechatQr()" style="font-size:.8rem;">&#x2715;</button>
-    </div>
-    <div class="settings-body" style="text-align:center;">
-      <img src="/wechat-mp-qr.jpg" alt="商海蟹公众号二维码" style="width:220px;height:220px;border-radius:8px;margin-bottom:8px;">
-      <div style="font-size:.7rem;color:var(--muted);">微信扫码关注</div>
-    </div>
-  </div>
-</div>
-
-<!-- 知识星球 QR Modal -->
-<div id="zsxqQrModal">
-  <div class="settings-box" style="width:320px;">
-    <div class="settings-head">
-      <h3 style="margin:0;font-size:.85rem;">加入商海蟹知识星球</h3>
-      <button class="btn-icon" onclick="closeZsxqQr()" style="font-size:.8rem;">&#x2715;</button>
-    </div>
-    <div class="settings-body" style="text-align:center;">
-      <img src="/zsxq-qr.png" alt="知识星球二维码" style="width:220px;height:220px;border-radius:8px;margin-bottom:8px;">
-      <div style="font-size:.7rem;color:var(--muted);">微信扫码加入</div>
-    </div>
-  </div>
-</div>
-
 <!-- System Init Guide Modal -->
 <div id="initGuideModal">
   <div class="settings-box" style="width:640px;">
@@ -535,7 +519,7 @@ html,body{margin:0;padding:0;height:100%;overflow:hidden;
       <div style="text-align:center;font-size:.7rem;color:var(--muted);margin-bottom:12px;">— 或输入激活密钥 —</div>
 
       <div style="text-align:center;margin-bottom:10px;">
-        <div style="font-size:.68rem;color:var(--muted);margin-bottom:4px;">机器码 (点击复制发送给客服)</div>
+        <div style="font-size:.68rem;color:var(--muted);margin-bottom:4px;">机器码 (激活需要)</div>
         <div style="display:flex;align-items:center;justify-content:center;gap:6px;">
           <span id="activateMid" style="font-size:.82rem;font-weight:700;color:var(--accent2);padding:6px 10px;background:var(--bg3);border-radius:6px;cursor:pointer;" onclick="copyMachineId()" title="点击复制">加载中...</span>
           <button onclick="copyMachineId()" title="复制机器码" style="padding:5px 8px;border:1px solid var(--border);border-radius:6px;background:var(--bg3);color:var(--text);cursor:pointer;font-size:.7rem;">📋</button>
@@ -548,11 +532,14 @@ html,body{margin:0;padding:0;height:100%;overflow:hidden;
       <div id="activateStatus" style="font-size:.68rem;text-align:center;margin:8px 0;"></div>
       <button class="btn btn-primary" onclick="submitActivation()" style="width:100%;padding:10px;">激活</button>
 
-      <!-- Customer Service -->
-      <div style="margin-top:12px;padding:10px;background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.2);border-radius:8px;text-align:center;">
-        <div style="font-size:.72rem;font-weight:700;color:#f87171;margin-bottom:4px;">试用到期后如何继续使用？</div>
-        <div style="font-size:.65rem;color:var(--muted);margin-bottom:8px;">扫码添加微信客服，发送机器码获取激活密钥</div>
-        <img src="/wechat-qr.png" alt="微信客服" style="width:120px;height:120px;border-radius:8px;border:2px solid var(--border);">
+      <!-- Hint -->
+      <div style="margin-top:12px;padding:10px;background:rgba(22,119,255,.06);border:1px solid rgba(22,119,255,.2);border-radius:8px;text-align:left;">
+        <div style="font-size:.7rem;font-weight:700;color:var(--accent);margin-bottom:4px;">如何获取激活密钥？</div>
+        <div style="font-size:.65rem;color:var(--muted);line-height:1.5;">
+          激活码采用 AES-256-GCM 本地验证，与机器码绑定。<br>
+          使用仓库内 <code style="color:var(--accent2)">recovery/tools/generate_license.py</code> 脚本离线生成：<br>
+          <code style="display:block;margin-top:6px;padding:4px 8px;background:var(--bg3);border-radius:4px;font-size:.62rem;color:var(--text);">python generate_license.py &lt;机器码&gt; &lt;天数&gt;</code>
+        </div>
       </div>
     </div>
   </div>
@@ -605,19 +592,21 @@ async function loadLicenseStatus() {
     var badge = document.getElementById('licenseBadge');
     var btn = document.getElementById('btnActivate');
     if (data.status === 'active') {
-      badge.textContent = data.message;
+      var days = (data.days_left !== undefined) ? data.days_left : '';
+      badge.textContent = '已激活' + (days !== '' ? ' · 剩余 ' + days + ' 天' : '');
       badge.style.background = 'rgba(34,197,94,.15)';
       badge.style.color = 'var(--green)';
       btn.style.display = 'none';
       checkFirstRunSetup();
     } else if (data.status === 'trial') {
-      badge.textContent = data.message;
+      var td = (data.days_left !== undefined) ? data.days_left : '';
+      badge.textContent = '试用中' + (td !== '' ? ' · 剩余 ' + td + ' 天' : '');
       badge.style.background = 'rgba(245,158,11,.15)';
       badge.style.color = 'var(--accent2)';
       btn.style.display = 'inline-block';
       checkFirstRunSetup();
     } else if (data.status === 'expired') {
-      badge.textContent = data.message;
+      badge.textContent = '试用已到期';
       badge.style.background = 'rgba(239,68,68,.15)';
       badge.style.color = 'var(--red)';
       btn.style.display = 'inline-block';
@@ -629,7 +618,7 @@ async function loadLicenseStatus() {
       // Auto-open activation dialog for first-time users
       setTimeout(function(){ openActivationDialog(); }, 500);
     } else {
-      badge.textContent = data.message || '未激活';
+      badge.textContent = '未激活';
       badge.style.background = 'var(--bg3)';
       badge.style.color = 'var(--muted)';
       btn.style.display = 'none';
@@ -659,7 +648,7 @@ async function startTrialFromModal() {
     var res = await fetch('/api/trial-start', {method:'POST'});
     var data = await res.json();
     if (data.status === 'ok') {
-      showToast(data.message, 'success');
+      showToast('试用已开始 · 3天', 'success');
       setTimeout(function(){ closeActivateModal(); loadLicenseStatus(); }, 800);
     } else {
       showToast(data.message||'失败', 'error');
@@ -694,7 +683,7 @@ function submitActivation() {
   var statusEl = document.getElementById('activateStatus');
   if (!key) { statusEl.textContent = '请输入激活密钥'; statusEl.style.color = 'var(--red)'; return; }
   statusEl.textContent = '验证中...'; statusEl.style.color = 'var(--accent2)';
-  fetch('/api/activate', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({key:key})})
+  fetch('/api/activate', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({code:key})})
     .then(function(r){return r.json();})
     .then(function(d){
       if (d.status === 'ok') {
@@ -886,12 +875,6 @@ document.getElementById('activateModal').addEventListener('click', function(e){i
 document.getElementById('initGuideModal').addEventListener('click', function(e){if(e.target===this)closeInitGuide();});
 function openInitGuide() { document.getElementById('initGuideModal').classList.add('open'); }
 function closeInitGuide() { document.getElementById('initGuideModal').classList.remove('open'); }
-function openWechatQr() { document.getElementById('wechatQrModal').classList.add('open'); }
-function closeWechatQr() { document.getElementById('wechatQrModal').classList.remove('open'); }
-document.getElementById('wechatQrModal').addEventListener('click', function(e){if(e.target===this)closeWechatQr();});
-function openZsxqQr() { document.getElementById('zsxqQrModal').classList.add('open'); }
-function closeZsxqQr() { document.getElementById('zsxqQrModal').classList.remove('open'); }
-document.getElementById('zsxqQrModal').addEventListener('click', function(e){if(e.target===this)closeZsxqQr();});
 
 // ── Clear Cache ──
 async function clearAllCache() {

@@ -604,21 +604,6 @@ def index():
     return send_from_directory(str(BASE_DIR / "templates"), "index.html")
 
 
-@app.route('/wechat-qr.png')
-def serve_qr():
-    return send_from_directory(str(BASE_DIR / "templates"), "wechat_qr.png")
-
-
-@app.route('/wechat-mp-qr.jpg')
-def serve_mp_qr():
-    return send_from_directory(str(BASE_DIR / "templates"), "wechat_mp_qr.jpg")
-
-
-@app.route('/zsxq-qr.png')
-def serve_zsxq_qr():
-    return send_from_directory(str(BASE_DIR / "templates"), "zsxq_qr.png")
-
-
 @app.route('/logo.png')
 def serve_logo():
     return send_from_directory(str(BASE_DIR / "templates"), "logo.png")
@@ -1070,53 +1055,61 @@ def api_test_connection(service):
 
 
 # ---------------------------------------------------------------------------
-# Licensing
+# Licensing (offline AES-256-GCM via license_crypto)
 # ---------------------------------------------------------------------------
 
 @app.route('/api/activate', methods=['POST'])
 def api_activate():
+    """Verify a license key locally (no network call).
+
+    The key is an AES-256-GCM encrypted payload bound to this machine's
+    fingerprint. Generate one with recovery/tools/generate_license.py.
+    """
     data = request.get_json(silent=True) or {}
-    code = (data.get("code") or "").strip()
-    email = (data.get("email") or "").strip()
+    code = (data.get("code") or data.get("key") or "").strip()
     if not code:
         return jsonify({"status": "error", "message": "激活码必填"}), 400
     try:
-        # Original contacts a license server; here we accept the code
-        # and persist the expiry it returns.
-        result = _license_bootstrap(code, email)
-        cfg = load_config()
-        cfg.setdefault("license", {}).update({
-            "code": code,
-            "email": email,
-            "activated_at": datetime.now().isoformat(),
-            **result,
+        from license_crypto import verify_and_save_license
+        result = verify_and_save_license(code)
+        return jsonify({
+            "status": "ok",
+            "valid": True,
+            "exp_date": result.get("exp_date", ""),
+            "days_left": result.get("days_left", 0),
+            "mid": result.get("mid", ""),
         })
-        save_config(cfg)
-        return jsonify({"status": "ok", **result})
     except Exception as e:
-        return jsonify({"status": "error", "message": str(e)}), 500
+        return jsonify({"status": "error", "message": str(e)}), 400
 
 
 @app.route('/api/trial-start', methods=['POST'])
 def api_trial_start():
-    cfg = load_config()
-    lic = cfg.setdefault("license", {})
-    if lic.get("trial_started"):
-        return jsonify({"status": "ok", "trial_started": True})
-    lic["trial_started"] = datetime.now().isoformat()
-    save_config(cfg)
-    return jsonify({"status": "ok", "trial_started": True})
+    """Start the 3-day trial (writes trial_start.key)."""
+    try:
+        from license_crypto import start_trial
+        remaining = start_trial()
+        return jsonify({
+            "status": "ok",
+            "trial_started": True,
+            "days_left": remaining,
+        })
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
 
 
 @app.route('/api/license-status')
 def api_license_status():
-    cfg = load_config()
-    lic = cfg.get("license", {})
-    return jsonify({
-        "activated": bool(lic.get("code")),
-        "trial_started": bool(lic.get("trial_started")),
-        "expires_at": lic.get("expires_at"),
-    })
+    """Return full license info: active / trial / expired / none."""
+    try:
+        from license_crypto import get_license_info, get_machine_id
+        info = get_license_info()
+        # Always include mid so the activation dialog can show it
+        if "mid" not in info or not info.get("mid"):
+            info["mid"] = get_machine_id()
+        return jsonify(info)
+    except Exception as e:
+        return jsonify({"status": "none", "message": str(e), "mid": ""})
 
 
 @app.route('/api/clear-cache', methods=['POST'])
@@ -1132,32 +1125,10 @@ def api_clear_cache():
         return jsonify({"status": "error", "message": str(e)}), 500
 
 
+# Kept for backward compat; the offline verifier above handles everything.
 def _license_bootstrap(code: str, email: str) -> dict:
-    """Call the upstream license server to validate an activation code."""
-    # Original endpoint details are in _internal; we call a generic validator.
-    cfg = load_config()
-    api_base = cfg.get("license", {}).get("server", "https://license.bsc.local")
-    parsed = urllib.parse.urlparse(api_base + "/v1/activate")
-    import ssl
-    ctx = ssl.create_default_context()
-    body = json.dumps({"code": code, "email": email}).encode("utf-8")
-    conn = http.client.HTTPSConnection(
-        parsed.hostname, parsed.port or 443, timeout=15, context=ctx
-    )
-    try:
-        conn.request("POST", parsed.path, body=body,
-                     headers={"Content-Type": "application/json"})
-        resp = conn.getresponse()
-        raw = resp.read().decode("utf-8")
-        data = json.loads(raw)
-        if resp.status >= 400:
-            raise RuntimeError(data.get("message", f"HTTP {resp.status}"))
-        return {
-            "expires_at": data.get("expires_at"),
-            "plan": data.get("plan", "personal"),
-        }
-    finally:
-        conn.close()
+    from license_crypto import verify_and_save_license
+    return verify_and_save_license(code)
 
 
 # ---------------------------------------------------------------------------

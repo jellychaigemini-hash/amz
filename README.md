@@ -119,6 +119,7 @@ recovery/                     # Raw decompilation artifacts (source of truth)
     find_bad_const.py         # Finds unmarshallable 3.14 constants
     combine_output.py         # Merges pycdc + disasm into one big file
     opinfo_313.json           # Python 3.13's opcode map
+    generate_license.py       # Self-serve offline license-key generator
 ```
 
 ## Running
@@ -131,6 +132,31 @@ echo '{"apimart": {"api_key": "YOUR_KEY"}}' > src/config.json
 
 python src/app.py    # opens http://127.0.0.1:5173
 ```
+
+## Activation
+
+The app no longer phones a remote license server — activation is fully
+**offline** via `src/license_crypto.py`.
+
+1. Launch the app and click **激活** in the header.
+2. The dialog shows your **机器码** (machine ID). Copy it.
+3. Generate a license key for that machine ID:
+
+   ```bash
+   python recovery/tools/generate_license.py <machine_id> <days>
+   # e.g.
+   python recovery/tools/generate_license.py 44a1638c8ae4424a 365
+   ```
+
+4. Paste the resulting key back into the activation dialog.
+
+The key is an AES-256-GCM encrypted payload bound to the target machine's
+fingerprint, using the original master secret recovered from the binary.
+Verification happens entirely in `src/license_crypto.py` with no network
+call.
+
+> Free trial still works too — click **开始免费试用** in the same dialog
+> to get 3 days without needing a key.
 
 ## Caveats / differences from the original
 
