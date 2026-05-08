@@ -189,6 +189,11 @@ def run_job(job_id: str, asin: str, marketplace: str) -> None:
             "data_insights":    build_data_insights(context),
         }
 
+        # Honesty flag: tell the UI whether the copy it's about to show is
+        # grounded in real MCP data or is just template fallback.
+        expert_data["is_template_fallback"] = not context.get("_has_real_data", False)
+        expert_data["data_quality"] = context.get("_data_quality", {})
+
         ctx_path = PROMPTS_DIR / f"{asin}_context.json"
         ctx_path.write_text(
             json.dumps(context, ensure_ascii=False, indent=2),
@@ -263,30 +268,294 @@ def _download_to(url: str, dest: Path) -> None:
 
 
 def build_context(job_id: str, asin: str, marketplace: str) -> dict:
-    """Call the SIF and Sorftime MCP tools to gather product info."""
-    context = {"asin": asin, "marketplace": marketplace}
+    """Gather product context by calling the real SIF + Sorftime MCP tools.
 
-    # SIF: get product basic info + reviews
+    Each section is best-effort: a failure in one source (e.g. Sorftime quota
+    exhausted) does not break the others. The set of successful / failed
+    sources is recorded in `_data_quality` so the expert-suggestion layer and
+    the UI can honestly flag "this output is template fallback, not real data".
+    """
+    import re as _re
+    from datetime import datetime as _dt, timedelta as _td
+
+    context: dict = {
+        "asin": asin,
+        "marketplace": marketplace,
+        "_data_quality": {
+            "sif_ok": [],
+            "sif_fail": [],
+            "sorftime_ok": [],
+            "sorftime_fail": [],
+        },
+    }
+    dq = context["_data_quality"]
+
+    # ------------------------------------------------------------------
+    # SIF — listing traffic overview (title / brand / category / bullets)
+    # ------------------------------------------------------------------
     try:
-        sif_data = _call_sif_tool("product_info", {"asin": asin, "marketplace": marketplace})
-        if sif_data:
-            context.update(sif_data)
+        overview = _call_sif_tool(
+            "mcp_sif_ops_get_listing_traffic_overview",
+            {"asin": asin, "marketplace": marketplace},
+        )
+        if overview and isinstance(overview, dict):
+            _apply_sif_overview(context, overview)
+            dq["sif_ok"].append("listing_traffic_overview")
+        else:
+            dq["sif_fail"].append("listing_traffic_overview (empty)")
     except Exception as e:
-        logging.warning(f"SIF call failed: {e}")
+        dq["sif_fail"].append(f"listing_traffic_overview ({e})")
 
-    # Sorftime: get keyword & ranking insights
+    # ------------------------------------------------------------------
+    # SIF — ASIN sales / ranking list
+    # ------------------------------------------------------------------
     try:
-        st_data = _call_sorftime_tool("keyword_insights", {"asin": asin, "marketplace": marketplace})
-        if st_data:
-            context["keyword_insights"] = st_data
+        sales = _call_sif_tool(
+            "mcp_sif_ops_get_asin_sales_list",
+            {"asin": asin, "marketplace": marketplace},
+        )
+        if sales and isinstance(sales, dict):
+            _apply_sif_sales(context, sales)
+            dq["sif_ok"].append("asin_sales_list")
+        else:
+            dq["sif_fail"].append("asin_sales_list (empty)")
     except Exception as e:
-        logging.warning(f"Sorftime call failed: {e}")
+        dq["sif_fail"].append(f"asin_sales_list ({e})")
 
+    # ------------------------------------------------------------------
+    # SIF — keyword traffic signals (needs start_date + end_date)
+    # ------------------------------------------------------------------
+    try:
+        today = _dt.utcnow().date()
+        start = (today - _td(days=30)).isoformat()
+        end = today.isoformat()
+        kw = _call_sif_tool(
+            "mcp_sif_market_get_asin_keyword_signals",
+            {
+                "asin": asin,
+                "marketplace": marketplace,
+                "start_date": start,
+                "end_date": end,
+            },
+        )
+        if kw and isinstance(kw, (dict, list)):
+            _apply_sif_keywords(context, kw)
+            dq["sif_ok"].append("asin_keyword_signals")
+        else:
+            dq["sif_fail"].append("asin_keyword_signals (empty)")
+    except Exception as e:
+        dq["sif_fail"].append(f"asin_keyword_signals ({e})")
+
+    # ------------------------------------------------------------------
+    # Sorftime — product detail
+    # ------------------------------------------------------------------
+    try:
+        detail = _call_sorftime_tool(
+            "mcp_sorftime_product_detail",
+            {"asin": asin, "marketplace": marketplace},
+        )
+        if detail and isinstance(detail, dict):
+            _apply_sorftime_detail(context, detail)
+            dq["sorftime_ok"].append("product_detail")
+        else:
+            dq["sorftime_fail"].append("product_detail (empty)")
+    except Exception as e:
+        dq["sorftime_fail"].append(f"product_detail ({e})")
+
+    # ------------------------------------------------------------------
+    # Sorftime — traffic terms / keywords
+    # ------------------------------------------------------------------
+    try:
+        traffic = _call_sorftime_tool(
+            "mcp_sorftime_product_traffic_terms",
+            {"asin": asin, "marketplace": marketplace},
+        )
+        if traffic and isinstance(traffic, (dict, list)):
+            _apply_sorftime_traffic(context, traffic)
+            dq["sorftime_ok"].append("product_traffic_terms")
+        else:
+            dq["sorftime_fail"].append("product_traffic_terms (empty)")
+    except Exception as e:
+        dq["sorftime_fail"].append(f"product_traffic_terms ({e})")
+
+    # ------------------------------------------------------------------
+    # Finalise
+    # ------------------------------------------------------------------
     # Trim long lists
-    if "reviews" in context and isinstance(context["reviews"], list):
+    if isinstance(context.get("reviews"), list):
         context["reviews"] = context["reviews"][:20]
+    if isinstance(context.get("keywords"), list):
+        context["keywords"] = context["keywords"][:30]
+
+    # Flag: did we get any real data at all?
+    has_real_title = bool((context.get("title") or "").strip())
+    has_real_bullets = bool(context.get("bullets"))
+    has_real_keywords = bool(context.get("keywords"))
+    context["_has_real_data"] = has_real_title or has_real_bullets or has_real_keywords
+    context["bullets_synthetic"] = not has_real_bullets
+
+    if not context["_has_real_data"]:
+        logging.warning(
+            f"build_context: no real MCP data for {asin}. "
+            f"SIF fails: {dq['sif_fail']}. Sorftime fails: {dq['sorftime_fail']}."
+        )
 
     return context
+
+
+# --- MCP result adapters --------------------------------------------------
+#
+# Each adapter takes the raw JSON payload returned by a specific MCP tool
+# and writes the relevant fields into `context` using the keys that
+# expert_suggestions.py expects (title/brand/category/bullets/keywords/...).
+# Keys that aren't present in the response are left alone so a later call
+# can fill them in.
+
+def _first_nonempty(d: dict, *keys):
+    for k in keys:
+        v = d.get(k)
+        if v:
+            return v
+    return None
+
+
+def _apply_sif_overview(ctx: dict, data: dict) -> None:
+    """Map a SIF listing_traffic_overview payload into context."""
+    # Unwrap common envelopes
+    d = data.get("data") if isinstance(data.get("data"), dict) else data
+    if not isinstance(d, dict):
+        return
+
+    title = _first_nonempty(d, "title", "listing_title", "asin_title")
+    if title and not ctx.get("title"):
+        ctx["title"] = title.strip()
+
+    brand = _first_nonempty(d, "brand", "brand_name")
+    if brand and not ctx.get("brand"):
+        ctx["brand"] = brand.strip()
+
+    category = _first_nonempty(d, "category", "category_path", "bsr_category")
+    if category and not ctx.get("category"):
+        ctx["category"] = str(category)
+
+    price = _first_nonempty(d, "price", "current_price", "list_price")
+    if price and not ctx.get("price"):
+        ctx["price"] = str(price)
+
+    rating = _first_nonempty(d, "rating", "average_rating", "star_rating")
+    if rating and not ctx.get("rating"):
+        ctx["rating"] = str(rating)
+
+    reviews = _first_nonempty(d, "review_count", "reviews_count", "total_reviews")
+    if reviews and not ctx.get("review_count"):
+        ctx["review_count"] = str(reviews)
+
+    # Bullets might live under "bullets" or "feature_bullets"
+    bullets = _first_nonempty(d, "bullets", "feature_bullets", "bullet_points")
+    if isinstance(bullets, list) and bullets and not ctx.get("bullets"):
+        ctx["bullets"] = [str(b).strip() for b in bullets if b]
+
+    # Images
+    imgs = _first_nonempty(d, "image_urls", "images", "main_images")
+    if isinstance(imgs, list) and imgs and not ctx.get("image_urls"):
+        ctx["image_urls"] = [str(i) for i in imgs if i]
+
+    # Traffic breakdown (natural/ads split) is gold for data_insights
+    traffic = d.get("traffic_breakdown") or d.get("traffic_sources")
+    if traffic:
+        ctx["traffic_breakdown"] = traffic
+
+
+def _apply_sif_sales(ctx: dict, data: dict) -> None:
+    """Pull monthly sales / trend from the SIF sales list tool."""
+    d = data.get("data") if isinstance(data.get("data"), dict) else data
+    if not isinstance(d, dict):
+        return
+    for k in ("monthly_sales", "sales_trend", "bsr_rank", "units_sold"):
+        if d.get(k) is not None and ctx.get(k) is None:
+            ctx[k] = d[k]
+
+
+def _apply_sif_keywords(ctx: dict, data) -> None:
+    """Normalise SIF keyword-signal output to ctx.keywords (list of {keyword, volume, ...})."""
+    items = data
+    if isinstance(data, dict):
+        items = data.get("data") or data.get("keywords") or data.get("items") or []
+
+    if not isinstance(items, list):
+        return
+
+    out: list[dict] = []
+    for item in items:
+        if isinstance(item, dict):
+            kw = _first_nonempty(item, "keyword", "query", "term", "word")
+            if not kw:
+                continue
+            out.append({
+                "keyword": str(kw),
+                "volume": item.get("volume") or item.get("search_volume") or 0,
+                "rank": item.get("rank") or item.get("organic_rank"),
+                "source": "sif",
+            })
+        elif isinstance(item, str):
+            out.append({"keyword": item, "source": "sif"})
+
+    if out:
+        existing = ctx.get("keywords", []) or []
+        ctx["keywords"] = existing + out
+        if not ctx.get("sif_keywords"):
+            ctx["sif_keywords"] = out
+
+
+def _apply_sorftime_detail(ctx: dict, data: dict) -> None:
+    """Sorftime product_detail fills in anything SIF overview missed."""
+    d = data.get("data") if isinstance(data.get("data"), dict) else data
+    if not isinstance(d, dict):
+        return
+
+    for field, keys in [
+        ("title", ("title", "product_title")),
+        ("brand", ("brand", "brand_name")),
+        ("price", ("price", "sale_price")),
+        ("rating", ("rating", "star_rating")),
+        ("review_count", ("review_count", "reviews")),
+        ("category", ("category", "category_path")),
+    ]:
+        if not ctx.get(field):
+            v = _first_nonempty(d, *keys)
+            if v:
+                ctx[field] = str(v)
+
+    bullets = _first_nonempty(d, "bullets", "feature_bullets", "bullet_points")
+    if isinstance(bullets, list) and bullets and not ctx.get("bullets"):
+        ctx["bullets"] = [str(b).strip() for b in bullets if b]
+
+
+def _apply_sorftime_traffic(ctx: dict, data) -> None:
+    """Sorftime traffic_terms -> append to ctx.keywords."""
+    items = data
+    if isinstance(data, dict):
+        items = data.get("data") or data.get("terms") or data.get("items") or []
+
+    if not isinstance(items, list):
+        return
+
+    out: list[dict] = []
+    for item in items:
+        if not isinstance(item, dict):
+            continue
+        kw = _first_nonempty(item, "keyword", "term", "query", "search_term")
+        if not kw:
+            continue
+        out.append({
+            "keyword": str(kw),
+            "volume": item.get("volume") or item.get("search_volume") or 0,
+            "source": "sorftime",
+        })
+
+    if out:
+        existing = ctx.get("keywords", []) or []
+        ctx["keywords"] = existing + out
 
 
 def _generate_synthetic_bullets(context: dict) -> list[str]:
@@ -351,55 +620,234 @@ def _sg(context: dict, key: str, default=None):
 # ---------------------------------------------------------------------------
 # MCP tool callers (SIF / Sorftime)
 # ---------------------------------------------------------------------------
+#
+# The original app shipped a skeleton client that skipped the MCP handshake
+# and used placeholder tool names (`product_info`, `keyword_insights`). Both
+# SIF and Sorftime implement the full MCP Streamable-HTTP spec and reject
+# such requests — so every call silently returned -32601 and the downstream
+# context stayed empty. This rewrite:
+#
+#   1. Always does initialize -> notifications/initialized -> tools/call
+#      (the three-message handshake the spec mandates).
+#   2. Sends `Accept: application/json, text/event-stream` so servers that
+#      only speak SSE don't 415/406 us.
+#   3. Reuses `mcp-session-id` across calls per endpoint (keyed on (host,
+#      query-auth) so key rotations reset the session).
+#   4. Parses BOTH plain JSON and SSE-framed `data: {...}` response bodies.
+#   5. Extracts structured content from the MCP `tools/call` result envelope
+#      (result.content[].text usually contains a JSON blob or plain text).
+#
+# None of this is Amazon-specific — it's just a correct MCP 2025-03-26
+# client implementation.
 
-def _mcp_call_tool(endpoint: str, api_key: str, tool: str, arguments: dict, timeout: int = 60) -> dict:
-    """Minimal MCP-over-HTTP caller.
+import ssl as _ssl
 
-    RECONSTRUCTED from disassembly (pycdc segfaulted on the try/except body).
-    """
-    parsed = urllib.parse.urlparse(endpoint.rstrip("/"))
-    if "?secret-key=" not in endpoint and "***" not in api_key and api_key:
-        path = parsed.path or "/mcp"
-        if not path.endswith("/mcp"):
-            path = path.rstrip("/") + "/mcp"
-        query = f"secret-key={api_key}"
-        full_path = path + ("?" + query if not parsed.query else "?" + parsed.query + "&" + query)
-    else:
-        full_path = parsed.path + ("?" + parsed.query if parsed.query else "")
+# Cache: endpoint-key -> {"session_id": str, "initialized": bool}
+_mcp_sessions: dict[str, dict] = {}
+_mcp_sessions_lock = threading.Lock()
 
-    import ssl
-    ctx = ssl.create_default_context()
+
+def _mcp_build_url(endpoint: str, api_key: str) -> str:
+    """Attach `?secret-key=` if the endpoint doesn't already carry auth."""
+    if not endpoint:
+        return ""
+    if "secret-key=" in endpoint or not api_key or "***" in api_key:
+        return endpoint
+    sep = "&" if "?" in endpoint else "?"
+    return f"{endpoint}{sep}secret-key={api_key}"
+
+
+def _mcp_open_conn(parsed, timeout: int) -> http.client.HTTPConnection:
     if parsed.scheme == "https":
-        conn = http.client.HTTPSConnection(
-            parsed.hostname, parsed.port or 443, timeout=timeout, context=ctx
+        return http.client.HTTPSConnection(
+            parsed.hostname, parsed.port or 443,
+            timeout=timeout, context=_ssl.create_default_context(),
         )
-    else:
-        conn = http.client.HTTPConnection(parsed.hostname, parsed.port or 80, timeout=timeout)
+    return http.client.HTTPConnection(
+        parsed.hostname, parsed.port or 80, timeout=timeout,
+    )
 
-    payload = json.dumps({
-        "jsonrpc": "2.0",
-        "id": str(uuid.uuid4()),
-        "method": "tools/call",
-        "params": {"name": tool, "arguments": arguments},
-    })
+
+def _mcp_parse_body(raw: str) -> dict:
+    """Accept either a plain JSON-RPC response or an SSE `data: {...}` stream."""
+    if not raw:
+        return {}
+    raw = raw.strip()
+
+    # SSE frame — grab the last `data:` line (servers may emit keepalive
+    # `: ping` comments before the actual payload).
+    if raw.startswith("data:") or "\ndata:" in raw:
+        last_data = None
+        for line in raw.splitlines():
+            if line.startswith("data:"):
+                last_data = line[5:].strip()
+        if last_data:
+            raw = last_data
+
     try:
-        conn.request(
-            "POST", full_path, body=payload.encode("utf-8"),
-            headers={"Content-Type": "application/json", "Accept": "application/json"},
-        )
+        return json.loads(raw)
+    except json.JSONDecodeError:
+        return {"_raw": raw}
+
+
+def _mcp_post(endpoint: str, api_key: str, payload: dict,
+              session_id: str | None, timeout: int) -> tuple[dict, dict]:
+    """POST one JSON-RPC message to an MCP endpoint.
+
+    Returns (parsed_response_body, response_headers_lowercase).
+    """
+    url = _mcp_build_url(endpoint, api_key)
+    parsed = urllib.parse.urlparse(url)
+    path = parsed.path + (f"?{parsed.query}" if parsed.query else "")
+
+    headers = {
+        "Content-Type": "application/json",
+        "Accept": "application/json, text/event-stream",
+    }
+    if session_id:
+        headers["mcp-session-id"] = session_id
+
+    conn = _mcp_open_conn(parsed, timeout)
+    try:
+        conn.request("POST", path, body=json.dumps(payload).encode("utf-8"),
+                     headers=headers)
         resp = conn.getresponse()
         raw = resp.read().decode("utf-8", errors="replace")
-        # Strip potential SSE "data: " prefix
-        if raw.startswith("data:"):
-            raw = raw[6:].strip()
-        data = json.loads(raw)
-        return data.get("result", data)
+        resp_headers = {k.lower(): v for k, v in resp.getheaders()}
+        if resp.status >= 400:
+            raise RuntimeError(
+                f"HTTP {resp.status}: {raw[:300]}"
+            )
+        return _mcp_parse_body(raw), resp_headers
     finally:
         conn.close()
 
 
+def _mcp_handshake(endpoint: str, api_key: str, timeout: int) -> str | None:
+    """Run initialize + notifications/initialized. Returns the session id.
+
+    Result is cached per (endpoint, api_key) so we only pay the handshake
+    cost once per process.
+    """
+    cache_key = f"{endpoint}|{api_key[-8:] if api_key else ''}"
+    with _mcp_sessions_lock:
+        cached = _mcp_sessions.get(cache_key)
+        if cached and cached.get("initialized"):
+            return cached.get("session_id")
+
+    init_payload = {
+        "jsonrpc": "2.0",
+        "id": str(uuid.uuid4()),
+        "method": "initialize",
+        "params": {
+            "protocolVersion": "2025-03-26",
+            "capabilities": {},
+            "clientInfo": {
+                "name": "BSC-OPC-Agent",
+                "version": "1.0.0",
+            },
+        },
+    }
+    body, headers = _mcp_post(endpoint, api_key, init_payload, None, timeout)
+    if body.get("error"):
+        raise RuntimeError(f"initialize failed: {body['error']}")
+    session_id = headers.get("mcp-session-id")
+
+    # Second step: notifications/initialized (fire-and-forget, no response body)
+    notif = {"jsonrpc": "2.0",
+             "method": "notifications/initialized",
+             "params": {}}
+    try:
+        _mcp_post(endpoint, api_key, notif, session_id, timeout)
+    except Exception as e:
+        # Some servers return 202 with empty body; treat any non-5xx as OK.
+        logging.debug(f"notifications/initialized returned: {e}")
+
+    with _mcp_sessions_lock:
+        _mcp_sessions[cache_key] = {
+            "session_id": session_id,
+            "initialized": True,
+        }
+    return session_id
+
+
+def _mcp_extract_content(result: dict):
+    """Pull the real payload out of an MCP tools/call result envelope.
+
+    MCP returns:
+        {"content": [{"type": "text", "text": "<json or plain>"}], ...}
+    We try to parse each text item as JSON; if everything is plain text,
+    we concatenate and return the string.
+    """
+    if not isinstance(result, dict):
+        return result
+    content = result.get("content")
+    if not isinstance(content, list):
+        return result
+
+    parsed_items: list = []
+    text_chunks: list[str] = []
+    for item in content:
+        if not isinstance(item, dict):
+            continue
+        txt = item.get("text", "")
+        if not txt:
+            continue
+        text_chunks.append(txt)
+        try:
+            parsed_items.append(json.loads(txt))
+        except json.JSONDecodeError:
+            pass
+
+    if len(parsed_items) == 1:
+        return parsed_items[0]
+    if parsed_items:
+        return parsed_items
+    return "\n".join(text_chunks) if text_chunks else result
+
+
+def _mcp_call_tool(endpoint: str, api_key: str, tool: str,
+                   arguments: dict, timeout: int = 60) -> dict:
+    """Full MCP tools/call with handshake + session reuse."""
+    if not endpoint:
+        raise RuntimeError("endpoint not configured")
+
+    session_id = _mcp_handshake(endpoint, api_key, timeout)
+
+    call_payload = {
+        "jsonrpc": "2.0",
+        "id": str(uuid.uuid4()),
+        "method": "tools/call",
+        "params": {"name": tool, "arguments": arguments},
+    }
+    body, _ = _mcp_post(endpoint, api_key, call_payload, session_id, timeout)
+
+    if body.get("error"):
+        err = body["error"]
+        # On -32001 / "invalid session", drop cache and retry once
+        cache_key = f"{endpoint}|{api_key[-8:] if api_key else ''}"
+        code = err.get("code") if isinstance(err, dict) else None
+        if code in (-32001, -32002):
+            with _mcp_sessions_lock:
+                _mcp_sessions.pop(cache_key, None)
+            session_id = _mcp_handshake(endpoint, api_key, timeout)
+            body, _ = _mcp_post(endpoint, api_key, call_payload, session_id, timeout)
+            if body.get("error"):
+                raise RuntimeError(f"{tool}: {body['error']}")
+        else:
+            raise RuntimeError(f"{tool}: {err}")
+
+    result = body.get("result", {})
+    if isinstance(result, dict) and result.get("isError"):
+        # Server-side tool error (quota exhausted, bad args, etc.)
+        content = _mcp_extract_content(result)
+        raise RuntimeError(f"{tool} returned isError: {content}")
+
+    return _mcp_extract_content(result)
+
+
 def _call_sif_tool(tool: str, arguments: dict) -> dict | None:
-    """RECONSTRUCTED from disassembly."""
+    """Call a SIF MCP tool. Returns None on failure (logged)."""
     cfg = load_config()
     sif = cfg.get("sif_mcp", {})
     endpoint = sif.get("endpoint", "")
@@ -409,7 +857,7 @@ def _call_sif_tool(tool: str, arguments: dict) -> dict | None:
     try:
         return _mcp_call_tool(endpoint, api_key, tool, arguments, timeout=60)
     except Exception as e:
-        logging.warning(f"SIF tool call failed: {e}")
+        logging.warning(f"SIF tool '{tool}' failed: {e}")
         return None
 
 
@@ -727,6 +1175,8 @@ def api_expert_suggestions(job_id):
             "selling_points":   extract_selling_points(context),
             "data_insights":    build_data_insights(context),
             "asin": asin,
+            "is_template_fallback": not context.get("_has_real_data", False),
+            "data_quality": context.get("_data_quality", {}),
         })
     except ImportError as e:
         return jsonify({"error": f"Module not available: {e}"}), 500
