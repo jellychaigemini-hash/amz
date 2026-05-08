@@ -604,11 +604,6 @@ def index():
     return send_from_directory(str(BASE_DIR / "templates"), "index.html")
 
 
-@app.route('/logo.png')
-def serve_logo():
-    return send_from_directory(str(BASE_DIR / "templates"), "logo.png")
-
-
 def _validate_asin(asin: str) -> bool:
     return bool(re.match(r"^[A-Z0-9]{10}$", asin or ""))
 

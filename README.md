@@ -27,7 +27,6 @@ original PyInstaller bundle:
 | Asset | Bytes | Notes |
 |---|---|---|
 | `templates/index.html` | 93 KB | The single-page Vue/HTML frontend |
-| `templates/logo.png` | 845 KB | App logo |
 | `templates/wechat_qr.png` | 68 KB | WeChat personal QR code |
 | `templates/wechat_mp_qr.jpg` | 27 KB | WeChat official-account QR code |
 | `templates/zsxq_qr.png` | 42 KB | 知识星球 (ZSXQ) QR code |
