@@ -323,19 +323,23 @@ def build_context(job_id: str, asin: str, marketplace: str) -> dict:
         dq["sif_fail"].append(f"asin_sales_list ({e})")
 
     # ------------------------------------------------------------------
-    # SIF — keyword traffic signals (needs start_date + end_date)
+    # SIF — keyword traffic signals.
+    #
+    # Schema says only `asin` is required but the server has a null-safety
+    # bug in its time-range handler: omitting time_type/time_value throws
+    # `Cannot invoke "String.length()" because "s" is null`. So we always
+    # pass the full set. Note: the field is `country`, NOT `marketplace`,
+    # and `time_value` is a string, not a number.
     # ------------------------------------------------------------------
     try:
-        today = _dt.utcnow().date()
-        start = (today - _td(days=30)).isoformat()
-        end = today.isoformat()
         kw = _call_sif_tool(
             "market_get_asin_keyword_signals",
             {
                 "asin": asin,
-                "marketplace": marketplace,
-                "start_date": start,
-                "end_date": end,
+                "country": marketplace,
+                "time_type": "lately",
+                "time_value": "7",
+                "topN": 30,
             },
         )
         if kw and isinstance(kw, (dict, list)):
