@@ -1,0 +1,2364 @@
+[<module>]
+  \nBSC OPC Agent OS — Personal Edition\nRufus & COSMO Expert Suggestions + GPT Image-2 Generation\n
+
+[<module>]
+  frozen
+
+[<module>]
+  input
+
+[<module>]
+  output
+
+[<module>]
+  prompts
+
+[<module>]
+  logs
+
+[<module>]
+  Wiki
+
+[<module>.asin_output_png]
+  png
+
+[<module>.asin_output_psd]
+  psd
+
+[<module>]
+  templates
+
+[<module>]
+  MAX_CONTENT_LENGTH
+
+[<module>]
+  config.json
+
+[<module>.load_config]
+  utf-8
+
+[<module>.save_config]
+  utf-8
+
+[<module>._encrypt_dict]
+  Recursively encrypt sensitive string values in a dict.
+
+[<module>._decrypt_dict]
+  Recursively decrypt sensitive string values in a dict.
+
+[<module>.emit_progress]
+  step
+
+[<module>.emit_progress]
+  progress
+
+[<module>.emit_progress]
+  message
+
+[<module>.emit_progress]
+  data
+
+[<module>.run_job]
+  collect
+
+[<module>.run_job]
+  正在准备产品上下文…
+
+[<module>.run_job]
+  正在下载产品参考图片…
+
+[<module>.run_job]
+  mcp
+
+[<module>.run_job]
+  产品上下文已就绪
+
+[<module>.run_job]
+  expert
+
+[<module>.run_job]
+  正在生成 Rufus & COSMO 专家建议…
+
+[<module>.run_job]
+  title_suggestion
+
+[<module>.run_job]
+  bullets_analysis
+
+[<module>.run_job]
+  qa_suggestions
+
+[<module>.run_job]
+  selling_points
+
+[<module>.run_job]
+  data_insights
+
+[<module>.run_job]
+  _context.json
+
+[<module>.run_job]
+  utf-8
+
+[<module>.run_job]
+  专家建议已生成
+
+[<module>.run_job]
+  prompt
+
+[<module>.run_job]
+  正在生成 GPT Image-2 提示词…
+
+[<module>.run_job]
+  已生成 
+
+[<module>.run_job]
+  prompts
+
+[<module>.run_job]
+   条提示词，等待生成图片
+
+[<module>.run_job]
+  done
+
+[<module>.run_job]
+  status
+
+[<module>.run_job]
+  prompts_data
+
+[<module>.run_job]
+  expert_data
+
+[<module>.run_job]
+  result
+
+[<module>.run_job]
+  Job 
+
+[<module>.run_job]
+   failed
+
+[<module>.run_job]
+  error
+
+[<module>._download_product_images]
+  Download product images. Uses context data if available (avoids duplicate MCP calls).
+
+[<module>._download_product_images]
+  main
+
+[<module>._download_product_images]
+  aplus
+
+[<module>._download_product_images]
+  *.jpg
+
+[<module>._download_product_images]
+  *.png
+
+[<module>._download_product_images]
+  *.webp
+
+[<module>._download_product_images]
+  US
+
+[<module>._download_product_images]
+  com
+
+[<module>._download_product_images]
+  UK
+
+[<module>._download_product_images]
+  co.uk
+
+[<module>._download_product_images]
+  DE
+
+[<module>._download_product_images]
+  de
+
+[<module>._download_product_images]
+  FR
+
+[<module>._download_product_images]
+  fr
+
+[<module>._download_product_images]
+  JP
+
+[<module>._download_product_images]
+  co.jp
+
+[<module>._download_product_images]
+  CA
+
+[<module>._download_product_images]
+  ca
+
+[<module>._download_product_images]
+  IT
+
+[<module>._download_product_images]
+  it
+
+[<module>._download_product_images]
+  ES
+
+[<module>._download_product_images]
+  es
+
+[<module>._download_product_images]
+  AU
+
+[<module>._download_product_images]
+  com.au
+
+[<module>._download_product_images]
+  MX
+
+[<module>._download_product_images]
+  com.mx
+
+[<module>._download_product_images]
+  IN
+
+[<module>._download_product_images]
+  in
+
+[<module>._download_product_images]
+  https://www.amazon.
+
+[<module>._download_product_images]
+  /dp/
+
+[<module>._download_product_images]
+  User-Agent
+
+[<module>._download_product_images]
+  Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36
+
+[<module>._download_product_images]
+  Accept
+
+[<module>._download_product_images]
+  text/html,application/xhtml+xml;q=0.9,*/*;q=0.8
+
+[<module>._download_product_images]
+  Accept-Language
+
+[<module>._download_product_images]
+  en-US,en;q=0.9
+
+[<module>._download_product_images]
+  utf-8
+
+[<module>._download_product_images]
+  replace
+
+[<module>._download_product_images]
+  [IMG] Amazon page 
+
+[<module>._download_product_images]
+   chars
+
+[<module>._download_product_images]
+  "hiRes":"(https://m\.media-amazon\.com/images/I/[^"]+\.(?:jpg|png))"
+
+[<module>._download_product_images]
+  "large":"(https://m\.media-amazon\.com/images/I/[^"]+\.(?:jpg|png))"
+
+[<module>._download_product_images]
+  [IMG] Found 
+
+[<module>._download_product_images]
+   image URLs
+
+[<module>._download_product_images]
+  \._[A-Z]{2,4}\d+_\.
+
+[<module>._download_product_images]
+  .
+
+[<module>._download_product_images]
+  .jpg
+
+[<module>._download_product_images]
+  .png
+
+[<module>._download_product_images]
+  _
+
+[<module>._download_product_images]
+  alt
+
+[<module>._download_product_images]
+  [IMG] OK 
+
+[<module>._download_product_images]
+   (
+
+[<module>._download_product_images]
+   bytes)
+
+[<module>._download_product_images]
+  [IMG] Amazon error: 
+
+[<module>._download_product_images]
+  : 
+
+[<module>._download_product_images]
+  https://ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=
+
+[<module>._download_product_images]
+  &Format=_SL1000_&ID=AsinImage&MarketPlace=
+
+[<module>._download_product_images]
+  &ServiceVersion=20070822&WS=1
+
+[<module>._download_product_images]
+  _main.jpg
+
+[<module>._download_product_images]
+  _sorftime_main_image
+
+[<module>._download_product_images]
+  
+
+[<module>._download_product_images]
+  sorftime_mcp
+
+[<module>._download_product_images]
+  enabled
+
+[<module>._download_product_images]
+  product_search
+
+[<module>._download_product_images]
+  searchName
+
+[<module>._download_product_images]
+  amzSite
+
+[<module>._download_product_images]
+  page
+
+[<module>._download_product_images]
+  主图
+
+[<module>._download_product_images]
+  mainImage
+
+[<module>._download_product_images]
+  main_image
+
+[<module>._download_product_images]
+  image
+
+[<module>._download_product_images]
+  imageUrl
+
+[<module>._download_product_images]
+  http
+
+[<module>._download_product_images]
+  _sorftime.jpg
+
+[<module>._download_product_images]
+  keywords
+
+[<module>._download_product_images]
+  sif_mcp
+
+[<module>._download_product_images]
+  market_get_asin_keyword_signals
+
+[<module>._download_product_images]
+  asin
+
+[<module>._download_product_images]
+  country
+
+[<module>._download_product_images]
+  time_type
+
+[<module>._download_product_images]
+  lately
+
+[<module>._download_product_images]
+  time_value
+
+[<module>._download_product_images]
+  30
+
+[<module>._download_product_images]
+  topN
+
+[<module>._download_product_images]
+  top_keywords
+
+[<module>._download_product_images]
+  keyword
+
+[<module>._download_product_images]
+  _sif_sorftime.jpg
+
+[<module>._download_to]
+  Download a file to a path using urllib. Returns True on success.
+
+[<module>._download_to]
+  User-Agent
+
+[<module>._download_to]
+  Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36
+
+[<module>._download_to]
+  Accept
+
+[<module>._download_to]
+  image/avif,image/webp,image/apng,image/*,*/*;q=0.8
+
+[<module>._download_to]
+  Accept-Language
+
+[<module>._download_to]
+  en-US,en;q=0.9
+
+[<module>._download_to]
+  Referer
+
+[<module>._download_to]
+  https://www.amazon.com/
+
+[<module>.build_context]
+  _context.json
+
+[<module>.build_context]
+  utf-8
+
+[<module>.build_context]
+  title
+
+[<module>.build_context]
+  bullets
+
+[<module>.build_context]
+  
+
+[<module>.build_context]
+  sif_mcp
+
+[<module>.build_context]
+  enabled
+
+[<module>.build_context]
+  endpoint
+
+[<module>.build_context]
+  market_get_asin_keyword_signals
+
+[<module>.build_context]
+  asin
+
+[<module>.build_context]
+  country
+
+[<module>.build_context]
+  time_type
+
+[<module>.build_context]
+  lately
+
+[<module>.build_context]
+  time_value
+
+[<module>.build_context]
+  30
+
+[<module>.build_context]
+  topN
+
+[<module>.build_context]
+  top_keywords
+
+[<module>.build_context]
+  keyword
+
+[<module>.build_context]
+  sorftime_mcp
+
+[<module>.build_context]
+  api_key
+
+[<module>.build_context]
+  product_search
+
+[<module>.build_context]
+  searchName
+
+[<module>.build_context]
+  amzSite
+
+[<module>.build_context]
+  page
+
+[<module>.build_context]
+  标题
+
+[<module>.build_context]
+  productTitle
+
+[<module>.build_context]
+  product_title
+
+[<module>.build_context]
+  product_name
+
+[<module>.build_context]
+  name
+
+[<module>.build_context]
+  所属细分类目
+
+[<module>.build_context]
+  category
+
+[<module>.build_context]
+  productCategory
+
+[<module>.build_context]
+  [（(]排名[：:]\d+[）)]\s*
+
+[<module>.build_context]
+  [\r\n]+.*
+
+[<module>.build_context]
+  价格
+
+[<module>.build_context]
+  price
+
+[<module>.build_context]
+  salePrice
+
+[<module>.build_context]
+  sale_price
+
+[<module>.build_context]
+  品牌
+
+[<module>.build_context]
+  brand
+
+[<module>.build_context]
+  brandName
+
+[<module>.build_context]
+  brand_name
+
+[<module>.build_context]
+  评分值
+
+[<module>.build_context]
+  星级
+
+[<module>.build_context]
+  评分
+
+[<module>.build_context]
+  rating
+
+[<module>.build_context]
+  starRating
+
+[<module>.build_context]
+  star
+
+[<module>.build_context]
+  评论数
+
+[<module>.build_context]
+  reviewCount
+
+[<module>.build_context]
+  reviews
+
+[<module>.build_context]
+  review_count
+
+[<module>.build_context]
+  五点描述
+
+[<module>.build_context]
+  五点
+
+[<module>.build_context]
+  bulletPoints
+
+[<module>.build_context]
+  bullet_points
+
+[<module>.build_context]
+  features
+
+[<module>.build_context]
+  featureBullets
+
+[<module>.build_context]
+  sellingPoints
+
+[<module>.build_context]
+  selling_points
+
+[<module>.build_context]
+  feature
+
+[<module>.build_context]
+  productFeatures
+
+[<module>.build_context]
+  product_features
+
+[<module>.build_context]
+  description
+
+[<module>.build_context]
+  productDescription
+
+[<module>.build_context]
+  product_description
+
+[<module>.build_context]
+  listingBullets
+
+[<module>.build_context]
+  listing_bullets
+
+[<module>.build_context]
+  itemBullets
+
+[<module>.build_context]
+  \n|•|·|\*|\d+\.
+
+[<module>.build_context]
+  描述
+
+[<module>.build_context]
+  \n
+
+[<module>.build_context]
+  ops_get_asin_sales_list
+
+[<module>.build_context]
+  pageSize
+
+[<module>.build_context]
+  marketplace
+
+[<module>.build_context]
+  keywords
+
+[<module>.build_context]
+  mcp_status
+
+[<module>.build_context]
+  sif_sorftime_enriched
+
+[<module>.build_context]
+  bullets_synthetic
+
+[<module>.build_context]
+  rufus_cosmo_enriched
+
+[<module>._generate_synthetic_bullets]
+  Generate listing-style bullet points from keyword/category data when real bullets unavailable.
+
+[<module>._generate_synthetic_bullets]
+  (
+
+[<module>._generate_synthetic_bullets]
+  
+
+[<module>._generate_synthetic_bullets]
+   
+
+[<module>._generate_synthetic_bullets]
+  产品
+
+[<module>._generate_synthetic_bullets]
+  ,
+
+[<module>._generate_synthetic_bullets]
+  【
+
+[<module>._generate_synthetic_bullets]
+  】专为
+
+[<module>._generate_synthetic_bullets]
+  日常使用
+
+[<module>._generate_synthetic_bullets]
+  设计，采用优质材料与精湛工艺，确保卓越性能和持久耐用。
+
+[<module>._generate_synthetic_bullets]
+  【出色效果】经过严格测试与优化，
+
+[<module>._generate_synthetic_bullets]
+  在实际使用中表现出色。
+
+[<module>._generate_synthetic_bullets]
+  无论是新手还是专业人士，都能轻松上手，获得满意的使用体验。
+
+[<module>._generate_synthetic_bullets]
+  完美适配
+
+[<module>._generate_synthetic_bullets]
+  场景需求。
+
+[<module>._generate_synthetic_bullets]
+  【安全可靠】产品通过多项质量检测认证。
+
+[<module>._generate_synthetic_bullets]
+  toy
+
+[<module>._generate_synthetic_bullets]
+  food
+
+[<module>._generate_synthetic_bullets]
+  baby
+
+[<module>._generate_synthetic_bullets]
+  采用环保无毒材料，
+
+[<module>._generate_synthetic_bullets]
+  对全家人都安全无忧，包括儿童和宠物。
+
+[<module>._generate_synthetic_bullets]
+  【便捷设计】精心设计的紧凑结构，便于携带和收纳。适合居家、办公、旅行等多种场景使用，让您随时随地享受便利。
+
+[<module>._generate_synthetic_bullets]
+  【无忧售后】包装精美，
+
+[<module>._generate_synthetic_bullets]
+  是送礼的理想选择。
+
+[<module>._generate_synthetic_bullets]
+  适合
+
+[<module>._generate_synthetic_bullets]
+  爱好者作为礼物。
+
+[<module>._generate_synthetic_bullets]
+  提供完善的售后保障服务，
+
+[<module>._generate_synthetic_bullets]
+  30天
+
+[<module>._generate_synthetic_bullets]
+  无忧退换，客服团队快速响应您的任何问题。
+
+[<module>._generate_synthetic_bullets]
+  、
+
+[<module>._generate_synthetic_bullets]
+  【核心特性】
+
+[<module>._generate_synthetic_bullets]
+  覆盖
+
+[<module>._generate_synthetic_bullets]
+  等关键功能，一站式满足您的需求。
+
+[<module>._generate_title_from_keywords]
+  Generate a reasonable product title from keywords.
+
+[<module>._generate_title_from_keywords]
+  
+
+[<module>.generate_prompts]
+  title
+
+[<module>.generate_prompts]
+  category
+
+[<module>.generate_prompts]
+  general
+
+[<module>.generate_prompts]
+  keywords
+
+[<module>.generate_prompts]
+  Professional Amazon product photography. Studio shot on pure white background (RGB 255,255,255).\nProduct: 
+
+[<module>.generate_prompts]
+  \nCategory: 
+
+[<module>.generate_prompts]
+  \nKey terms: 
+
+[<module>.generate_prompts]
+  , 
+
+[<module>.generate_prompts]
+  \nStyle: 8k ultra-detailed commercial product photography, soft diffused studio lighting, product centered occupying 85% frame.\nCRITICAL: Pure white background, no text/watermark/logo added. Amazon main image compliant.
+
+[<module>.generate_prompts]
+  type
+
+[<module>.generate_prompts]
+  main
+
+[<module>.generate_prompts]
+  aspect
+
+[<module>.generate_prompts]
+  1:1
+
+[<module>.generate_prompts]
+  prompt
+
+[<module>.generate_prompts]
+  Amazon A+ Content lifestyle photography.\nProduct: 
+
+[<module>.generate_prompts]
+   — 
+
+[<module>.generate_prompts]
+  \nScene: 
+
+[<module>.generate_prompts]
+  . Product in natural use context.\nStyle: Editorial commercial photography, 8k, shallow depth of field, warm natural lighting.\nRule of thirds composition with negative space for text overlay.\nCRITICAL: No text/watermark/logo. Product silhouette must be accurate.
+
+[<module>.generate_prompts]
+  aplus_lifestyle
+
+[<module>.generate_prompts]
+  16:9
+
+[<module>.generate_prompts]
+  Amazon A+ macro detail shot.\nProduct: 
+
+[<module>.generate_prompts]
+  \nExtreme close-up of key product detail. 90% frame fill.\n8k ultra-detailed macro, razor-thin focal plane, creamy bokeh.\nCRITICAL: No text/watermark/logo.
+
+[<module>.generate_prompts]
+  detail
+
+[<module>.generate_prompts]
+  asin
+
+[<module>.generate_prompts]
+  marketplace
+
+[<module>.generate_prompts]
+  model
+
+[<module>.generate_prompts]
+  gpt-image-2-official
+
+[<module>.generate_prompts]
+  prompts
+
+[<module>.generate_prompts]
+  _prompts.json
+
+[<module>.generate_prompts]
+  w
+
+[<module>.generate_prompts]
+  utf-8
+
+[<module>._sg]
+  Bilingual key accessor for Sorftime data.
+
+[<module>._sg]
+  
+
+[<module>._mcp_call_tool]
+  geturl
+
+[<module>._mcp_call_tool]
+  ://
+
+[<module>._mcp_call_tool]
+  :
+
+[<module>._mcp_call_tool]
+  
+
+[<module>._mcp_call_tool]
+  /
+
+[<module>._mcp_call_tool]
+  ?
+
+[<module>._mcp_call_tool]
+  jsonrpc
+
+[<module>._mcp_call_tool]
+  2.0
+
+[<module>._mcp_call_tool]
+  method
+
+[<module>._mcp_call_tool]
+  tools/call
+
+[<module>._mcp_call_tool]
+  params
+
+[<module>._mcp_call_tool]
+  name
+
+[<module>._mcp_call_tool]
+  arguments
+
+[<module>._mcp_call_tool]
+  id
+
+[<module>._mcp_call_tool]
+  Content-Type
+
+[<module>._mcp_call_tool]
+  application/json
+
+[<module>._mcp_call_tool]
+  Accept
+
+[<module>._mcp_call_tool]
+  application/json, text/event-stream
+
+[<module>._mcp_call_tool]
+  POST
+
+[<module>._mcp_call_tool]
+  utf-8
+
+[<module>._mcp_call_tool]
+  replace
+
+[<module>._mcp_call_tool]
+  \n
+
+[<module>._mcp_call_tool]
+  data: 
+
+[<module>._mcp_call_tool]
+  error
+
+[<module>._mcp_call_tool]
+  result
+
+[<module>._call_sif_tool]
+  sif_mcp
+
+[<module>._call_sif_tool]
+  enabled
+
+[<module>._call_sif_tool]
+  endpoint
+
+[<module>._call_sif_tool]
+  
+
+[<module>._call_sif_tool]
+  /
+
+[<module>._call_sif_tool]
+  api_key
+
+[<module>._call_sif_tool]
+  ://
+
+[<module>._call_sif_tool]
+  :
+
+[<module>._call_sif_tool]
+  /mcp
+
+[<module>._call_sif_tool]
+  secret-key
+
+[<module>._call_sif_tool]
+  &
+
+[<module>._call_sif_tool]
+  secret-key=
+
+[<module>._call_sif_tool]
+  ?
+
+[<module>._call_sif_tool]
+  country
+
+[<module>._call_sif_tool]
+  content
+
+[<module>._call_sif_tool]
+  text
+
+[<module>._call_sif_tool]
+  data
+
+[<module>._call_sorftime_tool]
+  sorftime_mcp
+
+[<module>._call_sorftime_tool]
+  enabled
+
+[<module>._call_sorftime_tool]
+  endpoint
+
+[<module>._call_sorftime_tool]
+  api_key
+
+[<module>._call_sorftime_tool]
+  
+
+[<module>._call_sorftime_tool]
+  /
+
+[<module>._call_sorftime_tool]
+  ?key=
+
+[<module>._call_sorftime_tool]
+  amzSite
+
+[<module>._call_sorftime_tool]
+  site
+
+[<module>._call_sorftime_tool]
+  content
+
+[<module>._call_sorftime_tool]
+  text
+
+[<module>._call_sorftime_tool]
+  [\[{]
+
+[<module>._call_sorftime_tool]
+  data
+
+[<module>._extract_list]
+  list
+
+[<module>.apimart_submit_task]
+  apimart
+
+[<module>.apimart_submit_task]
+  api_key
+
+[<module>.apimart_submit_task]
+  
+
+[<module>.apimart_submit_task]
+  APIMart API key not configured
+
+[<module>.apimart_submit_task]
+  base_url
+
+[<module>.apimart_submit_task]
+  https://api.apimart.ai
+
+[<module>.apimart_submit_task]
+  model
+
+[<module>.apimart_submit_task]
+  gpt-image-2-official
+
+[<module>.apimart_submit_task]
+  resolution
+
+[<module>.apimart_submit_task]
+  1k
+
+[<module>.apimart_submit_task]
+  quality
+
+[<module>.apimart_submit_task]
+  high
+
+[<module>.apimart_submit_task]
+  output_format
+
+[<module>.apimart_submit_task]
+  png
+
+[<module>.apimart_submit_task]
+  4k
+
+[<module>.apimart_submit_task]
+  2k
+
+[<module>.apimart_submit_task]
+  prompt
+
+[<module>.apimart_submit_task]
+  size
+
+[<module>.apimart_submit_task]
+  n
+
+[<module>.apimart_submit_task]
+  image_urls
+
+[<module>.apimart_submit_task]
+  utf-8
+
+[<module>.apimart_submit_task]
+  /v1/images/generations
+
+[<module>.apimart_submit_task]
+  POST
+
+[<module>.apimart_submit_task]
+  Authorization
+
+[<module>.apimart_submit_task]
+  Bearer 
+
+[<module>.apimart_submit_task]
+  Content-Type
+
+[<module>.apimart_submit_task]
+  application/json
+
+[<module>.apimart_submit_task]
+  error
+
+[<module>.apimart_submit_task]
+  APIMart error 
+
+[<module>.apimart_submit_task]
+  code
+
+[<module>.apimart_submit_task]
+  : 
+
+[<module>.apimart_submit_task]
+  message
+
+[<module>.apimart_submit_task]
+  data
+
+[<module>.apimart_submit_task]
+  task_id
+
+[<module>.apimart_submit_task]
+  No task_id: 
+
+[<module>.apimart_poll_task]
+  apimart
+
+[<module>.apimart_poll_task]
+  api_key
+
+[<module>.apimart_poll_task]
+  
+
+[<module>.apimart_poll_task]
+  base_url
+
+[<module>.apimart_poll_task]
+  https://api.apimart.ai
+
+[<module>.apimart_poll_task]
+  image_generation
+
+[<module>.apimart_poll_task]
+  poll_interval_seconds
+
+[<module>.apimart_poll_task]
+  /v1/tasks/
+
+[<module>.apimart_poll_task]
+  GET
+
+[<module>.apimart_poll_task]
+  Authorization
+
+[<module>.apimart_poll_task]
+  Bearer 
+
+[<module>.apimart_poll_task]
+  utf-8
+
+[<module>.apimart_poll_task]
+  error
+
+[<module>.apimart_poll_task]
+  Poll error 
+
+[<module>.apimart_poll_task]
+  code
+
+[<module>.apimart_poll_task]
+  : 
+
+[<module>.apimart_poll_task]
+  message
+
+[<module>.apimart_poll_task]
+  data
+
+[<module>.apimart_poll_task]
+  status
+
+[<module>.apimart_poll_task]
+  unknown
+
+[<module>.apimart_poll_task]
+  completed
+
+[<module>.apimart_poll_task]
+  result
+
+[<module>.apimart_poll_task]
+  images
+
+[<module>.apimart_poll_task]
+  task_data
+
+[<module>.apimart_poll_task]
+  failed
+
+[<module>.apimart_poll_task]
+  unknown error
+
+[<module>.apimart_poll_task]
+  Task failed: 
+
+[<module>.apimart_poll_task]
+  Task 
+
+[<module>.apimart_poll_task]
+   not complete within 
+
+[<module>.apimart_poll_task]
+  s
+
+[<module>.apimart_download_image]
+  GET
+
+[<module>.apimart_download_image]
+  ?
+
+[<module>.apimart_download_image]
+  
+
+[<module>.apimart_download_image]
+  User-Agent
+
+[<module>.apimart_download_image]
+  BSCImageGen/1.0
+
+[<module>.apimart_download_image]
+  Location
+
+[<module>.apimart_download_image]
+  wb
+
+[<module>.upload_image_to_apimart]
+  apimart
+
+[<module>.upload_image_to_apimart]
+  api_key
+
+[<module>.upload_image_to_apimart]
+  
+
+[<module>.upload_image_to_apimart]
+  base_url
+
+[<module>.upload_image_to_apimart]
+  https://api.apimart.ai
+
+[<module>.upload_image_to_apimart]
+  ----BSCUpload
+
+[<module>.upload_image_to_apimart]
+  .png
+
+[<module>.upload_image_to_apimart]
+  image/png
+
+[<module>.upload_image_to_apimart]
+  .jpg
+
+[<module>.upload_image_to_apimart]
+  image/jpeg
+
+[<module>.upload_image_to_apimart]
+  .jpeg
+
+[<module>.upload_image_to_apimart]
+  .webp
+
+[<module>.upload_image_to_apimart]
+  image/webp
+
+[<module>.upload_image_to_apimart]
+  rb
+
+[<module>.upload_image_to_apimart]
+  --
+
+[<module>.upload_image_to_apimart]
+  \nContent-Disposition: form-data; name="file"; filename="
+
+[<module>.upload_image_to_apimart]
+  "\nContent-Type: 
+
+[<module>.upload_image_to_apimart]
+  \n\n
+
+[<module>.upload_image_to_apimart]
+  utf-8
+
+[<module>.upload_image_to_apimart]
+  \n--
+
+[<module>.upload_image_to_apimart]
+  --\n
+
+[<module>.upload_image_to_apimart]
+  /v1/upload
+
+[<module>.upload_image_to_apimart]
+  POST
+
+[<module>.upload_image_to_apimart]
+  Authorization
+
+[<module>.upload_image_to_apimart]
+  Bearer 
+
+[<module>.upload_image_to_apimart]
+  Content-Type
+
+[<module>.upload_image_to_apimart]
+  multipart/form-data; boundary=
+
+[<module>.upload_image_to_apimart]
+  Upload failed: 
+
+[<module>.upload_image_to_apimart]
+  url
+
+[<module>.upload_image_to_apimart]
+  data
+
+[<module>.upload_image_to_apimart]
+  No upload URL: 
+
+[<module>]
+  /
+
+[<module>.index]
+  templates
+
+[<module>.index]
+  index.html
+
+[<module>.index]
+  no-cache, no-store, must-revalidate
+
+[<module>.index]
+  Cache-Control
+
+[<module>.index]
+  no-cache
+
+[<module>.index]
+  Pragma
+
+[<module>.index]
+  0
+
+[<module>.index]
+  Expires
+
+[<module>]
+  /wechat-qr.png
+
+[<module>.serve_qr]
+  templates
+
+[<module>.serve_qr]
+  wechat_qr.png
+
+[<module>]
+  /wechat-mp-qr.jpg
+
+[<module>.serve_mp_qr]
+  templates
+
+[<module>.serve_mp_qr]
+  wechat_mp_qr.jpg
+
+[<module>]
+  /zsxq-qr.png
+
+[<module>.serve_zsxq_qr]
+  templates
+
+[<module>.serve_zsxq_qr]
+  zsxq_qr.png
+
+[<module>]
+  /logo.png
+
+[<module>.serve_logo]
+  templates
+
+[<module>.serve_logo]
+  logo.png
+
+[<module>._validate_asin]
+  Validate ASIN format to prevent path traversal. Amazon ASINs are alphanumeric, 10 chars.
+
+[<module>._validate_asin]
+  ^[A-Za-z0-9]{5,15}$
+
+[<module>]
+  /api/submit
+
+[<module>]
+  POST
+
+[<module>.api_submit]
+  asin
+
+[<module>.api_submit]
+  
+
+[<module>.api_submit]
+  marketplace
+
+[<module>.api_submit]
+  US
+
+[<module>.api_submit]
+  error
+
+[<module>.api_submit]
+  ASIN required
+
+[<module>.api_submit]
+  Invalid ASIN format
+
+[<module>.api_submit]
+  images
+
+[<module>.api_submit]
+  main
+
+[<module>.api_submit.<lambda>]
+  created_at
+
+[<module>.api_submit.<lambda>]
+  
+
+[<module>.api_submit]
+  status
+
+[<module>.api_submit]
+  running
+
+[<module>.api_submit]
+  progress
+
+[<module>.api_submit]
+  step
+
+[<module>.api_submit]
+  init
+
+[<module>.api_submit]
+  created_at
+
+[<module>.api_submit]
+  result
+
+[<module>.api_submit]
+  job_id
+
+[<module>.api_submit]
+  started
+
+[<module>]
+  /api/status/<job_id>
+
+[<module>.api_status]
+  error
+
+[<module>.api_status]
+  Job not found
+
+[<module>.api_status]
+  job_id
+
+[<module>.api_status]
+  asin
+
+[<module>.api_status]
+  
+
+[<module>.api_status]
+  status
+
+[<module>.api_status]
+  progress
+
+[<module>.api_status]
+  step
+
+[<module>.api_status]
+  message
+
+[<module>.api_status]
+  result
+
+[<module>]
+  /api/stream/<job_id>
+
+[<module>.api_stream.generate]
+  data: 
+
+[<module>.api_stream.generate]
+  error
+
+[<module>.api_stream.generate]
+  Job not found
+
+[<module>.api_stream.generate]
+  \n\n
+
+[<module>.api_stream.generate]
+  step
+
+[<module>.api_stream.generate]
+  prompt
+
+[<module>.api_stream.generate]
+  progress
+
+[<module>.api_stream.generate]
+  heartbeat
+
+[<module>.api_stream.generate]
+  message
+
+[<module>.api_stream.generate]
+  waiting
+
+[<module>.api_stream.generate]
+  status
+
+[<module>.api_stream]
+  text/event-stream
+
+[<module>.api_stream]
+  Cache-Control
+
+[<module>.api_stream]
+  no-cache
+
+[<module>.api_stream]
+  X-Accel-Buffering
+
+[<module>.api_stream]
+  no
+
+[<module>]
+  /api/prompts/<job_id>
+
+[<module>.api_get_prompts]
+  error
+
+[<module>.api_get_prompts]
+  Job not found
+
+[<module>.api_get_prompts]
+  asin
+
+[<module>.api_get_prompts]
+  unknown
+
+[<module>.api_get_prompts]
+  _prompts.json
+
+[<module>.api_get_prompts]
+  utf-8
+
+[<module>.api_get_prompts]
+  prompts
+
+[<module>.api_get_prompts]
+  message
+
+[<module>.api_get_prompts]
+  Prompts not yet generated
+
+[<module>]
+  /api/context/<job_id>
+
+[<module>.api_get_context]
+  error
+
+[<module>.api_get_context]
+  Job not found
+
+[<module>.api_get_context]
+  asin
+
+[<module>.api_get_context]
+  unknown
+
+[<module>.api_get_context]
+  _context.json
+
+[<module>.api_get_context]
+  utf-8
+
+[<module>.api_get_context]
+  message
+
+[<module>.api_get_context]
+  Context not yet available
+
+[<module>]
+  /api/expert-suggestions/<job_id>
+
+[<module>.api_expert_suggestions]
+  error
+
+[<module>.api_expert_suggestions]
+  Job not found
+
+[<module>.api_expert_suggestions]
+  asin
+
+[<module>.api_expert_suggestions]
+  unknown
+
+[<module>.api_expert_suggestions]
+  _context.json
+
+[<module>.api_expert_suggestions]
+  Context not yet available. Run collection first.
+
+[<module>.api_expert_suggestions]
+  utf-8
+
+[<module>.api_expert_suggestions]
+  Failed to read context
+
+[<module>.api_expert_suggestions]
+  title_suggestion
+
+[<module>.api_expert_suggestions]
+  bullets_analysis
+
+[<module>.api_expert_suggestions]
+  qa_suggestions
+
+[<module>.api_expert_suggestions]
+  selling_points
+
+[<module>.api_expert_suggestions]
+  data_insights
+
+[<module>.api_expert_suggestions]
+  Module not available: 
+
+[<module>]
+  /api/send-to-chatgpt
+
+[<module>.api_send_to_chatgpt]
+  asin
+
+[<module>.api_send_to_chatgpt]
+  
+
+[<module>.api_send_to_chatgpt]
+  prompt_index
+
+[<module>.api_send_to_chatgpt]
+  error
+
+[<module>.api_send_to_chatgpt]
+  ASIN required
+
+[<module>.api_send_to_chatgpt]
+  _prompts.json
+
+[<module>.api_send_to_chatgpt]
+  Prompts not found
+
+[<module>.api_send_to_chatgpt]
+  utf-8
+
+[<module>.api_send_to_chatgpt]
+  prompts
+
+[<module>.api_send_to_chatgpt]
+  Index 
+
+[<module>.api_send_to_chatgpt]
+   out of range
+
+[<module>.api_send_to_chatgpt]
+  prompt_text
+
+[<module>.api_send_to_chatgpt]
+  prompt
+
+[<module>.api_send_to_chatgpt]
+  aspect
+
+[<module>.api_send_to_chatgpt]
+  1:1
+
+[<module>.api_send_to_chatgpt]
+  prototype_image_url
+
+[<module>.api_send_to_chatgpt]
+  /
+
+[<module>.api_send_to_chatgpt]
+  images
+
+[<module>.api_send_to_chatgpt]
+  No images in result
+
+[<module>.api_send_to_chatgpt]
+  url
+
+[<module>.api_send_to_chatgpt]
+  No image URL
+
+[<module>.api_send_to_chatgpt]
+  _
+
+[<module>.api_send_to_chatgpt]
+  type
+
+[<module>.api_send_to_chatgpt]
+  .png
+
+[<module>.api_send_to_chatgpt]
+  status
+
+[<module>.api_send_to_chatgpt]
+  generated
+
+[<module>.api_send_to_chatgpt]
+  filename
+
+[<module>.api_send_to_chatgpt]
+  /output/
+
+[<module>.api_send_to_chatgpt]
+  /png/
+
+[<module>.api_send_to_chatgpt]
+  task_id
+
+[<module>.api_send_to_chatgpt]
+  Generation failed
+
+[<module>]
+  /api/export-psd
+
+[<module>.api_export_psd]
+  asin
+
+[<module>.api_export_psd]
+  
+
+[<module>.api_export_psd]
+  name_stem
+
+[<module>.api_export_psd]
+  error
+
+[<module>.api_export_psd]
+  asin and name_stem required
+
+[<module>.api_export_psd]
+  .png
+
+[<module>.api_export_psd]
+  PNG not found: 
+
+[<module>.api_export_psd]
+  .psd
+
+[<module>.api_export_psd]
+  RGBA
+
+[<module>.api_export_psd]
+  gpt-image-2_base
+
+[<module>.api_export_psd]
+  status
+
+[<module>.api_export_psd]
+  ok
+
+[<module>.api_export_psd]
+  filename
+
+[<module>.api_export_psd]
+  url
+
+[<module>.api_export_psd]
+  /output/
+
+[<module>.api_export_psd]
+  /psd/
+
+[<module>.api_export_psd]
+  PSD library not available: 
+
+[<module>]
+  /api/images/<asin>
+
+[<module>.api_get_images]
+  error
+
+[<module>.api_get_images]
+  Invalid ASIN
+
+[<module>.api_get_images]
+  *.jpg
+
+[<module>.api_get_images]
+  *.png
+
+[<module>.api_get_images]
+  *.webp
+
+[<module>.api_get_images]
+  type
+
+[<module>.api_get_images]
+  filename
+
+[<module>.api_get_images]
+  url
+
+[<module>.api_get_images]
+  /input/
+
+[<module>.api_get_images]
+  /
+
+[<module>.api_get_images]
+  png
+
+[<module>.api_get_images]
+  generated
+
+[<module>.api_get_images]
+  /output/
+
+[<module>.api_get_images]
+  /png/
+
+[<module>.api_get_images]
+  asin
+
+[<module>.api_get_images]
+  images
+
+[<module>.api_get_images]
+  count
+
+[<module>]
+  /input/<asin>/<subdir>/<filename>
+
+[<module>.serve_input]
+  error
+
+[<module>.serve_input]
+  Invalid ASIN
+
+[<module>.serve_input]
+  main
+
+[<module>.serve_input]
+  aplus
+
+[<module>.serve_input]
+  Invalid directory
+
+[<module>]
+  /output/<asin>/<subdir>/<filename>
+
+[<module>.serve_output]
+  error
+
+[<module>.serve_output]
+  Invalid ASIN
+
+[<module>.serve_output]
+  png
+
+[<module>.serve_output]
+  psd
+
+[<module>.serve_output]
+  Invalid directory
+
+[<module>]
+  /api/settings
+
+[<module>]
+  GET
+
+[<module>.api_get_settings]
+  ***
+
+[<module>.api_get_settings]
+  sif_mcp
+
+[<module>.api_get_settings]
+  endpoint
+
+[<module>.api_get_settings]
+  
+
+[<module>.api_get_settings]
+  secret-key=
+
+[<module>.api_get_settings]
+  ?secret-key=
+
+[<module>.api_update_settings]
+  error
+
+[<module>.api_update_settings]
+  Invalid body
+
+[<module>.api_update_settings]
+  
+
+[<module>.api_update_settings]
+  status
+
+[<module>.api_update_settings]
+  saved
+
+[<module>._resolve_key]
+  Use form value unless it's redacted (contains ***) or empty — then fall back to saved config.
+
+[<module>._resolve_key]
+  ***
+
+[<module>._resolve_key]
+  
+
+[<module>]
+  /api/list-models
+
+[<module>.api_list_models]
+  Fetch available models from APIMart API using current credentials.
+
+[<module>.api_list_models]
+  api_key
+
+[<module>.api_list_models]
+  
+
+[<module>.api_list_models]
+  apimart
+
+[<module>.api_list_models]
+  base_url
+
+[<module>.api_list_models]
+  https://api.apimart.ai
+
+[<module>.api_list_models]
+  ***
+
+[<module>.api_list_models]
+  models
+
+[<module>.api_list_models]
+  error
+
+[<module>.api_list_models]
+  API Key not configured
+
+[<module>.api_list_models]
+  /
+
+[<module>.api_list_models]
+  /v1/models
+
+[<module>.api_list_models]
+  GET
+
+[<module>.api_list_models]
+  Authorization
+
+[<module>.api_list_models]
+  Bearer 
+
+[<module>.api_list_models]
+  utf-8
+
+[<module>.api_list_models]
+  data
+
+[<module>.api_list_models]
+  id
+
+[<module>.api_list_models]
+  name
+
+[<module>.api_list_models]
+  Unexpected response format
+
+[<module>]
+  /api/test-connection/<service>
+
+[<module>.api_test_connection]
+  Test connectivity using form values, falling back to saved config for redacted keys.
+
+[<module>.api_test_connection]
+  apimart
+
+[<module>.api_test_connection]
+  api_key
+
+[<module>.api_test_connection]
+  
+
+[<module>.api_test_connection]
+  base_url
+
+[<module>.api_test_connection]
+  https://api.apimart.ai
+
+[<module>.api_test_connection]
+  ***
+
+[<module>.api_test_connection]
+  status
+
+[<module>.api_test_connection]
+  error
+
+[<module>.api_test_connection]
+  message
+
+[<module>.api_test_connection]
+  API Key 未填写
+
+[<module>.api_test_connection]
+  /
+
+[<module>.api_test_connection]
+  /v1/tasks/test
+
+[<module>.api_test_connection]
+  GET
+
+[<module>.api_test_connection]
+  Authorization
+
+[<module>.api_test_connection]
+  Bearer 
+
+[<module>.api_test_connection]
+  ok
+
+[<module>.api_test_connection]
+  API 可达
+
+[<module>.api_test_connection]
+  Connected (
+
+[<module>.api_test_connection]
+  )
+
+[<module>.api_test_connection]
+  sif
+
+[<module>.api_test_connection]
+  sif_mcp
+
+[<module>.api_test_connection]
+  endpoint
+
+[<module>.api_test_connection]
+  Endpoint 未填写
+
+[<module>.api_test_connection]
+  ://
+
+[<module>.api_test_connection]
+  :
+
+[<module>.api_test_connection]
+  /mcp
+
+[<module>.api_test_connection]
+  ?
+
+[<module>.api_test_connection]
+  ?secret-key=
+
+[<module>.api_test_connection]
+  Accept
+
+[<module>.api_test_connection]
+  application/json
+
+[<module>.api_test_connection]
+  SIF MCP 可达
+
+[<module>.api_test_connection]
+  HTTP 
+
+[<module>.api_test_connection]
+  sorftime
+
+[<module>.api_test_connection]
+  sorftime_mcp
+
+[<module>.api_test_connection]
+  ?key=
+
+[<module>.api_test_connection]
+  Sorftime MCP 可达
+
+[<module>.api_test_connection]
+  Unknown service: 
+
+[<module>]
+  /api/activate
+
+[<module>.api_activate]
+  Activate license from web UI.
+
+[<module>.api_activate]
+  key
+
+[<module>.api_activate]
+  
+
+[<module>.api_activate]
+  status
+
+[<module>.api_activate]
+  error
+
+[<module>.api_activate]
+  message
+
+[<module>.api_activate]
+  请输入激活密钥
+
+[<module>.api_activate]
+  ok
+
+[<module>.api_activate]
+  exp_date
+
+[<module>.api_activate]
+  days_left
+
+[<module>.api_activate]
+  激活成功
+
+[<module>]
+  /api/trial-start
+
+[<module>.api_trial_start]
+  Start free trial from web UI.
+
+[<module>.api_trial_start]
+  status
+
+[<module>.api_trial_start]
+  ok
+
+[<module>.api_trial_start]
+  days_left
+
+[<module>.api_trial_start]
+  message
+
+[<module>.api_trial_start]
+  试用已开始 · 剩余 
+
+[<module>.api_trial_start]
+   天
+
+[<module>.api_trial_start]
+  error
+
+[<module>]
+  /api/license-status
+
+[<module>.api_license_status]
+  Return current license/trial status with machine ID always available.
+
+[<module>.api_license_status]
+  status
+
+[<module>.api_license_status]
+  none
+
+[<module>.api_license_status]
+  mid
+
+[<module>.api_license_status]
+  active
+
+[<module>.api_license_status]
+  已激活 · 到期 
+
+[<module>.api_license_status]
+  exp_date
+
+[<module>.api_license_status]
+  —
+
+[<module>.api_license_status]
+  message
+
+[<module>.api_license_status]
+  
+
+[<module>.api_license_status]
+  days_left
+
+[<module>.api_license_status]
+  trial
+
+[<module>.api_license_status]
+  试用中 · 剩余 
+
+[<module>.api_license_status]
+   天
+
+[<module>.api_license_status]
+  expired
+
+[<module>.api_license_status]
+  试用已到期
+
+[<module>.api_license_status]
+  未激活
+
+[<module>.api_license_status]
+  dev
+
+[<module>.api_license_status]
+  开发模式
+
+[<module>.api_license_status]
+  DEV
+
+[<module>]
+  /api/clear-cache
+
+[<module>.api_clear_cache]
+  Clear all history cache, generation records, and image files.
+
+[<module>.api_clear_cache]
+  prompts
+
+[<module>.api_clear_cache]
+  input
+
+[<module>.api_clear_cache]
+  output
+
+[<module>.api_clear_cache]
+  logs
+
+[<module>.api_clear_cache]
+  *
+
+[<module>.api_clear_cache]
+  status
+
+[<module>.api_clear_cache]
+  cleared
+
+[<module>._license_bootstrap]
+  Check license at startup. Always returns True — frontend handles activation UI.
+
+[<module>._license_bootstrap]
+  active
+
+[<module>._license_bootstrap]
+  [License] Activated
+
+[<module>._license_bootstrap]
+  trial
+
+[<module>._license_bootstrap]
+  [License] Trial mode - 
+
+[<module>._license_bootstrap]
+   day(s) remaining
+
+[<module>._license_bootstrap]
+  expired
+
+[<module>._license_bootstrap]
+  [License] Trial expired - activation required
+
+[<module>._license_bootstrap]
+  [License] Not activated - trial available
+
+[<module>]
+  __main__
+
+[<module>]
+  title BSC OPC Agent OS Personal
+
+[<module>]
+  %(asctime)s [%(levelname)s] %(message)s
+
+[<module>]
+  [=====================================]
+
+[<module>]
+  [  BSC OPC Agent OS Personal         ]
+
+[<module>]
+  [  Open: http://127.0.0.1:5173       ]
+
+[<module>.<lambda>]
+  http://127.0.0.1:5173
+
+[<module>]
+  127.0.0.1
+
+[<module>]
+  10048
+
+[<module>]
+  address
+
+[<module>]
+  \nERROR: Port 5173 is already in use.
+
+[<module>]
+  Close the other instance of BSC OPC Agent and try again.
+
+[<module>]
+  \nERROR: 
+
+[<module>]
+  \nPress Enter to exit...
+
