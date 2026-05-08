@@ -312,7 +312,7 @@ def build_context(job_id: str, asin: str, marketplace: str) -> dict:
     try:
         sales = _call_sif_tool(
             "ops_get_asin_sales_list",
-            {"asin": asin, "marketplace": marketplace},
+            {"asins": [asin], "marketplace": marketplace},
         )
         if sales and isinstance(sales, dict):
             _apply_sif_sales(context, sales)
