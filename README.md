@@ -21,6 +21,21 @@ All 6 Python modules from the original app:
 
 **Total: ~3,130 lines of Python across 6 modules.**
 
+Plus the frontend assets (`src/templates/`) copied verbatim from the
+original PyInstaller bundle:
+
+| Asset | Bytes | Notes |
+|---|---|---|
+| `templates/index.html` | 93 KB | The single-page Vue/HTML frontend |
+| `templates/logo.png` | 845 KB | App logo |
+| `templates/wechat_qr.png` | 68 KB | WeChat personal QR code |
+| `templates/wechat_mp_qr.jpg` | 27 KB | WeChat official-account QR code |
+| `templates/zsxq_qr.png` | 42 KB | 知识星球 (ZSXQ) QR code |
+
+These were **not** packed into the bytecode — PyInstaller keeps template
+files as external data resources alongside the `.exe`. They were copied
+verbatim from the original bundle.
+
 ## How it was done
 
 Python 3.14 was released so recently that no existing decompiler

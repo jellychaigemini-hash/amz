@@ -606,22 +606,22 @@ def index():
 
 @app.route('/wechat-qr.png')
 def serve_qr():
-    return send_from_directory(str(BASE_DIR), "wechat-qr.png")
+    return send_from_directory(str(BASE_DIR / "templates"), "wechat_qr.png")
 
 
 @app.route('/wechat-mp-qr.jpg')
 def serve_mp_qr():
-    return send_from_directory(str(BASE_DIR), "wechat-mp-qr.jpg")
+    return send_from_directory(str(BASE_DIR / "templates"), "wechat_mp_qr.jpg")
 
 
 @app.route('/zsxq-qr.png')
 def serve_zsxq_qr():
-    return send_from_directory(str(BASE_DIR), "zsxq-qr.png")
+    return send_from_directory(str(BASE_DIR / "templates"), "zsxq_qr.png")
 
 
 @app.route('/logo.png')
 def serve_logo():
-    return send_from_directory(str(BASE_DIR), "logo.png")
+    return send_from_directory(str(BASE_DIR / "templates"), "logo.png")
 
 
 def _validate_asin(asin: str) -> bool:
