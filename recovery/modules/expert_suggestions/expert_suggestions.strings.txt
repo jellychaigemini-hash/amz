@@ -1,0 +1,1782 @@
+[<module>]
+  \nRufus & COSMO Expert Suggestions Engine\n========================================\nGenerates algorithm-optimized listing recommendations from product context:\n- Title optimization with COSMO scene/persona embedding\n- 5 Bullet Points with compliance scoring (COSMO节点符合度)\n- 8 Q&A pairs following the Rufus-friendly framework\n- Selling point extraction with cause-effect chains\n\nBased on the Rufus Audit demo model and COSMO/Rufus algorithm playbook.\n
+
+[<module>.build_cosmo_title]
+  Analyze the original product title against COSMO/Rufus best practices,\nusing real MCP keyword data to identify gaps and suggest improvements.\nDoes NOT hallucinate a new title — only suggests evidence-based changes.\n
+
+[<module>.build_cosmo_title]
+  title
+
+[<module>.build_cosmo_title]
+  
+
+[<module>.build_cosmo_title]
+  category
+
+[<module>.build_cosmo_title]
+  keywords
+
+[<module>.build_cosmo_title]
+  bullets
+
+[<module>.build_cosmo_title]
+  brand
+
+[<module>.build_cosmo_title]
+  bullets_synthetic
+
+[<module>.build_cosmo_title]
+  ,
+
+[<module>.build_cosmo_title]
+   
+
+[<module>.build_cosmo_title]
+  |
+
+[<module>.build_cosmo_title]
+  element
+
+[<module>.build_cosmo_title]
+  品牌前置
+
+[<module>.build_cosmo_title]
+  present
+
+[<module>.build_cosmo_title]
+  detail
+
+[<module>.build_cosmo_title]
+  品牌「
+
+[<module>.build_cosmo_title]
+  」
+
+[<module>.build_cosmo_title]
+  已出现
+
+[<module>.build_cosmo_title]
+  未在标题中出现
+
+[<module>.build_cosmo_title]
+  \d+\s*(?:mg|g|kg|oz|lb|lbs|ml|l|inch|in|cm|mm|RPM|W|V|A|mAh|pack|count|ct|piece|pcs|set)
+
+[<module>.build_cosmo_title]
+  量化规格
+
+[<module>.build_cosmo_title]
+  含具体数值参数
+
+[<module>.build_cosmo_title]
+  缺少量化规格（如尺寸/容量/数量）
+
+[<module>.build_cosmo_title]
+  场景/人群
+
+[<module>.build_cosmo_title]
+  含使用场景或目标人群
+
+[<module>.build_cosmo_title]
+  缺少使用场景或目标人群定位
+
+[<module>.build_cosmo_title]
+  材质/品质
+
+[<module>.build_cosmo_title]
+  含材质或品质标识
+
+[<module>.build_cosmo_title]
+  可考虑添加材质/品质关键词
+
+[<module>.build_cosmo_title]
+  关键词密度
+
+[<module>.build_cosmo_title]
+  约
+
+[<module>.build_cosmo_title]
+  个有效词
+
+[<module>.build_cosmo_title]
+  ，覆盖良好
+
+[<module>.build_cosmo_title]
+  ，可增加更多长尾词
+
+[<module>.build_cosmo_title.<genexpr>]
+  present
+
+[<module>.build_cosmo_title]
+  A — 标题结构优秀
+
+[<module>.build_cosmo_title]
+  B — 标题结构良好，有优化空间
+
+[<module>.build_cosmo_title]
+  C — 标题需要改进
+
+[<module>.build_cosmo_title]
+  D — 标题结构严重不足
+
+[<module>.build_cosmo_title]
+  在标题中加入量化规格（如尺寸、容量、数量），提升搜索结果中的点击率
+
+[<module>.build_cosmo_title]
+  添加使用场景或目标人群（如 for Home, Gift for Adults），增强Rufus场景匹配
+
+[<module>.build_cosmo_title]
+  将品牌「
+
+[<module>.build_cosmo_title]
+  」前置到标题开头，提高品牌搜索可见度
+
+[<module>.build_cosmo_title]
+  、
+
+[<module>.build_cosmo_title]
+  标题可融入以下高流量词: 
+
+[<module>.build_cosmo_title]
+  标题偏短，可扩展至150-200字符以覆盖更多长尾搜索词
+
+[<module>.build_cosmo_title]
+  标题结构合理，持续监控关键词排名变化即可
+
+[<module>.build_cosmo_title]
+  .
+
+[<module>.build_cosmo_title]
+   — Perfect for 
+
+[<module>.build_cosmo_title]
+  (
+
+[<module>.build_cosmo_title]
+   — 
+
+[<module>.build_cosmo_title]
+  【
+
+[<module>.build_cosmo_title]
+  】
+
+[<module>.build_cosmo_title]
+  产品
+
+[<module>.build_cosmo_title]
+   · 适用多场景
+
+[<module>.build_cosmo_title]
+  （需先识别品牌和类目后再生成中文标题建议）
+
+[<module>.build_cosmo_title]
+  original
+
+[<module>.build_cosmo_title]
+  optimized
+
+[<module>.build_cosmo_title]
+  en_optimized
+
+[<module>.build_cosmo_title]
+  cosmo_analysis
+
+[<module>.build_cosmo_title]
+  未识别
+
+[<module>.build_cosmo_title]
+  title_score
+
+[<module>.build_cosmo_title]
+  title_grade
+
+[<module>.build_cosmo_title]
+  present_count
+
+[<module>.build_cosmo_title]
+  total_checks
+
+[<module>.build_cosmo_title]
+  structure_checks
+
+[<module>.build_cosmo_title]
+  keyword_gaps
+
+[<module>.build_cosmo_title]
+  suggestions
+
+[<module>.build_cosmo_title]
+  mcp_keyword_count
+
+[<module>.build_cosmo_title]
+  improvement
+
+[<module>.build_cosmo_title]
+  基于真实产品标题 + 
+
+[<module>.build_cosmo_title]
+  个SIF流量词的结构化分析
+
+[<module>.build_cosmo_title]
+  mcp_validated
+
+[<module>.build_cosmo_title]
+  mcp_sources
+
+[<module>.build_cosmo_title]
+  SIF MCP 关键词信号
+
+[<module>.build_cosmo_title]
+  mcp_top_keywords
+
+[<module>.build_cosmo_title]
+  data_note
+
+[<module>.build_cosmo_title]
+  真实Amazon标题分析
+
+[<module>.build_cosmo_title]
+  基于关键词合成的参考分析
+
+[<module>.build_cosmo_title]
+   — 专业级
+
+[<module>._extract_brand]
+  Extract brand name from SIF keywords or title.
+
+[<module>._extract_brand]
+  sif_keywords
+
+[<module>._extract_brand]
+  keyword
+
+[<module>._extract_brand]
+  
+
+[<module>._extract_core_function]
+  Extract core product function/type (ZH + EN).
+
+[<module>._extract_core_function]
+   
+
+[<module>._extract_core_function]
+  (\d+)\s*(?:in\s*1|forms? of)
+
+[<module>._extract_core_function]
+  (\d+)\s*mg
+
+[<module>._extract_core_function]
+  合1镁复合补充剂
+
+[<module>._extract_core_function]
+  -in-1 Magnesium Complex Supplement
+
+[<module>._extract_core_function]
+  高吸收镁补充剂 
+
+[<module>._extract_core_function]
+  mg
+
+[<module>._extract_core_function]
+  Magnesium Supplement 
+
+[<module>._extract_core_function]
+  镁复合补充剂
+
+[<module>._extract_core_function]
+  Magnesium Complex Supplement
+
+[<module>._extract_core_function]
+  产品
+
+[<module>._extract_core_function]
+  Product
+
+[<module>._extract_persona_bilingual]
+  Extract target persona with ZH and EN versions.
+
+[<module>._extract_persona_bilingual]
+   
+
+[<module>._extract_persona_bilingual]
+  男女成人
+
+[<module>._extract_persona_bilingual]
+  Adult Men & Women
+
+[<module>._extract_persona_bilingual]
+  运动健身人群
+
+[<module>._extract_persona_bilingual]
+  Active Adults & Athletes
+
+[<module>._extract_persona_bilingual]
+  老年人
+
+[<module>._extract_persona_bilingual]
+  Seniors
+
+[<module>._extract_persona_bilingual]
+  婴幼儿家庭
+
+[<module>._extract_persona_bilingual]
+  Families with Children
+
+[<module>._extract_persona_bilingual]
+  宠物家庭
+
+[<module>._extract_persona_bilingual]
+  Pet Owners
+
+[<module>._extract_persona_bilingual]
+  旅行者
+
+[<module>._extract_persona_bilingual]
+  Travelers
+
+[<module>._extract_persona_bilingual]
+  学生群体
+
+[<module>._extract_persona_bilingual]
+  Students
+
+[<module>._extract_persona_bilingual]
+  上班族与商务人士
+
+[<module>._extract_persona_bilingual]
+  Professionals & Commuters
+
+[<module>._extract_key_spec]
+  Extract key spec/strength for Chinese title.
+
+[<module>._extract_key_spec]
+   
+
+[<module>._extract_key_spec]
+  (\d+)\s*mg
+
+[<module>._extract_key_spec]
+  mg
+
+[<module>._extract_key_spec]
+  (\d+)\s*(?:in\s*1|forms? of|合\d+)
+
+[<module>._extract_key_spec]
+  合1
+
+[<module>._extract_key_spec]
+  (\d+)[-\s]*day\s*supply
+
+[<module>._extract_key_spec]
+  天供应
+
+[<module>._extract_key_spec]
+  
+
+[<module>._extract_key_spec_en]
+  Extract key spec for English title.
+
+[<module>._extract_key_spec_en]
+   
+
+[<module>._extract_key_spec_en]
+  (\d+)\s*mg
+
+[<module>._extract_key_spec_en]
+  mg
+
+[<module>._extract_key_spec_en]
+  (\d+)\s*(?:in\s*1|forms? of)
+
+[<module>._extract_key_spec_en]
+  -in-1
+
+[<module>._extract_key_spec_en]
+  (\d+)[-\s]*day\s*supply
+
+[<module>._extract_key_spec_en]
+  -Day Supply
+
+[<module>._extract_key_spec_en]
+  
+
+[<module>._extract_scenes_bilingual]
+  Extract usage scenes (ZH + EN).
+
+[<module>._extract_scenes_bilingual]
+   
+
+[<module>._extract_scenes_bilingual]
+  睡前放松
+
+[<module>._extract_scenes_bilingual]
+  Sleep & Relaxation
+
+[<module>._extract_scenes_bilingual]
+  运动恢复
+
+[<module>._extract_scenes_bilingual]
+  Post-Workout Recovery
+
+[<module>._extract_scenes_bilingual]
+  日常精力补充
+
+[<module>._extract_scenes_bilingual]
+  Daily Energy Support
+
+[<module>._extract_scenes_bilingual]
+  旅行便携
+
+[<module>._extract_scenes_bilingual]
+  Travel Friendly
+
+[<module>._extract_scenes_bilingual]
+  家庭日常
+
+[<module>._extract_scenes_bilingual]
+  Home & Family
+
+[<module>._extract_scenes_bilingual]
+  送礼佳品
+
+[<module>._extract_scenes_bilingual]
+  Gift Ready
+
+[<module>._extract_scenes_bilingual]
+  全身健康
+
+[<module>._extract_scenes_bilingual]
+  Whole-Body Wellness
+
+[<module>._extract_scenes_bilingual]
+  日常保健
+
+[<module>._extract_scenes_bilingual]
+  Daily Wellness
+
+[<module>._extract_accessories]
+  Extract meaningful accessories/included items.
+
+[<module>._extract_accessories]
+   
+
+[<module>._extract_accessories]
+  (?:with|include(?:s|d)?)\s+(?:a\s+)?(magnetic\s+nozzle|carrying\s+case|travel\s+pouch|sleep\s+mask|diffuser|storage\s+bag|free\s+\w+)
+
+[<module>._extract_accessories]
+  
+
+[<module>._detect_problem_en]
+  Detect the problem the product solves, in English.
+
+[<module>._detect_problem_en]
+   
+
+[<module>._detect_problem_en]
+  
+
+[<module>.build_cosmo_bullets]
+  Build 5 COSMO-compliant bullet points with compliance scores.
+
+[<module>.build_cosmo_bullets]
+  bullets
+
+[<module>.build_cosmo_bullets]
+  title
+
+[<module>.build_cosmo_bullets]
+  
+
+[<module>.build_cosmo_bullets]
+  category
+
+[<module>.build_cosmo_bullets]
+  type
+
+[<module>.build_cosmo_bullets]
+  即时需求与痛点 (Scenario & Pain-points)
+
+[<module>.build_cosmo_bullets]
+  cosmo_node
+
+[<module>.build_cosmo_bullets]
+  场景(赶时间/需求紧迫) → 功能(核心能力) → 结果(量化时间/效果)
+
+[<module>.build_cosmo_bullets]
+  format
+
+[<module>.build_cosmo_bullets]
+  [量化结果 + 场景价值] → 告别传统痛点。采用[核心技术]...
+
+[<module>.build_cosmo_bullets]
+  en_format
+
+[<module>.build_cosmo_bullets]
+  [QUANTIFIED RESULT FOR SCENARIO] — Say goodbye to [pain point]. Powered by [core tech]...
+
+[<module>.build_cosmo_bullets]
+  效果与质感 (Effect & Quality)
+
+[<module>.build_cosmo_bullets]
+  常识疑虑(会不会XX?) → 原理(技术支撑) → 效果(长期收益)
+
+[<module>.build_cosmo_bullets]
+  [效果承诺 + 原理支撑] → 担心[常识疑虑]？[技术]释放[量化指标]...
+
+[<module>.build_cosmo_bullets]
+  [EFFECT PROMISE] — Worried about [common concern]? The [tech] delivers [quantified result]...
+
+[<module>.build_cosmo_bullets]
+  便携与场景适配 (Portability & Scenarios)
+
+[<module>.build_cosmo_bullets]
+  常识具象(类比日常物品) → 多场景覆盖 → 便携价值
+
+[<module>.build_cosmo_bullets]
+  [常识具象化 + 多场景覆盖] → 仅重[量化](约[日常类比])...适合[场景A]/[场景B]
+
+[<module>.build_cosmo_bullets]
+  [CONCRETE COMPARISON + MULTI-SCENE] — Weighing only [X] (about [daily item])... Perfect for [scene A]/[scene B]
+
+[<module>.build_cosmo_bullets]
+  常识性后顾之忧 (Common-Sense Concerns)
+
+[<module>.build_cosmo_bullets]
+  安全排雷(怕不怕XX?) → 技术保障(监测频率) → 兼容人群(婴儿/宠物)
+
+[<module>.build_cosmo_bullets]
+  [安全排雷 + 兼容人群] → 害怕[安全疑虑]？[智能技术]每秒[X]次监测...适合[敏感人群]
+
+[<module>.build_cosmo_bullets]
+  [SAFETY ASSURANCE FOR VULNERABLE GROUPS] — Afraid of [safety concern]? [Smart tech] monitors [X] times/sec... Safe for [sensitive groups]
+
+[<module>.build_cosmo_bullets]
+  信任闭环 (Trust Loop)
+
+[<module>.build_cosmo_bullets]
+  认证/背书 → 礼品属性 → 售后保障(时间+响应速度)
+
+[<module>.build_cosmo_bullets]
+  [认证背书 + 礼品场景 + 售后承诺] → 通过[认证]...精美包装适合[节日/场景]送礼...提供[X]天无忧[换新/退款]
+
+[<module>.build_cosmo_bullets]
+  [CERTIFIED SAFETY & GIFT READY] — [Certification] approved... Premium gift packaging for [occasion]... [X]-day worry-free [replacement/refund]
+
+[<module>.build_cosmo_bullets]
+  (缺失)
+
+[<module>.build_cosmo_bullets]
+  index
+
+[<module>.build_cosmo_bullets]
+  original
+
+[<module>.build_cosmo_bullets]
+  cosmo_score
+
+[<module>.build_cosmo_bullets]
+  suggestion_zh
+
+[<module>.build_cosmo_bullets]
+  zh
+
+[<module>.build_cosmo_bullets]
+  suggestion_en
+
+[<module>.build_cosmo_bullets]
+  en
+
+[<module>.build_cosmo_bullets]
+  overall_score
+
+[<module>.build_cosmo_bullets.<genexpr>]
+  cosmo_score
+
+[<module>.build_cosmo_bullets]
+  summary
+
+[<module>._score_bullet]
+  Score a bullet's COSMO compliance (0-100).
+
+[<module>._score_bullet]
+  (缺失)
+
+[<module>._generate_bullet_suggestion]
+  Generate a bullet suggestion following the COSMO template pattern.
+
+[<module>._generate_bullet_suggestion]
+  title
+
+[<module>._generate_bullet_suggestion]
+  
+
+[<module>._generate_bullet_suggestion]
+  bullets
+
+[<module>._generate_bullet_suggestion]
+  category
+
+[<module>._generate_bullet_suggestion]
+  \d+[\.\d]*\s*(?:mg|g|kg|oz|lb|lbs|ml|l|inch|in|cm|mm|RPM|m/s|dB|%|倍|x)
+
+[<module>._generate_bullet_suggestion]
+  【
+
+[<module>._generate_bullet_suggestion]
+  核心卖点
+
+[<module>._generate_bullet_suggestion]
+  】高效解决
+
+[<module>._generate_bullet_suggestion]
+  用户
+
+[<module>._generate_bullet_suggestion]
+  的核心需求。采用
+
+[<module>._generate_bullet_suggestion]
+  先进
+
+[<module>._generate_bullet_suggestion]
+  专业技术
+
+[<module>._generate_bullet_suggestion]
+  ，
+
+[<module>._generate_bullet_suggestion]
+  显著提升使用体验
+
+[<module>._generate_bullet_suggestion]
+  实测数据
+
+[<module>._generate_bullet_suggestion]
+  让您告别传统产品的低效与不便
+
+[<module>._generate_bullet_suggestion]
+  为您节省宝贵时间
+
+[<module>._generate_bullet_suggestion]
+  。
+
+[<module>._generate_bullet_suggestion]
+  【提升效果，看得见的改变】担心效果不明显？
+
+[<module>._generate_bullet_suggestion]
+  我们采用优质原料与精密工艺
+
+[<module>._generate_bullet_suggestion]
+  实测
+
+[<module>._generate_bullet_suggestion]
+  ，坚持使用可显著改善。
+
+[<module>._generate_bullet_suggestion]
+  经实验室验证，有效提升产品性能与用户体验
+
+[<module>._generate_bullet_suggestion]
+  从根源解决您的困扰
+
+[<module>._generate_bullet_suggestion]
+  【轻巧便捷，随时随地】精心设计的紧凑机身，轻松放入包中。无论
+
+[<module>._generate_bullet_suggestion]
+  居家、办公还是旅行
+
+[<module>._generate_bullet_suggestion]
+  日常通勤、差旅还是户外活动
+
+[<module>._generate_bullet_suggestion]
+  ，都是您的理想选择。人体工学设计让长时间使用也不会感到疲劳。
+
+[<module>._generate_bullet_suggestion]
+  【安全可靠，全家安心】配备智能保护系统，
+
+[<module>._generate_bullet_suggestion]
+  通过严格质量检测
+
+[<module>._generate_bullet_suggestion]
+  多重安全防护
+
+[<module>._generate_bullet_suggestion]
+  。低噪音/低辐射设计，即使
+
+[<module>._generate_bullet_suggestion]
+  在安静环境中使用也不会打扰他人
+
+[<module>._generate_bullet_suggestion]
+  对敏感人群同样友好
+
+[<module>._generate_bullet_suggestion]
+  特别适合有儿童和宠物的家庭
+
+[<module>._generate_bullet_suggestion]
+  【品质认证，无忧售后】通过
+
+[<module>._generate_bullet_suggestion]
+  国际安全认证
+
+[<module>._generate_bullet_suggestion]
+  权威机构检测
+
+[<module>._generate_bullet_suggestion]
+  ，精美包装使其成为
+
+[<module>._generate_bullet_suggestion]
+  节日送礼
+
+[<module>._generate_bullet_suggestion]
+  自用送人
+
+[<module>._generate_bullet_suggestion]
+  的绝佳选择。我们提供
+
+[<module>._generate_bullet_suggestion]
+  365天
+
+[<module>._generate_bullet_suggestion]
+  无忧
+
+[<module>._generate_bullet_suggestion]
+  换新服务，
+
+[<module>._generate_bullet_suggestion]
+  客服团队12小时内响应您的任何疑问
+
+[<module>._generate_bullet_suggestion]
+  让您购买无忧
+
+[<module>._generate_bullet_suggestion]
+  [FAST & EFFECTIVE FOR 
+
+[<module>._generate_bullet_suggestion]
+  DAILY USE
+
+[<module>._generate_bullet_suggestion]
+  ] — Say goodbye to inconvenience. 
+
+[<module>._generate_bullet_suggestion]
+  Powered by advanced technology
+
+[<module>._generate_bullet_suggestion]
+  Delivers 
+
+[<module>._generate_bullet_suggestion]
+  premium
+
+[<module>._generate_bullet_suggestion]
+   performance
+
+[<module>._generate_bullet_suggestion]
+  , ensuring you get the best results every time.
+
+[<module>._generate_bullet_suggestion]
+  [VISIBLE IMPROVEMENT YOU CAN TRUST] — Worried about effectiveness? 
+
+[<module>._generate_bullet_suggestion]
+  supplement
+
+[<module>._generate_bullet_suggestion]
+  vitamin
+
+[<module>._generate_bullet_suggestion]
+  Our premium formula
+
+[<module>._generate_bullet_suggestion]
+  Our precision engineering
+
+[<module>._generate_bullet_suggestion]
+   ensures 
+
+[<module>._generate_bullet_suggestion]
+  optimal absorption and results
+
+[<module>._generate_bullet_suggestion]
+  consistent, reliable performance
+
+[<module>._generate_bullet_suggestion]
+  . 
+
+[<module>._generate_bullet_suggestion]
+  Lab-tested for quality assurance
+
+[<module>._generate_bullet_suggestion]
+  [COMPACT & PORTABLE FOR ANY LIFESTYLE] — Designed with portability in mind, it fits effortlessly into your bag. Perfect for home, office, travel, or gym use. The ergonomic design ensures comfortable handling during extended use.
+
+[<module>._generate_bullet_suggestion]
+  [SAFE & RELIABLE FOR THE WHOLE FAMILY] — Equipped with intelligent safety features and rigorous quality testing. Low-noise operation won't disturb others, making it ideal for households with children and pets. Peace of mind in every use.
+
+[<module>._generate_bullet_suggestion]
+  [CERTIFIED QUALITY & WORRY-FREE WARRANTY] — Safety certified and premium packaged — an excellent gift choice. We offer a worry-free replacement service, with our support team responding within 12 hours to any concerns.
+
+[<module>._generate_bullet_suggestion]
+  zh
+
+[<module>._generate_bullet_suggestion]
+  en
+
+[<module>._bullet_summary]
+  Generate summary analysis of bullet optimization.
+
+[<module>._bullet_summary]
+  cosmo_score
+
+[<module>._bullet_summary]
+  严重缺乏因果推理(Cause-Effect)结构。当买家向Rufus提问复合查询时，AI不会将其作为首选答案。建议全面重构五点描述。
+
+[<module>._bullet_summary]
+  语义密度偏低。部分bullet有场景意识但缺乏完整的痛点→机制→结果→边界链路。建议重点优化得分最低的bullet。
+
+[<module>._bullet_summary]
+  整体结构良好。部分bullet可增强常识疑虑解答和信任闭环。建议补充量化数据和兼容人群信息。
+
+[<module>._bullet_summary]
+  COSMO节点覆盖完整。五条bullet均具备完整的因果推理链路，Rufus可高效抓取并匹配复合查询意图。
+
+[<module>.build_rufus_qa]
+  Build 8 Rufus-optimized Q&A pairs covering core purchase concerns.
+
+[<module>.build_rufus_qa]
+  title
+
+[<module>.build_rufus_qa]
+  this product
+
+[<module>.build_rufus_qa]
+  category
+
+[<module>.build_rufus_qa]
+  general
+
+[<module>.build_rufus_qa]
+  bullets
+
+[<module>.build_rufus_qa]
+   
+
+[<module>.build_rufus_qa]
+  price
+
+[<module>.build_rufus_qa]
+  
+
+[<module>.build_rufus_qa]
+  q_zh
+
+[<module>.build_rufus_qa]
+  关于
+
+[<module>.build_rufus_qa]
+  的核心功能与使用效果
+
+[<module>.build_rufus_qa]
+  q_en
+
+[<module>.build_rufus_qa]
+  About the core functionality and effectiveness of this 
+
+[<module>.build_rufus_qa]
+  a_zh
+
+[<module>.build_rufus_qa]
+  结论是：
+
+[<module>.build_rufus_qa]
+  专为解决
+
+[<module>.build_rufus_qa]
+  核心需求而设计。具体来说：1) 采用优质原料与先进工艺，确保卓越的产品性能；2) 
+
+[<module>.build_rufus_qa]
+  经过严格质量检测，
+
+[<module>.build_rufus_qa]
+  每项功能均经过实测验证，
+
+[<module>.build_rufus_qa]
+  使用效果显著；3) 适用于日常使用场景，能为用户带来切实的改善体验。我们建议按照产品说明坚持使用，以获得最佳效果。
+
+[<module>.build_rufus_qa]
+  a_en
+
+[<module>.build_rufus_qa]
+  Yes, 
+
+[<module>.build_rufus_qa]
+   is specifically designed to address core 
+
+[<module>.build_rufus_qa]
+   needs. Specifically: 1) It uses premium materials and advanced processes to ensure superior performance; 2) Each feature has been tested and validated for real-world effectiveness; 3) It's suitable for daily use scenarios, delivering tangible improvements. We recommend following product instructions consistently for optimal results.
+
+[<module>.build_rufus_qa]
+  的隐藏费用与后续成本
+
+[<module>.build_rufus_qa]
+  About hidden costs and ongoing expenses for this 
+
+[<module>.build_rufus_qa]
+  结论是：购买
+
+[<module>.build_rufus_qa]
+  后无需额外支付隐藏费用。具体来说：1) 
+
+[<module>.build_rufus_qa]
+  accessory
+
+[<module>.build_rufus_qa]
+  产品包含所有必需配件，无需额外购买
+
+[<module>.build_rufus_qa]
+  包装内已包含完整配件套装
+
+[<module>.build_rufus_qa]
+  ；2) 无需付费订阅或软件服务费即可使用全部功能；3) 
+
+[<module>.build_rufus_qa]
+  产品定价$
+
+[<module>.build_rufus_qa]
+  产品定价透明
+
+[<module>.build_rufus_qa]
+  ，长期使用成本极低。我们建议购买时确认包装清单，确保包含您需要的所有配件。
+
+[<module>.build_rufus_qa]
+  No, there are no hidden costs after purchasing 
+
+[<module>.build_rufus_qa]
+  . Specifically: 1) The product includes all necessary accessories — no additional purchases required; 2) No paid subscriptions or software fees needed to access all features; 3) 
+
+[<module>.build_rufus_qa]
+  Priced at $
+
+[<module>.build_rufus_qa]
+  Transparent pricing
+
+[<module>.build_rufus_qa]
+   with extremely low long-term ownership costs. We recommend checking the package contents upon purchase.
+
+[<module>.build_rufus_qa]
+  的兼容性与使用便捷性
+
+[<module>.build_rufus_qa]
+  About compatibility and ease of use for this 
+
+[<module>.build_rufus_qa]
+  设计简洁，开箱即用。具体来说：1) 无需复杂安装或专业工具，普通用户即可在几分钟内完成设置；2) 兼容主流使用环境和场景，适应性强；3) 附带详细的中英文使用说明书，以及在线客服支持。例如，首次使用的用户可参考快速入门指南，在3分钟内完成基本设置。
+
+[<module>.build_rufus_qa]
+   is designed for plug-and-play simplicity. Specifically: 1) No complex installation or professional tools required — setup takes just minutes; 2) Compatible with mainstream environments and scenarios; 3) Includes detailed user manual and online customer support. For instance, first-time users can complete basic setup within 3 minutes following the quick-start guide.
+
+[<module>.build_rufus_qa]
+  的质量耐用性与使用极限
+
+[<module>.build_rufus_qa]
+  About durability limits and quality for this 
+
+[<module>.build_rufus_qa]
+  采用
+
+[<module>.build_rufus_qa]
+  高品质材料制造
+
+[<module>.build_rufus_qa]
+  严格品控标准
+
+[<module>.build_rufus_qa]
+  ，日常使用完全可靠，但也存在合理的使用边界。具体来说：1) 
+
+[<module>.build_rufus_qa]
+  产品经过多项质量检测，确保在正常使用条件下的稳定表现
+
+[<module>.build_rufus_qa]
+  核心部件经过严格耐久性测试
+
+[<module>.build_rufus_qa]
+  ；2) 请注意遵循使用说明中的注意事项（如避免极端温度/潮湿环境）；3) 外壳具有日常抗摔耐磨能力，但不可故意暴力破坏。如果需要更专业的使用场景，我们建议搭配相应的保护配件。
+
+[<module>.build_rufus_qa]
+   is built with 
+
+[<module>.build_rufus_qa]
+  high-quality materials
+
+[<module>.build_rufus_qa]
+  rigorous quality standards
+
+[<module>.build_rufus_qa]
+   and is fully reliable for daily use, though reasonable limits apply. Specifically: 1) 
+
+[<module>.build_rufus_qa]
+  The product has passed multiple quality tests for stable performance under normal conditions
+
+[<module>.build_rufus_qa]
+  Core components have undergone strict durability testing
+
+[<module>.build_rufus_qa]
+  ; 2) Please follow usage guidelines (e.g., avoid extreme temperatures/moisture); 3) The outer shell withstands daily drops and wear but cannot survive intentional abuse. We recommend protective accessories for more demanding scenarios.
+
+[<module>.build_rufus_qa]
+  的续航/持续使用能力
+
+[<module>.build_rufus_qa]
+  About battery life / continuous use capability
+
+[<module>.build_rufus_qa]
+  在正常使用条件下具有出色的续航表现。具体来说：1) 
+
+[<module>.build_rufus_qa]
+  单次充足准备可满足日常使用需求
+
+[<module>.build_rufus_qa]
+  根据实测数据，可持续工作满足全天候使用
+
+[<module>.build_rufus_qa]
+  ；2) 
+
+[<module>.build_rufus_qa]
+  recharge
+
+[<module>.build_rufus_qa]
+  battery
+
+[<module>.build_rufus_qa]
+  充电/补充
+
+[<module>.build_rufus_qa]
+  准备工作
+
+[<module>.build_rufus_qa]
+  快速便捷；3) 支持在
+
+[<module>.build_rufus_qa]
+  charge
+
+[<module>.build_rufus_qa]
+  充电
+
+[<module>.build_rufus_qa]
+  补充
+
+[<module>.build_rufus_qa]
+  的同时继续使用（边充边用），确保永不断档。对于高频使用场景，我们建议配备备用方案以确保连续运转。
+
+[<module>.build_rufus_qa]
+   delivers excellent endurance under normal use conditions. Specifically: 1) 
+
+[<module>.build_rufus_qa]
+  A single full charge/prep meets daily usage needs
+
+[<module>.build_rufus_qa]
+  Tested data shows it can sustain all-day continuous use
+
+[<module>.build_rufus_qa]
+  ; 2) 
+
+[<module>.build_rufus_qa]
+  Recharging/replenishment
+
+[<module>.build_rufus_qa]
+  Preparation
+
+[<module>.build_rufus_qa]
+   is fast and convenient; 3) It supports use while 
+
+[<module>.build_rufus_qa]
+  charging
+
+[<module>.build_rufus_qa]
+  replenishing
+
+[<module>.build_rufus_qa]
+  , ensuring you never run out. We recommend keeping a backup for high-frequency usage scenarios.
+
+[<module>.build_rufus_qa]
+  在高噪音/复杂环境下的使用效果
+
+[<module>.build_rufus_qa]
+  About performance in noisy/complex environments
+
+[<module>.build_rufus_qa]
+  结论是：即使在复杂环境下，
+
+[<module>.build_rufus_qa]
+  依然表现可靠。具体来说：1) 
+
+[<module>.build_rufus_qa]
+  产品经过针对性优化，核心功能不受环境干扰
+
+[<module>.build_rufus_qa]
+  关键性能指标在多种环境下均保持稳定
+
+[<module>.build_rufus_qa]
+  具备足够的输出功率/音量/亮度
+
+[<module>.build_rufus_qa]
+  ，确保在嘈杂或复杂场景中依然清晰可用；3) 配备实体操作按键/界面，可随时快速调节。例如，在极端嘈杂的环境中，我们建议调至最大档位即可完美覆盖背景干扰。
+
+[<module>.build_rufus_qa]
+   performs reliably even in complex environments. Specifically: 1) 
+
+[<module>.build_rufus_qa]
+  The product is optimized to maintain core functionality regardless of environmental interference
+
+[<module>.build_rufus_qa]
+  Key performance metrics remain stable across various environments
+
+[<module>.build_rufus_qa]
+  ; 2) It delivers sufficient output power to remain clearly usable in noisy or complex scenarios; 3) Physical controls allow quick adjustments anytime. For extremely noisy environments, we recommend using maximum settings to overpower background interference.
+
+[<module>.build_rufus_qa]
+  的附加实用功能
+
+[<module>.build_rufus_qa]
+  About additional practical features of this 
+
+[<module>.build_rufus_qa]
+  除了核心功能外，还具备多项提升使用体验的附加功能。具体来说：1) 
+
+[<module>.build_rufus_qa]
+  产品内置智能芯片/模块，可自动适配不同使用场景
+
+[<module>.build_rufus_qa]
+  多项智能功能协同工作，提升整体使用体验
+
+[<module>.build_rufus_qa]
+  ；2) 无需连接手机APP或其他设备即可独立工作；3) 这些功能旨在为用户提供更便捷、更安全的使用体验。我们建议在使用前浏览完整的功能列表，以充分利用产品的所有潜力。
+
+[<module>.build_rufus_qa]
+  Yes, beyond its core functionality, 
+
+[<module>.build_rufus_qa]
+   includes several additional features that enhance the user experience. Specifically: 1) 
+
+[<module>.build_rufus_qa]
+  Built-in smart modules automatically adapt to different usage scenarios
+
+[<module>.build_rufus_qa]
+  Multiple intelligent features work together to elevate the overall experience
+
+[<module>.build_rufus_qa]
+  ; 2) It works independently without needing a smartphone app connection; 3) These features are designed for greater convenience and safety. We recommend reviewing the full feature list before use to fully leverage the product's potential.
+
+[<module>.build_rufus_qa]
+  的售后保修与技术支持
+
+[<module>.build_rufus_qa]
+  About warranty and technical support for this 
+
+[<module>.build_rufus_qa]
+  结论是：我们提供
+
+[<module>.build_rufus_qa]
+  1年
+
+[<module>.build_rufus_qa]
+  无忧官方保修及终身技术支持。具体来说：1) 自购买之日起
+
+[<module>.build_rufus_qa]
+  内，针对非人为损坏的硬件故障，我们提供免费维修或更换服务；2) 包装内附带详细的客服联系方式，专属团队会在24小时内响应您的排障需求；3) 质保不涵盖因私自拆卸或意外损坏导致的人为故障。我们建议妥善保留购买凭证，并在遇到任何使用问题时，优先联系客服进行排查。
+
+[<module>.build_rufus_qa]
+  Yes, we offer a 
+
+[<module>.build_rufus_qa]
+  1-year
+
+[<module>.build_rufus_qa]
+   worry-free official warranty and lifetime technical support. Specifically: 1) Within 
+
+[<module>.build_rufus_qa]
+  1 year
+
+[<module>.build_rufus_qa]
+  the warranty period
+
+[<module>.build_rufus_qa]
+   of purchase, we provide free repair or replacement for hardware failures not caused by human error; 2) The package includes detailed customer service contacts, and our dedicated team responds within 24 hours; 3) The warranty does not cover man-made damage from unauthorized disassembly or accidents. We recommend keeping your purchase receipt and contacting support first for any issues.
+
+[<module>.build_rufus_qa]
+  qa_pairs
+
+[<module>.build_rufus_qa]
+  total
+
+[<module>.extract_selling_points]
+  Extract and rank selling points with COSMO cause-effect chains.
+
+[<module>.extract_selling_points]
+  title
+
+[<module>.extract_selling_points]
+  
+
+[<module>.extract_selling_points]
+  bullets
+
+[<module>.extract_selling_points]
+  category
+
+[<module>.extract_selling_points]
+  (因为|由于|采用|通过|配备|内置|because|powered by|with|featuring|equipped)
+
+[<module>.extract_selling_points]
+  (可以|能够|确保|提供|帮助|改善|减少|增加|提升|delivers|provides|ensures|helps|improves|reduces|boosts)
+
+[<module>.extract_selling_points]
+  \d+
+
+[<module>.extract_selling_points]
+  source
+
+[<module>.extract_selling_points]
+  Bullet 
+
+[<module>.extract_selling_points]
+  text
+
+[<module>.extract_selling_points]
+  cause_effect_complete
+
+[<module>.extract_selling_points]
+  has_quantified_data
+
+[<module>.extract_selling_points]
+  cosmo_strength
+
+[<module>.extract_selling_points.<lambda>]
+  cosmo_strength
+
+[<module>.extract_selling_points.<genexpr>]
+  cosmo_strength
+
+[<module>.extract_selling_points]
+  严重缺乏因果推理结构。建议每个卖点按'痛点→机制→结果→边界'公式重写。
+
+[<module>.extract_selling_points.<genexpr>]
+  has_quantified_data
+
+[<module>.extract_selling_points]
+  缺乏量化数据支撑。建议在卖点中嵌入具体的数量、时间、百分比等数字。
+
+[<module>.extract_selling_points]
+  卖点数量不足。建议从产品属性、使用场景、用户评价中挖掘至少5个独立卖点。
+
+[<module>.extract_selling_points]
+  extracted_points
+
+[<module>.extract_selling_points]
+  top_3
+
+[<module>.extract_selling_points]
+  improvement_suggestions
+
+[<module>.extract_selling_points]
+  卖点结构良好，建议在Q&A和A+内容中进一步展开每个卖点的因果关系。
+
+[<module>.extract_selling_points]
+  cosmo_advice
+
+[<module>._cosmo_selling_advice]
+  Generate COSMO-specific selling advice.
+
+[<module>._cosmo_selling_advice.<genexpr>]
+  cosmo_strength
+
+[<module>._cosmo_selling_advice]
+  当前
+
+[<module>._cosmo_selling_advice]
+  产品
+
+[<module>._cosmo_selling_advice]
+  卖点的COSMO语义密度严重偏低。Rufus在面对买家'哪款
+
+[<module>._cosmo_selling_advice]
+  更适合XX场景？'的复合查询时，无法从您的Listing中提取有效的因果关系链来推荐您的产品。建议立即按照'场景→功能→量化结果→兼容人群'的链路重构所有卖点。
+
+[<module>._cosmo_selling_advice]
+  卖点具备基础的COSMO结构，但部分节点缺乏量化数据或常识疑虑解答。建议补充'解决什么顾虑'和'适合什么人群'的明确表述，以提升Rufus在复合查询中的抓取优先级。
+
+[<module>._cosmo_selling_advice]
+  卖点的COSMO语义结构完整。Rufus能够高效抓取并理解您的产品价值主张，在面对买家的场景化、对比型提问时具有较高的被推荐优先级。
+
+[<module>._extract_attributes]
+  Extract key product attributes from bullets and title.
+
+[<module>._extract_attributes]
+   
+
+[<module>._extract_attributes]
+  \d+[,\.\d]*\s*RPM|电机|motor|brushless
+
+[<module>._extract_attributes]
+  高速无刷电机
+
+[<module>._extract_attributes]
+  core_function
+
+[<module>._extract_attributes]
+  High-Speed Brushless Motor
+
+[<module>._extract_attributes]
+  core_function_en
+
+[<module>._extract_attributes]
+  supplement|vitamin|magnesium|mineral|nutrition
+
+[<module>._extract_attributes]
+  高吸收率复合补充剂
+
+[<module>._extract_attributes]
+  High-Absorption Complex Supplement
+
+[<module>._extract_attributes]
+  radio|对讲|PTT|POC|communication
+
+[<module>._extract_attributes]
+  5G/4G POC公网对讲机
+
+[<module>._extract_attributes]
+  5G/4G POC Push-to-Talk Radio
+
+[<module>._extract_attributes]
+  dryer|吹风|hair
+
+[<module>._extract_attributes]
+  高速负离子吹风机
+
+[<module>._extract_attributes]
+  High-Speed Ionic Hair Dryer
+
+[<module>._extract_attributes]
+  便携|轻|compact|lightweight|portable|travel
+
+[<module>._extract_attributes]
+  轻巧便携
+
+[<module>._extract_attributes]
+  differentiator
+
+[<module>._extract_attributes]
+  认证|NSF|GMP|FDA|certified|approved
+
+[<module>._extract_attributes]
+  权威认证
+
+[<module>._extract_attributes]
+  8\s*in\s*1|复合|complex|blend
+
+[<module>._extract_attributes]
+  8合1复合配方
+
+[<module>._extract_attributes]
+  赠送|附送|包含|with.*nozzle|with.*accessory
+
+[<module>._extract_attributes]
+  (?:赠送|附送|包含|with)\s*([^,，.\n]+)
+
+[<module>._extract_attributes]
+  extras
+
+[<module>._detect_persona]
+  Detect target persona from product context.
+
+[<module>._detect_persona]
+   
+
+[<module>._detect_persona]
+  上班族|通勤|出差|商务|commut|business|office|worker
+
+[<module>._detect_persona]
+  上班族与商务人士
+
+[<module>._detect_persona]
+  运动员|健身|运动|athlete|fitness|gym|workout|active
+
+[<module>._detect_persona]
+  运动健身人群
+
+[<module>._detect_persona]
+  老人|老年|senior|elderly|aging
+
+[<module>._detect_persona]
+  老年人
+
+[<module>._detect_persona]
+  婴儿|宝宝|儿童|小孩|baby|kid|child|infant|toddler
+
+[<module>._detect_persona]
+  婴幼儿家庭
+
+[<module>._detect_persona]
+  宠物|pet|dog|cat
+
+[<module>._detect_persona]
+  宠物家庭
+
+[<module>._detect_persona]
+  旅行|travel|trip|journey
+
+[<module>._detect_persona]
+  旅行者
+
+[<module>._detect_persona]
+  学生|student|college|school
+
+[<module>._detect_persona]
+  学生群体
+
+[<module>._detect_persona]
+  
+
+[<module>._detect_problem]
+  Detect the problem the product solves.
+
+[<module>._detect_problem]
+   
+
+[<module>._detect_problem]
+  毛躁|干枯|分叉|frizz|dry\s*hair|split\s*end
+
+[<module>._detect_problem]
+  毛躁发质
+
+[<module>._detect_problem]
+  疲劳|肌肉|恢复|muscle|fatigue|recovery|sore
+
+[<module>._detect_problem]
+  肌肉疲劳与恢复
+
+[<module>._detect_problem]
+  睡眠|失眠|sleep|insomnia|relaxation
+
+[<module>._detect_problem]
+  睡眠质量
+
+[<module>._detect_problem]
+  迟到|赶时间|busy\s*morning|rush|quick
+
+[<module>._detect_problem]
+  早晨匆忙
+
+[<module>._detect_problem]
+  
+
+[<module>._detect_scenes]
+  Detect usage scenes.
+
+[<module>._detect_scenes]
+   
+
+[<module>._detect_scenes]
+  旅行|出差|travel|trip|journey
+
+[<module>._detect_scenes]
+  旅行便携
+
+[<module>._detect_scenes]
+  家庭|家居|home|family|household
+
+[<module>._detect_scenes]
+  家庭使用
+
+[<module>._detect_scenes]
+  健身|运动|gym|workout|fitness
+
+[<module>._detect_scenes]
+  健身房
+
+[<module>._detect_scenes]
+  办公|office|desk|work
+
+[<module>._detect_scenes]
+  办公场景
+
+[<module>._detect_scenes]
+  户外|outdoor|camping|hiking
+
+[<module>._detect_scenes]
+  户外活动
+
+[<module>._detect_scenes]
+  送礼|礼物|gift|present|birthday|mother
+
+[<module>._detect_scenes]
+  送礼佳品
+
+[<module>._detect_scenes]
+  日常使用
+
+[<module>.build_data_insights]
+  Build a comprehensive data insights dashboard from all available context.
+
+[<module>.build_data_insights]
+  title
+
+[<module>.build_data_insights]
+  
+
+[<module>.build_data_insights]
+  category
+
+[<module>.build_data_insights]
+  keywords
+
+[<module>.build_data_insights]
+  bullets
+
+[<module>.build_data_insights]
+  brand
+
+[<module>.build_data_insights]
+  price
+
+[<module>.build_data_insights]
+  rating
+
+[<module>.build_data_insights]
+  review_count
+
+[<module>.build_data_insights]
+  description
+
+[<module>.build_data_insights]
+  mcp_status
+
+[<module>.build_data_insights]
+  bullets_synthetic
+
+[<module>.build_data_insights]
+  visual_features
+
+[<module>.build_data_insights]
+  cosmo_intents
+
+[<module>.build_data_insights]
+  未识别
+
+[<module>.build_data_insights]
+  $
+
+[<module>.build_data_insights]
+  未知
+
+[<module>.build_data_insights]
+  /5
+
+[<module>.build_data_insights]
+  暂无评分
+
+[<module>.build_data_insights]
+  暂无
+
+[<module>.build_data_insights]
+   
+
+[<module>.build_data_insights]
+  高
+
+[<module>.build_data_insights]
+  中
+
+[<module>.build_data_insights]
+  低
+
+[<module>.build_data_insights]
+  total
+
+[<module>.build_data_insights]
+  top5
+
+[<module>.build_data_insights]
+  unique_words
+
+[<module>.build_data_insights]
+  diversity
+
+[<module>.build_data_insights]
+  coverage_judgment
+
+[<module>.build_data_insights]
+  关键词覆盖广泛，流量入口充足
+
+[<module>.build_data_insights]
+  关键词覆盖中等
+
+[<module>.build_data_insights]
+  关键词覆盖不足，建议拓展长尾词
+
+[<module>.build_data_insights]
+  index
+
+[<module>.build_data_insights]
+  text
+
+[<module>.build_data_insights]
+  score
+
+[<module>.build_data_insights.<genexpr>]
+  score
+
+[<module>.build_data_insights]
+  count
+
+[<module>.build_data_insights]
+  avg_score
+
+[<module>.build_data_insights]
+  synthetic
+
+[<module>.build_data_insights]
+  judgment
+
+[<module>.build_data_insights]
+  五点描述COSMO语义密度优秀，Rufus可高效索引
+
+[<module>.build_data_insights]
+  五点描述结构良好，建议补充量化数据
+
+[<module>.build_data_insights]
+  五点描述缺乏因果链路，Rufus推荐优先级偏低
+
+[<module>.build_data_insights]
+  五点描述严重不足，Rufus无法有效推荐该产品
+
+[<module>.build_data_insights]
+  details
+
+[<module>.build_data_insights]
+  category_hierarchy
+
+[<module>.build_data_insights]
+  category_depth
+
+[<module>.build_data_insights]
+  mcp_sources
+
+[<module>.build_data_insights]
+  sif
+
+[<module>.build_data_insights]
+  sorftime
+
+[<module>.build_data_insights]
+  SIF + Sorftime
+
+[<module>.build_data_insights]
+  data_quality
+
+[<module>.build_data_insights]
+  高 — 真实Listing数据
+
+[<module>.build_data_insights]
+  中 — 基于关键词合成的五点描述
+
+[<module>.build_data_insights]
+  低 — 数据不足，建议补充
+
+[<module>.build_data_insights]
+  materials
+
+[<module>.build_data_insights]
+  colors
+
+[<module>.build_data_insights]
+  primary_colors
+
+[<module>.build_data_insights]
+  shape
+
+[<module>.build_data_insights]
+  product_shape
+
+[<module>.build_data_insights]
+  priority
+
+[<module>.build_data_insights]
+  high
+
+[<module>.build_data_insights]
+  area
+
+[<module>.build_data_insights]
+  五点描述优化
+
+[<module>.build_data_insights]
+  action
+
+[<module>.build_data_insights]
+  为每个Bullet添加具体的量化数据和因果链条（痛点→机制→结果→边界）
+
+[<module>.build_data_insights]
+  关键词拓展
+
+[<module>.build_data_insights]
+  当前仅
+
+[<module>.build_data_insights]
+  个流量词，建议通过SIF MCP挖掘更多长尾关键词覆盖蓝海流量
+
+[<module>.build_data_insights]
+  medium
+
+[<module>.build_data_insights]
+  品牌识别
+
+[<module>.build_data_insights]
+  标题中品牌信息不明显，建议前置品牌名以提高品牌搜索可见度
+
+[<module>.build_data_insights]
+  数据质量
+
+[<module>.build_data_insights]
+  当前五点描述为AI合成。建议从Amazon实时采集真实Listing数据以获得更准确的COSMO评分
+
+[<module>.build_data_insights]
+  社会证明
+
+[<module>.build_data_insights]
+  缺少评分和评论数据，建议关注Review积累策略以提升转化率
+
+[<module>.build_data_insights]
+  low
+
+[<module>.build_data_insights]
+  A+内容
+
+[<module>.build_data_insights]
+  五点描述质量良好，建议同步优化A+内容（品牌故事+场景图+对比模块）以最大化Rufus推荐权重
+
+[<module>.build_data_insights]
+  持续监控
+
+[<module>.build_data_insights]
+  每周通过SIF MCP监控关键词排名变化，关注竞品动态，及时调整投放策略
+
+[<module>.build_data_insights]
+  overview
+
+[<module>.build_data_insights]
+  keyword_health
+
+[<module>.build_data_insights]
+  bullets_health
+
+[<module>.build_data_insights]
+  market_signals
+
+[<module>.build_data_insights]
+  visual_summary
+
+[<module>.build_data_insights]
+  recommendations
+
+[<module>.build_data_insights]
+  data_quality_note
+
+[<module>.build_data_insights]
+  真实Amazon Listing数据 + COSMO/Rufus算法量化评估
+
+[<module>.build_data_insights]
+  基于关键词的AI合成数据 + COSMO/Rufus算法量化评估
+

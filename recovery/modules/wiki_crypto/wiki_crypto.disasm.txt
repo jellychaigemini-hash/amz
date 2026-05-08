@@ -1,0 +1,979 @@
+# Reconstructed from: /projects/sandbox/decompile/pyz_contents/wiki_crypto.pyc
+# Python magic: 2b0e0d0a
+
+# === CODE: <module>  (file=wiki_crypto.py, line=1) ===
+# argcount=0, posonly=0, kwonly=0, stacksize=9
+# varnames=()
+# freevars=(), cellvars=()
+# names=('__doc__', 'base64', 'hashlib', 'json', 'os', 'struct', 'pathlib', 'Path', '__file__', 'resolve', 'parent', 'BASE', 'WIKI_DIR', '_KEY_SEED', 'sha256', 'digest', '_KEY', '_NONCE_PREFIX', '_derive_nonce', '_aes_ctr_encrypt', '_aes_ctr_decrypt', '_pure_aes_ctr', 'encrypt_file', 'decrypt_file', 'wiki_read', 'encrypt_all_wiki', '__name__', 'sys', 'argv', 'key_file', 'content', 'print', 'len')
+# constants:
+#   [0] '\nWiki Knowledge Base — Encrypted Storage\n========================================\nAll Wiki .md files are AES-256 encrypted at build time.\nThis module handles decryption at runtime via .pyd-pro...
+#   [1] None
+#   [2] ('Path',)
+#   [3] 'Wiki'
+#   [4] b'BSC-Wiki-OPC-OS-KnowledgeBase-Protection-2026'
+#   [5] b'BSCWIKI1'
+#   [21] '__main__'
+#   [22] '--encrypt'
+#   [23] '--test'
+#   [24] '  '
+#   [25] ': '
+#   [26] ' chars'
+#   [27] 'Usage: python wiki_crypto.py --encrypt'
+#   [28] (None,)
+#   [29] ('06-Rufus-Cosmo/algorithms.md', 'PROMPT-LIBRARY.md')
+# --- bytecode ---
+#   0           RESUME                   0
+# 
+#   1           LOAD_CONST               0 ('\nWiki Knowledge Base — Encrypted Storage\n========================================\nAll Wiki .md files are AES-256 encrypted at build time.\nThis module handles decryption at runtime via .pyd-protected key.\n\nBuild-time:  python wiki_crypto.py --encrypt    (encrypts Wiki/*.md → Wiki/*.enc)\nRuntime:     from wiki_crypto import wiki_read   (decrypts and returns content)\n')
+#               STORE_NAME               0 (__doc__)
+# 
+#  10           LOAD_SMALL_INT           0
+#               LOAD_CONST               1 (None)
+#               IMPORT_NAME              1 (base64)
+#               STORE_NAME               1 (base64)
+# 
+#  11           LOAD_SMALL_INT           0
+#               LOAD_CONST               1 (None)
+#               IMPORT_NAME              2 (hashlib)
+#               STORE_NAME               2 (hashlib)
+# 
+#  12           LOAD_SMALL_INT           0
+#               LOAD_CONST               1 (None)
+#               IMPORT_NAME              3 (json)
+#               STORE_NAME               3 (json)
+# 
+#  13           LOAD_SMALL_INT           0
+#               LOAD_CONST               1 (None)
+#               IMPORT_NAME              4 (os)
+#               STORE_NAME               4 (os)
+# 
+#  14           LOAD_SMALL_INT           0
+#               LOAD_CONST               1 (None)
+#               IMPORT_NAME              5 (struct)
+#               STORE_NAME               5 (struct)
+# 
+#  15           LOAD_SMALL_INT           0
+#               LOAD_CONST               2 (('Path',))
+#               IMPORT_NAME              6 (pathlib)
+#               IMPORT_FROM              7 (Path)
+#               STORE_NAME               7 (Path)
+#               POP_TOP
+# 
+#  17           LOAD_NAME                7 (Path)
+#               PUSH_NULL
+#               LOAD_NAME                8 (__file__)
+#               CALL                     1
+#               LOAD_ATTR               19 (resolve + NULL|self)
+#               CALL                     0
+#               LOAD_ATTR               20 (parent)
+#               STORE_NAME              11 (BASE)
+# 
+#  18           LOAD_NAME               11 (BASE)
+#               LOAD_CONST               3 ('Wiki')
+#               BINARY_OP               11 (/)
+#               STORE_NAME              12 (WIKI_DIR)
+# 
+#  23           LOAD_CONST               4 (b'BSC-Wiki-OPC-OS-KnowledgeBase-Protection-2026')
+#               STORE_NAME              13 (_KEY_SEED)
+# 
+#  24           LOAD_NAME                2 (hashlib)
+#               LOAD_ATTR               28 (sha256)
+#               PUSH_NULL
+#               LOAD_NAME               13 (_KEY_SEED)
+#               CALL                     1
+#               LOAD_ATTR               31 (digest + NULL|self)
+#               CALL                     0
+#               STORE_NAME              16 (_KEY)
+# 
+#  25           LOAD_CONST               5 (b'BSCWIKI1')
+#               STORE_NAME              17 (_NONCE_PREFIX)
+# 
+#  28           LOAD_CONST               6 (<code object __annotate__ at 0x7fc86ab30b30, file "wiki_crypto.py", line 28>)
+#               MAKE_FUNCTION
+#               LOAD_CONST               7 (<code object _derive_nonce at 0x7fc86ac73e10, file "wiki_crypto.py", line 28>)
+#               MAKE_FUNCTION
+#               SET_FUNCTION_ATTRIBUTE  16 (annotate)
+#               STORE_NAME              18 (_derive_nonce)
+# 
+#  34           LOAD_CONST               8 (<code object __annotate__ at 0x7fc86aaed8a0, file "wiki_crypto.py", line 34>)
+#               MAKE_FUNCTION
+#               LOAD_CONST               9 (<code object _aes_ctr_encrypt at 0x7fc86aca68b0, file "wiki_crypto.py", line 34>)
+#               MAKE_FUNCTION
+#               SET_FUNCTION_ATTRIBUTE  16 (annotate)
+#               STORE_NAME              19 (_aes_ctr_encrypt)
+# 
+#  42           LOAD_CONST              10 (<code object __annotate__ at 0x7fc86aaed9b0, file "wiki_crypto.py", line 42>)
+#               MAKE_FUNCTION
+#               LOAD_CONST              11 (<code object _aes_ctr_decrypt at 0x7fc86aae1a70, file "wiki_crypto.py", line 42>)
+#               MAKE_FUNCTION
+#               SET_FUNCTION_ATTRIBUTE  16 (annotate)
+#               STORE_NAME              20 (_aes_ctr_decrypt)
+# 
+#  49           LOAD_CONST              12 (<code object __annotate__ at 0x7fc86aaedac0, file "wiki_crypto.py", line 49>)
+#               MAKE_FUNCTION
+#               LOAD_CONST              13 (<code object _pure_aes_ctr at 0x3449b020, file "wiki_crypto.py", line 49>)
+#               MAKE_FUNCTION
+#               SET_FUNCTION_ATTRIBUTE  16 (annotate)
+#               STORE_NAME              21 (_pure_aes_ctr)
+# 
+#  65           LOAD_CONST              14 (<code object __annotate__ at 0x7fc86ab30d30, file "wiki_crypto.py", line 65>)
+#               MAKE_FUNCTION
+#               LOAD_CONST              15 (<code object encrypt_file at 0x7fc86ac23a30, file "wiki_crypto.py", line 65>)
+#               MAKE_FUNCTION
+#               SET_FUNCTION_ATTRIBUTE  16 (annotate)
+#               STORE_NAME              22 (encrypt_file)
+# 
+#  79           LOAD_CONST              28 ((None,))
+#               LOAD_CONST              16 (<code object __annotate__ at 0x7fc86aaedbd0, file "wiki_crypto.py", line 79>)
+#               MAKE_FUNCTION
+#               LOAD_CONST              17 (<code object decrypt_file at 0x344b1e80, file "wiki_crypto.py", line 79>)
+#               MAKE_FUNCTION
+#               SET_FUNCTION_ATTRIBUTE  16 (annotate)
+#               SET_FUNCTION_ATTRIBUTE   1 (defaults)
+#               STORE_NAME              23 (decrypt_file)
+# 
+# 100           LOAD_CONST              18 (<code object __annotate__ at 0x7fc86ab30e30, file "wiki_crypto.py", line 100>)
+#               MAKE_FUNCTION
+#               LOAD_CONST              19 (<code object wiki_read at 0x7fc86ac85b50, file "wiki_crypto.py", line 100>)
+#               MAKE_FUNCTION
+#               SET_FUNCTION_ATTRIBUTE  16 (annotate)
+#               STORE_NAME              24 (wiki_read)
+# 
+# 118           LOAD_CONST              20 (<code object encrypt_all_wiki at 0x343bdd20, file "wiki_crypto.py", line 118>)
+#               MAKE_FUNCTION
+#               STORE_NAME              25 (encrypt_all_wiki)
+# 
+# 135           LOAD_NAME               26 (__name__)
+#               LOAD_CONST              21 ('__main__')
+#               COMPARE_OP              88 (bool(==))
+#               POP_JUMP_IF_FALSE       98 (to L5)
+#               NOT_TAKEN
+# 
+# 136           LOAD_SMALL_INT           0
+#               LOAD_CONST               1 (None)
+#               IMPORT_NAME             27 (sys)
+#               STORE_NAME              27 (sys)
+# 
+# 137           LOAD_CONST              22 ('--encrypt')
+#               LOAD_NAME               27 (sys)
+#               LOAD_ATTR               56 (argv)
+#               CONTAINS_OP              0 (in)
+#               POP_JUMP_IF_FALSE       10 (to L1)
+#               NOT_TAKEN
+# 
+# 138           LOAD_NAME               25 (encrypt_all_wiki)
+#               PUSH_NULL
+#               CALL                     0
+#               POP_TOP
+#               LOAD_CONST               1 (None)
+#               RETURN_VALUE
+# 
+# 139   L1:     LOAD_CONST              23 ('--test')
+#               LOAD_NAME               27 (sys)
+#               LOAD_ATTR               56 (argv)
+#               CONTAINS_OP              0 (in)
+#               POP_JUMP_IF_FALSE       41 (to L4)
+#               NOT_TAKEN
+# 
+# 141           LOAD_CONST              29 (('06-Rufus-Cosmo/algorithms.md', 'PROMPT-LIBRARY.md'))
+#               GET_ITER
+#       L2:     FOR_ITER                32 (to L3)
+#               STORE_NAME              29 (key_file)
+# 
+# 142           LOAD_NAME               24 (wiki_read)
+#               PUSH_NULL
+#               LOAD_NAME               29 (key_file)
+#               CALL                     1
+#               STORE_NAME              30 (content)
+# 
+# 143           LOAD_NAME               31 (print)
+#               PUSH_NULL
+#               LOAD_CONST              24 ('  ')
+#               LOAD_NAME               29 (key_file)
+#               FORMAT_SIMPLE
+#               LOAD_CONST              25 (': ')
+#               LOAD_NAME               32 (len)
+#               PUSH_NULL
+#               LOAD_NAME               30 (content)
+#               CALL                     1
+#               FORMAT_SIMPLE
+#               LOAD_CONST              26 (' chars')
+#               BUILD_STRING             5
+#               CALL                     1
+#               POP_TOP
+#               JUMP_BACKWARD           34 (to L2)
+# 
+# 141   L3:     END_FOR
+#               POP_ITER
+#               LOAD_CONST               1 (None)
+#               RETURN_VALUE
+# 
+# 145   L4:     LOAD_NAME               31 (print)
+#               PUSH_NULL
+#               LOAD_CONST              27 ('Usage: python wiki_crypto.py --encrypt')
+#               CALL                     1
+#               POP_TOP
+#               LOAD_CONST               1 (None)
+#               RETURN_VALUE
+# 
+# 135   L5:     LOAD_CONST               1 (None)
+#               RETURN_VALUE
+# --- end bytecode ---
+
+    # === CODE: <module>.__annotate__  (file=wiki_crypto.py, line=28) ===
+    # argcount=1, posonly=1, kwonly=0, stacksize=4
+    # varnames=('format',)
+    # freevars=(), cellvars=()
+    # names=('str', 'bytes')
+    # constants:
+    #   [0] 2
+    #   [1] 'filepath'
+    #   [2] 'return'
+    # --- bytecode ---
+    #  28           RESUME                   0
+    #               LOAD_FAST_BORROW         0 (format)
+    #               LOAD_SMALL_INT           2
+    #               COMPARE_OP             132 (>)
+    #               POP_JUMP_IF_FALSE        3 (to L1)
+    #               NOT_TAKEN
+    #               LOAD_COMMON_CONSTANT     1 (NotImplementedError)
+    #               RAISE_VARARGS            1
+    #       L1:     LOAD_CONST               1 ('filepath')
+    #               LOAD_GLOBAL              0 (str)
+    #               LOAD_CONST               2 ('return')
+    #               LOAD_GLOBAL              2 (bytes)
+    #               BUILD_MAP                2
+    #               RETURN_VALUE
+    # --- end bytecode ---
+
+    # === CODE: <module>._derive_nonce  (file=wiki_crypto.py, line=28) ===
+    # argcount=1, posonly=0, kwonly=0, stacksize=4
+    # varnames=('filepath', 'h')
+    # freevars=(), cellvars=()
+    # names=('hashlib', 'sha256', 'encode', 'digest', '_NONCE_PREFIX')
+    # constants:
+    #   [0] 'Derive a deterministic 16-byte nonce for each file.'
+    #   [1] slice(None, 8, None)
+    # --- bytecode ---
+    #  28           RESUME                   0
+    # 
+    #  30           LOAD_GLOBAL              0 (hashlib)
+    #               LOAD_ATTR                2 (sha256)
+    #               PUSH_NULL
+    #               LOAD_FAST_BORROW         0 (filepath)
+    #               LOAD_ATTR                5 (encode + NULL|self)
+    #               CALL                     0
+    #               CALL                     1
+    #               LOAD_ATTR                7 (digest + NULL|self)
+    #               CALL                     0
+    #               LOAD_CONST               1 (slice(None, 8, None))
+    #               BINARY_OP               26 ([])
+    #               STORE_FAST               1 (h)
+    # 
+    #  31           LOAD_GLOBAL              8 (_NONCE_PREFIX)
+    #               LOAD_FAST_BORROW         1 (h)
+    #               BINARY_OP                0 (+)
+    #               RETURN_VALUE
+    # --- end bytecode ---
+
+    # === CODE: <module>.__annotate__  (file=wiki_crypto.py, line=34) ===
+    # argcount=1, posonly=1, kwonly=0, stacksize=6
+    # varnames=('format',)
+    # freevars=(), cellvars=()
+    # names=('bytes',)
+    # constants:
+    #   [0] 2
+    #   [1] 'data'
+    #   [2] 'nonce'
+    #   [3] 'return'
+    # --- bytecode ---
+    #  34           RESUME                   0
+    #               LOAD_FAST_BORROW         0 (format)
+    #               LOAD_SMALL_INT           2
+    #               COMPARE_OP             132 (>)
+    #               POP_JUMP_IF_FALSE        3 (to L1)
+    #               NOT_TAKEN
+    #               LOAD_COMMON_CONSTANT     1 (NotImplementedError)
+    #               RAISE_VARARGS            1
+    #       L1:     LOAD_CONST               1 ('data')
+    #               LOAD_GLOBAL              0 (bytes)
+    #               LOAD_CONST               2 ('nonce')
+    #               LOAD_GLOBAL              0 (bytes)
+    #               LOAD_CONST               3 ('return')
+    #               LOAD_GLOBAL              0 (bytes)
+    #               BUILD_MAP                3
+    #               RETURN_VALUE
+    # --- end bytecode ---
+
+    # === CODE: <module>._aes_ctr_encrypt  (file=wiki_crypto.py, line=34) ===
+    # argcount=2, posonly=0, kwonly=0, stacksize=6
+    # varnames=('data', 'nonce', 'Cipher', 'algorithms', 'modes', 'cipher', 'encryptor')
+    # freevars=(), cellvars=()
+    # names=('cryptography.hazmat.primitives.ciphers', 'Cipher', 'algorithms', 'modes', 'AES', '_KEY', 'CTR', 'encryptor', 'update', 'finalize')
+    # constants:
+    #   [0] 'AES-256-CTR encrypt/decrypt (symmetric). Nonce must be 16 bytes.'
+    #   [1] ('Cipher', 'algorithms', 'modes')
+    # --- bytecode ---
+    #  34           RESUME                   0
+    # 
+    #  36           LOAD_SMALL_INT           0
+    #               LOAD_CONST               1 (('Cipher', 'algorithms', 'modes'))
+    #               IMPORT_NAME              0 (cryptography.hazmat.primitives.ciphers)
+    #               IMPORT_FROM              1 (Cipher)
+    #               STORE_FAST               2 (Cipher)
+    #               IMPORT_FROM              2 (algorithms)
+    #               STORE_FAST               3 (algorithms)
+    #               IMPORT_FROM              3 (modes)
+    #               STORE_FAST               4 (modes)
+    #               POP_TOP
+    # 
+    #  37           LOAD_FAST_BORROW         2 (Cipher)
+    #               PUSH_NULL
+    #               LOAD_FAST_BORROW         3 (algorithms)
+    #               LOAD_ATTR                9 (AES + NULL|self)
+    #               LOAD_GLOBAL             10 (_KEY)
+    #               CALL                     1
+    #               LOAD_FAST_BORROW         4 (modes)
+    #               LOAD_ATTR               13 (CTR + NULL|self)
+    #               LOAD_FAST_BORROW         1 (nonce)
+    #               CALL                     1
+    #               CALL                     2
+    #               STORE_FAST               5 (cipher)
+    # 
+    #  38           LOAD_FAST_BORROW         5 (cipher)
+    #               LOAD_ATTR               15 (encryptor + NULL|self)
+    #               CALL                     0
+    #               STORE_FAST               6 (encryptor)
+    # 
+    #  39           LOAD_FAST_BORROW         6 (encryptor)
+    #               LOAD_ATTR               17 (update + NULL|self)
+    #               LOAD_FAST_BORROW         0 (data)
+    #               CALL                     1
+    #               LOAD_FAST_BORROW         6 (encryptor)
+    #               LOAD_ATTR               19 (finalize + NULL|self)
+    #               CALL                     0
+    #               BINARY_OP                0 (+)
+    #               RETURN_VALUE
+    # --- end bytecode ---
+
+    # === CODE: <module>.__annotate__  (file=wiki_crypto.py, line=42) ===
+    # argcount=1, posonly=1, kwonly=0, stacksize=6
+    # varnames=('format',)
+    # freevars=(), cellvars=()
+    # names=('bytes',)
+    # constants:
+    #   [0] 2
+    #   [1] 'data'
+    #   [2] 'nonce'
+    #   [3] 'return'
+    # --- bytecode ---
+    #  42           RESUME                   0
+    #               LOAD_FAST_BORROW         0 (format)
+    #               LOAD_SMALL_INT           2
+    #               COMPARE_OP             132 (>)
+    #               POP_JUMP_IF_FALSE        3 (to L1)
+    #               NOT_TAKEN
+    #               LOAD_COMMON_CONSTANT     1 (NotImplementedError)
+    #               RAISE_VARARGS            1
+    #       L1:     LOAD_CONST               1 ('data')
+    #               LOAD_GLOBAL              0 (bytes)
+    #               LOAD_CONST               2 ('nonce')
+    #               LOAD_GLOBAL              0 (bytes)
+    #               LOAD_CONST               3 ('return')
+    #               LOAD_GLOBAL              0 (bytes)
+    #               BUILD_MAP                3
+    #               RETURN_VALUE
+    # --- end bytecode ---
+
+    # === CODE: <module>._aes_ctr_decrypt  (file=wiki_crypto.py, line=42) ===
+    # argcount=2, posonly=0, kwonly=0, stacksize=4
+    # varnames=('data', 'nonce')
+    # freevars=(), cellvars=()
+    # names=('_aes_ctr_encrypt',)
+    # constants:
+    #   [0] 'AES-256-CTR decrypt (same as encrypt since CTR is symmetric).'
+    # --- bytecode ---
+    #  42           RESUME                   0
+    # 
+    #  44           LOAD_GLOBAL              1 (_aes_ctr_encrypt + NULL)
+    #               LOAD_FAST_BORROW_LOAD_FAST_BORROW 1 (data, nonce)
+    #               CALL                     2
+    #               RETURN_VALUE
+    # --- end bytecode ---
+
+    # === CODE: <module>.__annotate__  (file=wiki_crypto.py, line=49) ===
+    # argcount=1, posonly=1, kwonly=0, stacksize=6
+    # varnames=('format',)
+    # freevars=(), cellvars=()
+    # names=('bytes',)
+    # constants:
+    #   [0] 2
+    #   [1] 'data'
+    #   [2] 'nonce'
+    #   [3] 'return'
+    # --- bytecode ---
+    #  49           RESUME                   0
+    #               LOAD_FAST_BORROW         0 (format)
+    #               LOAD_SMALL_INT           2
+    #               COMPARE_OP             132 (>)
+    #               POP_JUMP_IF_FALSE        3 (to L1)
+    #               NOT_TAKEN
+    #               LOAD_COMMON_CONSTANT     1 (NotImplementedError)
+    #               RAISE_VARARGS            1
+    #       L1:     LOAD_CONST               1 ('data')
+    #               LOAD_GLOBAL              0 (bytes)
+    #               LOAD_CONST               2 ('nonce')
+    #               LOAD_GLOBAL              0 (bytes)
+    #               LOAD_CONST               3 ('return')
+    #               LOAD_GLOBAL              0 (bytes)
+    #               BUILD_MAP                3
+    #               RETURN_VALUE
+    # --- end bytecode ---
+
+    # === CODE: <module>._pure_aes_ctr  (file=wiki_crypto.py, line=49) ===
+    # argcount=2, posonly=0, kwonly=0, stacksize=6
+    # varnames=('data', 'nonce', 'result', 'counter', 'i', 'block_input', 'keystream', 'chunk', 'j')
+    # freevars=(), cellvars=()
+    # names=('bytearray', 'len', 'range', 'struct', 'pack', 'hashlib', 'sha256', '_KEY', 'digest', 'bytes')
+    # constants:
+    #   [0] 'Pure Python AES-CTR implementation using PyCryptodome-compatible approach.\nFalls back to simple XOR with key stream for environments without cryptography.'
+    #   [1] '>Q'
+    # --- bytecode ---
+    #  49           RESUME                   0
+    # 
+    #  53           LOAD_GLOBAL              1 (bytearray + NULL)
+    #               LOAD_GLOBAL              3 (len + NULL)
+    #               LOAD_FAST_BORROW         0 (data)
+    #               CALL                     1
+    #               CALL                     1
+    #               STORE_FAST               2 (result)
+    # 
+    #  54           LOAD_SMALL_INT           0
+    #               STORE_FAST               3 (counter)
+    # 
+    #  55           LOAD_GLOBAL              5 (range + NULL)
+    #               LOAD_SMALL_INT           0
+    #               LOAD_GLOBAL              3 (len + NULL)
+    #               LOAD_FAST_BORROW         0 (data)
+    #               CALL                     1
+    #               LOAD_SMALL_INT          32
+    #               CALL                     3
+    #               GET_ITER
+    #       L1:     FOR_ITER               157 (to L4)
+    #               STORE_FAST               4 (i)
+    # 
+    #  56           LOAD_FAST_BORROW         1 (nonce)
+    #               LOAD_GLOBAL              6 (struct)
+    #               LOAD_ATTR                8 (pack)
+    #               PUSH_NULL
+    #               LOAD_CONST               1 ('>Q')
+    #               LOAD_FAST_BORROW         3 (counter)
+    #               CALL                     2
+    #               BINARY_OP                0 (+)
+    #               STORE_FAST               5 (block_input)
+    # 
+    #  57           LOAD_GLOBAL             10 (hashlib)
+    #               LOAD_ATTR               12 (sha256)
+    #               PUSH_NULL
+    #               LOAD_GLOBAL             14 (_KEY)
+    #               LOAD_FAST_BORROW         5 (block_input)
+    #               BINARY_OP                0 (+)
+    #               CALL                     1
+    #               LOAD_ATTR               17 (digest + NULL|self)
+    #               CALL                     0
+    #               STORE_FAST               6 (keystream)
+    # 
+    #  58           LOAD_FAST_BORROW_LOAD_FAST_BORROW 4 (data, i)
+    #               LOAD_FAST_BORROW         4 (i)
+    #               LOAD_SMALL_INT          32
+    #               BINARY_OP                0 (+)
+    #               BINARY_SLICE
+    #               STORE_FAST               7 (chunk)
+    # 
+    #  59           LOAD_GLOBAL              5 (range + NULL)
+    #               LOAD_GLOBAL              3 (len + NULL)
+    #               LOAD_FAST_BORROW         7 (chunk)
+    #               CALL                     1
+    #               CALL                     1
+    #               GET_ITER
+    #       L2:     FOR_ITER                33 (to L3)
+    #               STORE_FAST               8 (j)
+    # 
+    #  60           LOAD_FAST_BORROW_LOAD_FAST_BORROW 120 (chunk, j)
+    #               BINARY_OP               26 ([])
+    #               LOAD_FAST_BORROW_LOAD_FAST_BORROW 104 (keystream, j)
+    #               BINARY_OP               26 ([])
+    #               BINARY_OP               12 (^)
+    #               LOAD_FAST_BORROW_LOAD_FAST_BORROW 36 (result, i)
+    #               LOAD_FAST_BORROW         8 (j)
+    #               BINARY_OP                0 (+)
+    #               STORE_SUBSCR
+    #               JUMP_BACKWARD           35 (to L2)
+    # 
+    #  59   L3:     END_FOR
+    #               POP_ITER
+    # 
+    #  61           LOAD_FAST_BORROW         3 (counter)
+    #               LOAD_SMALL_INT           1
+    #               BINARY_OP               13 (+=)
+    #               STORE_FAST               3 (counter)
+    #               JUMP_BACKWARD          159 (to L1)
+    # 
+    #  55   L4:     END_FOR
+    #               POP_ITER
+    # 
+    #  62           LOAD_GLOBAL             19 (bytes + NULL)
+    #               LOAD_FAST_BORROW         2 (result)
+    #               CALL                     1
+    #               RETURN_VALUE
+    # --- end bytecode ---
+
+    # === CODE: <module>.__annotate__  (file=wiki_crypto.py, line=65) ===
+    # argcount=1, posonly=1, kwonly=0, stacksize=4
+    # varnames=('format',)
+    # freevars=(), cellvars=()
+    # names=('Path',)
+    # constants:
+    #   [0] 2
+    #   [1] 'filepath'
+    #   [2] 'return'
+    # --- bytecode ---
+    #  65           RESUME                   0
+    #               LOAD_FAST_BORROW         0 (format)
+    #               LOAD_SMALL_INT           2
+    #               COMPARE_OP             132 (>)
+    #               POP_JUMP_IF_FALSE        3 (to L1)
+    #               NOT_TAKEN
+    #               LOAD_COMMON_CONSTANT     1 (NotImplementedError)
+    #               RAISE_VARARGS            1
+    #       L1:     LOAD_CONST               1 ('filepath')
+    #               LOAD_GLOBAL              0 (Path)
+    #               LOAD_CONST               2 ('return')
+    #               LOAD_GLOBAL              0 (Path)
+    #               BUILD_MAP                2
+    #               RETURN_VALUE
+    # --- end bytecode ---
+
+    # === CODE: <module>.encrypt_file  (file=wiki_crypto.py, line=65) ===
+    # argcount=1, posonly=0, kwonly=0, stacksize=7
+    # varnames=('filepath', 'data', 'nonce', 'encrypted', 'enc_path')
+    # freevars=(), cellvars=()
+    # names=('read_bytes', '_derive_nonce', 'str', 'relative_to', 'WIKI_DIR', '_aes_ctr_encrypt', 'ImportError', '_pure_aes_ctr', 'with_suffix', 'suffix', 'write_bytes')
+    # constants:
+    #   [0] 'Encrypt a single file. Returns path to .enc file.'
+    #   [1] '.enc'
+    # --- bytecode ---
+    #   65           RESUME                   0
+    # 
+    #   67           LOAD_FAST_BORROW         0 (filepath)
+    #                LOAD_ATTR                1 (read_bytes + NULL|self)
+    #                CALL                     0
+    #                STORE_FAST               1 (data)
+    # 
+    #   68           LOAD_GLOBAL              3 (_derive_nonce + NULL)
+    #                LOAD_GLOBAL              5 (str + NULL)
+    #                LOAD_FAST_BORROW         0 (filepath)
+    #                LOAD_ATTR                7 (relative_to + NULL|self)
+    #                LOAD_GLOBAL              8 (WIKI_DIR)
+    #                CALL                     1
+    #                CALL                     1
+    #                CALL                     1
+    #                STORE_FAST               2 (nonce)
+    # 
+    #   70           NOP
+    # 
+    #   71   L1:     LOAD_GLOBAL             11 (_aes_ctr_encrypt + NULL)
+    #                LOAD_FAST_BORROW_LOAD_FAST_BORROW 18 (data, nonce)
+    #                CALL                     2
+    #                STORE_FAST               3 (encrypted)
+    # 
+    #   74   L2:     LOAD_FAST_BORROW         0 (filepath)
+    #                LOAD_ATTR               17 (with_suffix + NULL|self)
+    #                LOAD_FAST_BORROW         0 (filepath)
+    #                LOAD_ATTR               18 (suffix)
+    #                LOAD_CONST               1 ('.enc')
+    #                BINARY_OP                0 (+)
+    #                CALL                     1
+    #                STORE_FAST               4 (enc_path)
+    # 
+    #   75           LOAD_FAST_BORROW         4 (enc_path)
+    #                LOAD_ATTR               21 (write_bytes + NULL|self)
+    #                LOAD_FAST_BORROW         3 (encrypted)
+    #                CALL                     1
+    #                POP_TOP
+    # 
+    #   76           LOAD_FAST_BORROW         4 (enc_path)
+    #                RETURN_VALUE
+    # 
+    #   --   L3:     PUSH_EXC_INFO
+    # 
+    #   72           LOAD_GLOBAL             12 (ImportError)
+    #                CHECK_EXC_MATCH
+    #                POP_JUMP_IF_FALSE       15 (to L5)
+    #                NOT_TAKEN
+    #                POP_TOP
+    # 
+    #   73           LOAD_GLOBAL             15 (_pure_aes_ctr + NULL)
+    #                LOAD_FAST_LOAD_FAST     18 (data, nonce)
+    #                CALL                     2
+    #                STORE_FAST               3 (encrypted)
+    #        L4:     POP_EXCEPT
+    #                JUMP_BACKWARD_NO_INTERRUPT 77 (to L2)
+    # 
+    #   72   L5:     RERAISE                  0
+    # 
+    #   --   L6:     COPY                     3
+    #                POP_EXCEPT
+    #                RERAISE                  1
+    # ExceptionTable:
+    #   L1 to L2 -> L3 [0]
+    #   L3 to L4 -> L6 [1] lasti
+    #   L5 to L6 -> L6 [1] lasti
+    # --- end bytecode ---
+
+    # === CODE: <module>.__annotate__  (file=wiki_crypto.py, line=79) ===
+    # argcount=1, posonly=1, kwonly=0, stacksize=6
+    # varnames=('format',)
+    # freevars=(), cellvars=()
+    # names=('Path', 'str', 'bytes')
+    # constants:
+    #   [0] 2
+    #   [1] 'enc_path'
+    #   [2] 'original_rel_path'
+    #   [3] 'return'
+    # --- bytecode ---
+    #  79           RESUME                   0
+    #               LOAD_FAST_BORROW         0 (format)
+    #               LOAD_SMALL_INT           2
+    #               COMPARE_OP             132 (>)
+    #               POP_JUMP_IF_FALSE        3 (to L1)
+    #               NOT_TAKEN
+    #               LOAD_COMMON_CONSTANT     1 (NotImplementedError)
+    #               RAISE_VARARGS            1
+    #       L1:     LOAD_CONST               1 ('enc_path')
+    #               LOAD_GLOBAL              0 (Path)
+    #               LOAD_CONST               2 ('original_rel_path')
+    #               LOAD_GLOBAL              2 (str)
+    #               LOAD_CONST               3 ('return')
+    #               LOAD_GLOBAL              4 (bytes)
+    #               BUILD_MAP                3
+    #               RETURN_VALUE
+    # --- end bytecode ---
+
+    # === CODE: <module>.decrypt_file  (file=wiki_crypto.py, line=79) ===
+    # argcount=2, posonly=0, kwonly=0, stacksize=5
+    # varnames=('enc_path', 'original_rel_path', 'data', 'rel', 'nonce')
+    # freevars=(), cellvars=()
+    # names=('read_bytes', 'name', 'replace', 'str', 'Path', 'Exception', 'stem', '_derive_nonce', '_aes_ctr_decrypt', 'ImportError', '_pure_aes_ctr')
+    # constants:
+    #   [0] 'Decrypt a .enc file. Returns raw bytes.'
+    #   [1] '.enc'
+    #   [2] ''
+    # --- bytecode ---
+    #   79            RESUME                   0
+    # 
+    #   81            LOAD_FAST_BORROW         0 (enc_path)
+    #                 LOAD_ATTR                1 (read_bytes + NULL|self)
+    #                 CALL                     0
+    #                 STORE_FAST               2 (data)
+    # 
+    #   82            LOAD_FAST_BORROW         1 (original_rel_path)
+    #                 POP_JUMP_IF_NOT_NONE    29 (to L1)
+    #                 NOT_TAKEN
+    # 
+    #   83            LOAD_FAST_BORROW         0 (enc_path)
+    #                 LOAD_ATTR                2 (name)
+    #                 LOAD_ATTR                5 (replace + NULL|self)
+    #                 LOAD_CONST               1 ('.enc')
+    #                 LOAD_CONST               2 ('')
+    #                 CALL                     2
+    #                 STORE_FAST               1 (original_rel_path)
+    # 
+    #   85    L1:     NOP
+    # 
+    #   86    L2:     LOAD_GLOBAL              7 (str + NULL)
+    #                 LOAD_GLOBAL              9 (Path + NULL)
+    #                 LOAD_FAST_BORROW         1 (original_rel_path)
+    #                 CALL                     1
+    #                 CALL                     1
+    #                 STORE_FAST               3 (rel)
+    # 
+    #   90    L3:     LOAD_GLOBAL             15 (_derive_nonce + NULL)
+    #                 LOAD_FAST_BORROW         3 (rel)
+    #                 CALL                     1
+    #                 STORE_FAST               4 (nonce)
+    # 
+    #   91            NOP
+    # 
+    #   92            NOP
+    # 
+    #   93    L4:     LOAD_GLOBAL             17 (_aes_ctr_decrypt + NULL)
+    #                 LOAD_FAST_BORROW_LOAD_FAST_BORROW 36 (data, nonce)
+    #                 CALL                     2
+    #         L5:     RETURN_VALUE
+    # 
+    #   --    L6:     PUSH_EXC_INFO
+    # 
+    #   87            LOAD_GLOBAL             10 (Exception)
+    #                 CHECK_EXC_MATCH
+    #                 POP_JUMP_IF_FALSE       16 (to L8)
+    #                 NOT_TAKEN
+    #                 POP_TOP
+    # 
+    #   88            LOAD_FAST                0 (enc_path)
+    #                 LOAD_ATTR               12 (stem)
+    #                 STORE_FAST               3 (rel)
+    #         L7:     POP_EXCEPT
+    #                 JUMP_BACKWARD_NO_INTERRUPT 49 (to L3)
+    # 
+    #   87    L8:     RERAISE                  0
+    # 
+    #   --    L9:     COPY                     3
+    #                 POP_EXCEPT
+    #                 RERAISE                  1
+    #        L10:     PUSH_EXC_INFO
+    # 
+    #   94            LOAD_GLOBAL             18 (ImportError)
+    #                 CHECK_EXC_MATCH
+    #                 POP_JUMP_IF_FALSE       15 (to L13)
+    #                 NOT_TAKEN
+    #                 POP_TOP
+    # 
+    #   95            LOAD_GLOBAL             21 (_pure_aes_ctr + NULL)
+    #                 LOAD_FAST_LOAD_FAST     36 (data, nonce)
+    #                 CALL                     2
+    #                 SWAP                     2
+    #        L11:     POP_EXCEPT
+    #        L12:     RETURN_VALUE
+    # 
+    #   94   L13:     RERAISE                  0
+    # 
+    #   --   L14:     COPY                     3
+    #                 POP_EXCEPT
+    #                 RERAISE                  1
+    #        L15:     PUSH_EXC_INFO
+    # 
+    #   96            LOAD_GLOBAL             10 (Exception)
+    #                 CHECK_EXC_MATCH
+    #                 POP_JUMP_IF_FALSE        6 (to L17)
+    #                 NOT_TAKEN
+    #                 POP_TOP
+    # 
+    #   97            LOAD_FAST                2 (data)
+    #                 SWAP                     2
+    #        L16:     POP_EXCEPT
+    #                 RETURN_VALUE
+    # 
+    #   96   L17:     RERAISE                  0
+    # 
+    #   --   L18:     COPY                     3
+    #                 POP_EXCEPT
+    #                 RERAISE                  1
+    # ExceptionTable:
+    #   L2 to L3 -> L6 [0]
+    #   L4 to L5 -> L10 [0]
+    #   L6 to L7 -> L9 [1] lasti
+    #   L8 to L9 -> L9 [1] lasti
+    #   L10 to L11 -> L14 [1] lasti
+    #   L11 to L12 -> L15 [0]
+    #   L13 to L14 -> L14 [1] lasti
+    #   L14 to L15 -> L15 [0]
+    #   L15 to L16 -> L18 [1] lasti
+    #   L17 to L18 -> L18 [1] lasti
+    # --- end bytecode ---
+
+    # === CODE: <module>.__annotate__  (file=wiki_crypto.py, line=100) ===
+    # argcount=1, posonly=1, kwonly=0, stacksize=4
+    # varnames=('format',)
+    # freevars=(), cellvars=()
+    # names=('str',)
+    # constants:
+    #   [0] 2
+    #   [1] 'relative_path'
+    #   [2] 'return'
+    # --- bytecode ---
+    # 100           RESUME                   0
+    #               LOAD_FAST_BORROW         0 (format)
+    #               LOAD_SMALL_INT           2
+    #               COMPARE_OP             132 (>)
+    #               POP_JUMP_IF_FALSE        3 (to L1)
+    #               NOT_TAKEN
+    #               LOAD_COMMON_CONSTANT     1 (NotImplementedError)
+    #               RAISE_VARARGS            1
+    #       L1:     LOAD_CONST               1 ('relative_path')
+    #               LOAD_GLOBAL              0 (str)
+    #               LOAD_CONST               2 ('return')
+    #               LOAD_GLOBAL              0 (str)
+    #               BUILD_MAP                2
+    #               RETURN_VALUE
+    # --- end bytecode ---
+
+    # === CODE: <module>.wiki_read  (file=wiki_crypto.py, line=100) ===
+    # argcount=1, posonly=0, kwonly=0, stacksize=5
+    # varnames=('relative_path', 'filepath', 'enc_path')
+    # freevars=(), cellvars=()
+    # names=('WIKI_DIR', 'with_suffix', 'suffix', 'exists', 'decrypt_file', 'decode', 'read_text')
+    # constants:
+    #   [0] "Read a Wiki file by its relative path (e.g., '06-Rufus-Cosmo/algorithms.md').\nSupports both .enc (encrypted) and plain .md files.\nReturns decoded UTF-8 string.\n"
+    #   [1] '.enc'
+    #   [2] 'utf-8'
+    #   [3] 'replace'
+    #   [4] ('errors',)
+    #   [5] ('encoding',)
+    #   [6] ''
+    # --- bytecode ---
+    # 100           RESUME                   0
+    # 
+    # 105           LOAD_GLOBAL              0 (WIKI_DIR)
+    #               LOAD_FAST_BORROW         0 (relative_path)
+    #               BINARY_OP               11 (/)
+    #               STORE_FAST               1 (filepath)
+    # 
+    # 106           LOAD_FAST_BORROW         1 (filepath)
+    #               LOAD_ATTR                3 (with_suffix + NULL|self)
+    #               LOAD_FAST_BORROW         1 (filepath)
+    #               LOAD_ATTR                4 (suffix)
+    #               LOAD_CONST               1 ('.enc')
+    #               BINARY_OP                0 (+)
+    #               CALL                     1
+    #               STORE_FAST               2 (enc_path)
+    # 
+    # 108           LOAD_FAST_BORROW         2 (enc_path)
+    #               LOAD_ATTR                7 (exists + NULL|self)
+    #               CALL                     0
+    #               TO_BOOL
+    #               POP_JUMP_IF_FALSE       29 (to L1)
+    #               NOT_TAKEN
+    # 
+    # 109           LOAD_GLOBAL              9 (decrypt_file + NULL)
+    #               LOAD_FAST_BORROW_LOAD_FAST_BORROW 32 (enc_path, relative_path)
+    #               CALL                     2
+    #               LOAD_ATTR               11 (decode + NULL|self)
+    #               LOAD_CONST               2 ('utf-8')
+    #               LOAD_CONST               3 ('replace')
+    #               LOAD_CONST               4 (('errors',))
+    #               CALL_KW                  2
+    #               RETURN_VALUE
+    # 
+    # 110   L1:     LOAD_FAST_BORROW         1 (filepath)
+    #               LOAD_ATTR                7 (exists + NULL|self)
+    #               CALL                     0
+    #               TO_BOOL
+    #               POP_JUMP_IF_FALSE       19 (to L2)
+    #               NOT_TAKEN
+    # 
+    # 111           LOAD_FAST_BORROW         1 (filepath)
+    #               LOAD_ATTR               13 (read_text + NULL|self)
+    #               LOAD_CONST               2 ('utf-8')
+    #               LOAD_CONST               5 (('encoding',))
+    #               CALL_KW                  1
+    #               RETURN_VALUE
+    # 
+    # 113   L2:     LOAD_CONST               6 ('')
+    #               RETURN_VALUE
+    # --- end bytecode ---
+
+    # === CODE: <module>.encrypt_all_wiki  (file=wiki_crypto.py, line=118) ===
+    # argcount=0, posonly=0, kwonly=0, stacksize=9
+    # varnames=('count', 'f', 'enc_path')
+    # freevars=(), cellvars=()
+    # names=('sorted', 'WIKI_DIR', 'rglob', 'is_file', 'suffix', 'encrypt_file', 'print', 'relative_to', 'unlink')
+    # constants:
+    #   [0] 'Encrypt all .md and .json files in Wiki directory. Run at build time.'
+    #   [1] '*'
+    #   [2] '.enc'
+    #   [3] '  Encrypted: '
+    #   [4] ' → '
+    #   [5] '  Total: '
+    #   [6] ' files encrypted'
+    #   [7] ('.md', '.json', '.txt')
+    # --- bytecode ---
+    # 118           RESUME                   0
+    # 
+    # 120           LOAD_SMALL_INT           0
+    #               STORE_FAST               0 (count)
+    # 
+    # 121           LOAD_GLOBAL              1 (sorted + NULL)
+    #               LOAD_GLOBAL              2 (WIKI_DIR)
+    #               LOAD_ATTR                5 (rglob + NULL|self)
+    #               LOAD_CONST               1 ('*')
+    #               CALL                     1
+    #               CALL                     1
+    #               GET_ITER
+    #       L1:     FOR_ITER               156 (to L5)
+    #               STORE_FAST               1 (f)
+    # 
+    # 122           LOAD_FAST_BORROW         1 (f)
+    #               LOAD_ATTR                7 (is_file + NULL|self)
+    #               CALL                     0
+    #               TO_BOOL
+    #               POP_JUMP_IF_TRUE         3 (to L2)
+    #               NOT_TAKEN
+    #               JUMP_BACKWARD           27 (to L1)
+    #       L2:     LOAD_FAST_BORROW         1 (f)
+    #               LOAD_ATTR                8 (suffix)
+    #               LOAD_CONST               7 (('.md', '.json', '.txt'))
+    #               CONTAINS_OP              0 (in)
+    #               POP_JUMP_IF_TRUE         3 (to L3)
+    #               NOT_TAKEN
+    #               JUMP_BACKWARD           46 (to L1)
+    # 
+    # 124   L3:     LOAD_FAST_BORROW         1 (f)
+    #               LOAD_ATTR                8 (suffix)
+    #               LOAD_CONST               2 ('.enc')
+    #               COMPARE_OP              88 (bool(==))
+    #               POP_JUMP_IF_FALSE        3 (to L4)
+    #               NOT_TAKEN
+    # 
+    # 125           JUMP_BACKWARD           65 (to L1)
+    # 
+    # 126   L4:     LOAD_GLOBAL             11 (encrypt_file + NULL)
+    #               LOAD_FAST_BORROW         1 (f)
+    #               CALL                     1
+    #               STORE_FAST               2 (enc_path)
+    # 
+    # 127           LOAD_GLOBAL             13 (print + NULL)
+    #               LOAD_CONST               3 ('  Encrypted: ')
+    #               LOAD_FAST_BORROW         1 (f)
+    #               LOAD_ATTR               15 (relative_to + NULL|self)
+    #               LOAD_GLOBAL              2 (WIKI_DIR)
+    #               CALL                     1
+    #               FORMAT_SIMPLE
+    #               LOAD_CONST               4 (' → ')
+    #               LOAD_FAST_BORROW         2 (enc_path)
+    #               LOAD_ATTR               15 (relative_to + NULL|self)
+    #               LOAD_GLOBAL              2 (WIKI_DIR)
+    #               CALL                     1
+    #               FORMAT_SIMPLE
+    #               BUILD_STRING             4
+    #               CALL                     1
+    #               POP_TOP
+    # 
+    # 129           LOAD_FAST_BORROW         1 (f)
+    #               LOAD_ATTR               17 (unlink + NULL|self)
+    #               CALL                     0
+    #               POP_TOP
+    # 
+    # 130           LOAD_FAST_BORROW         0 (count)
+    #               LOAD_SMALL_INT           1
+    #               BINARY_OP               13 (+=)
+    #               STORE_FAST               0 (count)
+    #               JUMP_BACKWARD          158 (to L1)
+    # 
+    # 121   L5:     END_FOR
+    #               POP_ITER
+    # 
+    # 131           LOAD_GLOBAL             13 (print + NULL)
+    #               LOAD_CONST               5 ('  Total: ')
+    #               LOAD_FAST_BORROW         0 (count)
+    #               FORMAT_SIMPLE
+    #               LOAD_CONST               6 (' files encrypted')
+    #               BUILD_STRING             3
+    #               CALL                     1
+    #               POP_TOP
+    # 
+    # 132           LOAD_FAST_BORROW         0 (count)
+    #               RETURN_VALUE
+    # --- end bytecode ---
+

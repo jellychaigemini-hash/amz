@@ -1,0 +1,153 @@
+[<module>]
+  \nWiki Knowledge Base — Encrypted Storage\n========================================\nAll Wiki .md files are AES-256 encrypted at build time.\nThis module handles decryption at runtime via .pyd-protected key.\n\nBuild-time:  python wiki_crypto.py --encrypt    (encrypts Wiki/*.md → Wiki/*.enc)\nRuntime:     from wiki_crypto import wiki_read   (decrypts and returns content)\n
+
+[<module>]
+  Wiki
+
+[<module>]
+  BSC-Wiki-OPC-OS-KnowledgeBase-Protection-2026
+
+[<module>]
+  BSCWIKI1
+
+[<module>.__annotate__]
+  filepath
+
+[<module>.__annotate__]
+  return
+
+[<module>._derive_nonce]
+  Derive a deterministic 16-byte nonce for each file.
+
+[<module>.__annotate__]
+  data
+
+[<module>.__annotate__]
+  nonce
+
+[<module>.__annotate__]
+  return
+
+[<module>._aes_ctr_encrypt]
+  AES-256-CTR encrypt/decrypt (symmetric). Nonce must be 16 bytes.
+
+[<module>.__annotate__]
+  data
+
+[<module>.__annotate__]
+  nonce
+
+[<module>.__annotate__]
+  return
+
+[<module>._aes_ctr_decrypt]
+  AES-256-CTR decrypt (same as encrypt since CTR is symmetric).
+
+[<module>.__annotate__]
+  data
+
+[<module>.__annotate__]
+  nonce
+
+[<module>.__annotate__]
+  return
+
+[<module>._pure_aes_ctr]
+  Pure Python AES-CTR implementation using PyCryptodome-compatible approach.\nFalls back to simple XOR with key stream for environments without cryptography.
+
+[<module>._pure_aes_ctr]
+  >Q
+
+[<module>.__annotate__]
+  filepath
+
+[<module>.__annotate__]
+  return
+
+[<module>.encrypt_file]
+  Encrypt a single file. Returns path to .enc file.
+
+[<module>.encrypt_file]
+  .enc
+
+[<module>.__annotate__]
+  enc_path
+
+[<module>.__annotate__]
+  original_rel_path
+
+[<module>.__annotate__]
+  return
+
+[<module>.decrypt_file]
+  Decrypt a .enc file. Returns raw bytes.
+
+[<module>.decrypt_file]
+  .enc
+
+[<module>.decrypt_file]
+  
+
+[<module>.__annotate__]
+  relative_path
+
+[<module>.__annotate__]
+  return
+
+[<module>.wiki_read]
+  Read a Wiki file by its relative path (e.g., '06-Rufus-Cosmo/algorithms.md').\nSupports both .enc (encrypted) and plain .md files.\nReturns decoded UTF-8 string.\n
+
+[<module>.wiki_read]
+  .enc
+
+[<module>.wiki_read]
+  utf-8
+
+[<module>.wiki_read]
+  replace
+
+[<module>.wiki_read]
+  
+
+[<module>.encrypt_all_wiki]
+  Encrypt all .md and .json files in Wiki directory. Run at build time.
+
+[<module>.encrypt_all_wiki]
+  *
+
+[<module>.encrypt_all_wiki]
+  .enc
+
+[<module>.encrypt_all_wiki]
+    Encrypted: 
+
+[<module>.encrypt_all_wiki]
+   → 
+
+[<module>.encrypt_all_wiki]
+    Total: 
+
+[<module>.encrypt_all_wiki]
+   files encrypted
+
+[<module>]
+  __main__
+
+[<module>]
+  --encrypt
+
+[<module>]
+  --test
+
+[<module>]
+    
+
+[<module>]
+  : 
+
+[<module>]
+   chars
+
+[<module>]
+  Usage: python wiki_crypto.py --encrypt
+

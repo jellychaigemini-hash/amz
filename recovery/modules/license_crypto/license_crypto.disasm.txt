@@ -1,0 +1,2613 @@
+# Reconstructed from: /projects/sandbox/decompile/pyz_contents/license_crypto.pyc
+# Python magic: 2b0e0d0a
+
+# === CODE: <module>  (file=license_crypto.py, line=1) ===
+# argcount=0, posonly=0, kwonly=0, stacksize=3
+# varnames=()
+# freevars=(), cellvars=()
+# names=('__doc__', 'base64', 'hashlib', 'hmac', 'json', 'os', 'struct', 'time', 'uuid', 'pathlib', 'Path', '_KEY_SEED', 'sha256', 'digest', '_LICENSE_KEY', '_APP_ID', '_LICENSE_FILE', '_get_base_dir', '_get_machine_id', '_aes_gcm_encrypt', '_aes_gcm_decrypt', '_pure_aes_ctr_keystream', '_pure_aes_encrypt', '_pure_aes_decrypt', 'generate_license_key', 'verify_and_save_license', 'save_license', 'check_license', '_trial_file', 'start_trial', 'trial_days_left', 'has_trial_expired', 'get_license_info', 'check_and_activate', '_fmt_date', 'get_machine_id', 'encrypt_config_value', 'decrypt_config_value')
+# constants:
+#   [0] '\nLicense verification and activation for BSC OPC Agent OS.\n==========================================================\nAES-256-GCM encrypted license keys with machine binding.\nThis module is co...
+#   [1] None
+#   [2] ('Path',)
+#   [3] b'BSC-OPC-License-Key-v1-2026-Production-Secure'
+#   [4] b'BSC-OPC-Agent'
+#   [5] 'license.key'
+#   [38] (b'',)
+# --- bytecode ---
+#   0           RESUME                   0
+# 
+#   1           LOAD_CONST               0 ('\nLicense verification and activation for BSC OPC Agent OS.\n==========================================================\nAES-256-GCM encrypted license keys with machine binding.\nThis module is compiled to .pyd by PyArmor during build.\n')
+#               STORE_NAME               0 (__doc__)
+# 
+#   7           LOAD_SMALL_INT           0
+#               LOAD_CONST               1 (None)
+#               IMPORT_NAME              1 (base64)
+#               STORE_NAME               1 (base64)
+# 
+#   8           LOAD_SMALL_INT           0
+#               LOAD_CONST               1 (None)
+#               IMPORT_NAME              2 (hashlib)
+#               STORE_NAME               2 (hashlib)
+# 
+#   9           LOAD_SMALL_INT           0
+#               LOAD_CONST               1 (None)
+#               IMPORT_NAME              3 (hmac)
+#               STORE_NAME               3 (hmac)
+# 
+#  10           LOAD_SMALL_INT           0
+#               LOAD_CONST               1 (None)
+#               IMPORT_NAME              4 (json)
+#               STORE_NAME               4 (json)
+# 
+#  11           LOAD_SMALL_INT           0
+#               LOAD_CONST               1 (None)
+#               IMPORT_NAME              5 (os)
+#               STORE_NAME               5 (os)
+# 
+#  12           LOAD_SMALL_INT           0
+#               LOAD_CONST               1 (None)
+#               IMPORT_NAME              6 (struct)
+#               STORE_NAME               6 (struct)
+# 
+#  13           LOAD_SMALL_INT           0
+#               LOAD_CONST               1 (None)
+#               IMPORT_NAME              7 (time)
+#               STORE_NAME               7 (time)
+# 
+#  14           LOAD_SMALL_INT           0
+#               LOAD_CONST               1 (None)
+#               IMPORT_NAME              8 (uuid)
+#               STORE_NAME               8 (uuid)
+# 
+#  15           LOAD_SMALL_INT           0
+#               LOAD_CONST               2 (('Path',))
+#               IMPORT_NAME              9 (pathlib)
+#               IMPORT_FROM             10 (Path)
+#               STORE_NAME              10 (Path)
+#               POP_TOP
+# 
+#  18           LOAD_CONST               3 (b'BSC-OPC-License-Key-v1-2026-Production-Secure')
+#               STORE_NAME              11 (_KEY_SEED)
+# 
+#  19           LOAD_NAME                2 (hashlib)
+#               LOAD_ATTR               24 (sha256)
+#               PUSH_NULL
+#               LOAD_NAME               11 (_KEY_SEED)
+#               CALL                     1
+#               LOAD_ATTR               27 (digest + NULL|self)
+#               CALL                     0
+#               STORE_NAME              14 (_LICENSE_KEY)
+# 
+#  20           LOAD_CONST               4 (b'BSC-OPC-Agent')
+#               STORE_NAME              15 (_APP_ID)
+# 
+#  22           LOAD_CONST               5 ('license.key')
+#               STORE_NAME              16 (_LICENSE_FILE)
+# 
+#  25           LOAD_CONST               6 (<code object _get_base_dir at 0x7f11d751ec10, file "license_crypto.py", line 25>)
+#               MAKE_FUNCTION
+#               STORE_NAME              17 (_get_base_dir)
+# 
+#  33           LOAD_CONST               7 (<code object _get_machine_id at 0x2f608c70, file "license_crypto.py", line 33>)
+#               MAKE_FUNCTION
+#               STORE_NAME              18 (_get_machine_id)
+# 
+#  58           LOAD_CONST              38 ((b'',))
+#               LOAD_CONST               8 (<code object __annotate__ at 0x7f11d7361ac0, file "license_crypto.py", line 58>)
+#               MAKE_FUNCTION
+#               LOAD_CONST               9 (<code object _aes_gcm_encrypt at 0x7f11d73cc030, file "license_crypto.py", line 58>)
+#               MAKE_FUNCTION
+#               SET_FUNCTION_ATTRIBUTE  16 (annotate)
+#               SET_FUNCTION_ATTRIBUTE   1 (defaults)
+#               STORE_NAME              19 (_aes_gcm_encrypt)
+# 
+#  67           LOAD_CONST              38 ((b'',))
+#               LOAD_CONST              10 (<code object __annotate__ at 0x7f11d7361bd0, file "license_crypto.py", line 67>)
+#               MAKE_FUNCTION
+#               LOAD_CONST              11 (<code object _aes_gcm_decrypt at 0x7f11d7542970, file "license_crypto.py", line 67>)
+#               MAKE_FUNCTION
+#               SET_FUNCTION_ATTRIBUTE  16 (annotate)
+#               SET_FUNCTION_ATTRIBUTE   1 (defaults)
+#               STORE_NAME              20 (_aes_gcm_decrypt)
+# 
+#  77           LOAD_CONST              12 (<code object _pure_aes_ctr_keystream at 0x7f11d74fdb50, file "license_crypto.py", line 77>)
+#               MAKE_FUNCTION
+#               STORE_NAME              21 (_pure_aes_ctr_keystream)
+# 
+#  88           LOAD_CONST              13 (<code object __annotate__ at 0x7f11d73a5d30, file "license_crypto.py", line 88>)
+#               MAKE_FUNCTION
+#               LOAD_CONST              14 (<code object _pure_aes_encrypt at 0x2f60d600, file "license_crypto.py", line 88>)
+#               MAKE_FUNCTION
+#               SET_FUNCTION_ATTRIBUTE  16 (annotate)
+#               STORE_NAME              22 (_pure_aes_encrypt)
+# 
+#  98           LOAD_CONST              15 (<code object __annotate__ at 0x7f11d73a5e30, file "license_crypto.py", line 98>)
+#               MAKE_FUNCTION
+#               LOAD_CONST              16 (<code object _pure_aes_decrypt at 0x2f609610, file "license_crypto.py", line 98>)
+#               MAKE_FUNCTION
+#               SET_FUNCTION_ATTRIBUTE  16 (annotate)
+#               STORE_NAME              23 (_pure_aes_decrypt)
+# 
+# 113           LOAD_CONST              17 (<code object __annotate__ at 0x7f11d7361f00, file "license_crypto.py", line 113>)
+#               MAKE_FUNCTION
+#               LOAD_CONST              18 (<code object generate_license_key at 0x2f44d020, file "license_crypto.py", line 113>)
+#               MAKE_FUNCTION
+#               SET_FUNCTION_ATTRIBUTE  16 (annotate)
+#               STORE_NAME              24 (generate_license_key)
+# 
+# 129           LOAD_CONST              19 (<code object __annotate__ at 0x7f11d73a5f30, file "license_crypto.py", line 129>)
+#               MAKE_FUNCTION
+#               LOAD_CONST              20 (<code object verify_and_save_license at 0x2f613590, file "license_crypto.py", line 129>)
+#               MAKE_FUNCTION
+#               SET_FUNCTION_ATTRIBUTE  16 (annotate)
+#               STORE_NAME              25 (verify_and_save_license)
+# 
+# 180           LOAD_CONST              21 (<code object __annotate__ at 0x7f11d73a6130, file "license_crypto.py", line 180>)
+#               MAKE_FUNCTION
+#               LOAD_CONST              22 (<code object save_license at 0x2f6090a0, file "license_crypto.py", line 180>)
+#               MAKE_FUNCTION
+#               SET_FUNCTION_ATTRIBUTE  16 (annotate)
+#               STORE_NAME              26 (save_license)
+# 
+# 200           LOAD_CONST              23 (<code object __annotate__ at 0x7f11d73a6330, file "license_crypto.py", line 200>)
+#               MAKE_FUNCTION
+#               LOAD_CONST              24 (<code object check_license at 0x2f607b60, file "license_crypto.py", line 200>)
+#               MAKE_FUNCTION
+#               SET_FUNCTION_ATTRIBUTE  16 (annotate)
+#               STORE_NAME              27 (check_license)
+# 
+# 236           LOAD_CONST              25 (<code object _trial_file at 0x7f11d73a6430, file "license_crypto.py", line 236>)
+#               MAKE_FUNCTION
+#               STORE_NAME              28 (_trial_file)
+# 
+# 240           LOAD_CONST              26 (<code object start_trial at 0x7f11d750e730, file "license_crypto.py", line 240>)
+#               MAKE_FUNCTION
+#               STORE_NAME              29 (start_trial)
+# 
+# 248           LOAD_CONST              27 (<code object trial_days_left at 0x2f60a030, file "license_crypto.py", line 248>)
+#               MAKE_FUNCTION
+#               STORE_NAME              30 (trial_days_left)
+# 
+# 262           LOAD_CONST              28 (<code object has_trial_expired at 0x7f11d7359b80, file "license_crypto.py", line 262>)
+#               MAKE_FUNCTION
+#               STORE_NAME              31 (has_trial_expired)
+# 
+# 270           LOAD_CONST              29 (<code object __annotate__ at 0x7f11d73a6530, file "license_crypto.py", line 270>)
+#               MAKE_FUNCTION
+#               LOAD_CONST              30 (<code object get_license_info at 0x2f612d20, file "license_crypto.py", line 270>)
+#               MAKE_FUNCTION
+#               SET_FUNCTION_ATTRIBUTE  16 (annotate)
+#               STORE_NAME              32 (get_license_info)
+# 
+# 300           LOAD_CONST              31 (<code object check_and_activate at 0x7f11d7385f70, file "license_crypto.py", line 300>)
+#               MAKE_FUNCTION
+#               STORE_NAME              33 (check_and_activate)
+# 
+# 318           LOAD_CONST              32 (<code object _fmt_date at 0x7f11d7359cb0, file "license_crypto.py", line 318>)
+#               MAKE_FUNCTION
+#               STORE_NAME              34 (_fmt_date)
+# 
+# 324           LOAD_CONST              33 (<code object get_machine_id at 0x7f11d7356010, file "license_crypto.py", line 324>)
+#               MAKE_FUNCTION
+#               STORE_NAME              35 (get_machine_id)
+# 
+# 331           LOAD_CONST              34 (<code object __annotate__ at 0x7f11d73a6630, file "license_crypto.py", line 331>)
+#               MAKE_FUNCTION
+#               LOAD_CONST              35 (<code object encrypt_config_value at 0x7f11d750e8d0, file "license_crypto.py", line 331>)
+#               MAKE_FUNCTION
+#               SET_FUNCTION_ATTRIBUTE  16 (annotate)
+#               STORE_NAME              36 (encrypt_config_value)
+# 
+# 343           LOAD_CONST              36 (<code object __annotate__ at 0x7f11d73a6830, file "license_crypto.py", line 343>)
+#               MAKE_FUNCTION
+#               LOAD_CONST              37 (<code object decrypt_config_value at 0x7f11d73d0030, file "license_crypto.py", line 343>)
+#               MAKE_FUNCTION
+#               SET_FUNCTION_ATTRIBUTE  16 (annotate)
+#               STORE_NAME              37 (decrypt_config_value)
+#               LOAD_CONST               1 (None)
+#               RETURN_VALUE
+# --- end bytecode ---
+
+    # === CODE: <module>._get_base_dir  (file=license_crypto.py, line=25) ===
+    # argcount=0, posonly=0, kwonly=0, stacksize=5
+    # varnames=('sys',)
+    # freevars=(), cellvars=()
+    # names=('sys', 'getattr', 'Path', 'executable', 'resolve', 'parent', '__file__')
+    # constants:
+    #   [0] 'Get the directory containing the .exe or .py.'
+    #   [1] None
+    #   [2] 'frozen'
+    #   [3] False
+    # --- bytecode ---
+    #  25           RESUME                   0
+    # 
+    #  27           LOAD_SMALL_INT           0
+    #               LOAD_CONST               1 (None)
+    #               IMPORT_NAME              0 (sys)
+    #               STORE_FAST               0 (sys)
+    # 
+    #  28           LOAD_GLOBAL              3 (getattr + NULL)
+    #               LOAD_FAST_BORROW         0 (sys)
+    #               LOAD_CONST               2 ('frozen')
+    #               LOAD_CONST               3 (False)
+    #               CALL                     3
+    #               TO_BOOL
+    #               POP_JUMP_IF_FALSE       46 (to L1)
+    #               NOT_TAKEN
+    # 
+    #  29           LOAD_GLOBAL              5 (Path + NULL)
+    #               LOAD_FAST_BORROW         0 (sys)
+    #               LOAD_ATTR                6 (executable)
+    #               CALL                     1
+    #               LOAD_ATTR                9 (resolve + NULL|self)
+    #               CALL                     0
+    #               LOAD_ATTR               10 (parent)
+    #               RETURN_VALUE
+    # 
+    #  30   L1:     LOAD_GLOBAL              5 (Path + NULL)
+    #               LOAD_GLOBAL             12 (__file__)
+    #               CALL                     1
+    #               LOAD_ATTR                9 (resolve + NULL|self)
+    #               CALL                     0
+    #               LOAD_ATTR               10 (parent)
+    #               RETURN_VALUE
+    # --- end bytecode ---
+
+    # === CODE: <module>._get_machine_id  (file=license_crypto.py, line=33) ===
+    # argcount=0, posonly=0, kwonly=0, stacksize=6
+    # varnames=('subprocess', 'result', 'l', 'macs', 'mac', 'result2', 'serials', 'disk', 'fingerprint', '_u')
+    # freevars=(), cellvars=()
+    # names=('subprocess', 'run', 'stdout', 'decode', 'splitlines', 'strip', 'sorted', 'replace', 'Exception', 'uuid', 'str', 'getnode', 'hashlib', 'sha256', 'encode', 'hexdigest')
+    # constants:
+    #   [0] 'Generate a machine fingerprint from hardware.'
+    #   [1] None
+    #   [2] True
+    #   [3] ('capture_output', 'timeout')
+    #   [4] ':'
+    #   [5] ''
+    #   [6] 'SerialNumber'
+    #   [7] '00000000'
+    #   [8] '-'
+    #   [9] slice(None, 16, None)
+    #   [10] ('wmic', 'nic', 'where', 'NetEnabled=True', 'get', 'MACAddress')
+    #   [11] '000000000000'
+    #   [12] ('wmic', 'diskdrive', 'get', 'SerialNumber')
+    # --- bytecode ---
+    #   33            RESUME                   0
+    # 
+    #   35            NOP
+    # 
+    #   36    L1:     LOAD_SMALL_INT           0
+    #                 LOAD_CONST               1 (None)
+    #                 IMPORT_NAME              0 (subprocess)
+    #                 STORE_FAST               0 (subprocess)
+    # 
+    #   38            LOAD_FAST_BORROW         0 (subprocess)
+    #                 LOAD_ATTR                3 (run + NULL|self)
+    # 
+    #   39            BUILD_LIST               0
+    #                 LOAD_CONST              10 (('wmic', 'nic', 'where', 'NetEnabled=True', 'get', 'MACAddress'))
+    #                 LIST_EXTEND              1
+    # 
+    #   40            LOAD_CONST               2 (True)
+    #                 LOAD_SMALL_INT           5
+    # 
+    #   38            LOAD_CONST               3 (('capture_output', 'timeout'))
+    #                 CALL_KW                  3
+    #                 STORE_FAST               1 (result)
+    # 
+    #   42            LOAD_FAST_BORROW         1 (result)
+    #                 LOAD_ATTR                4 (stdout)
+    #                 LOAD_ATTR                7 (decode + NULL|self)
+    #                 CALL                     0
+    #                 LOAD_ATTR                9 (splitlines + NULL|self)
+    #                 CALL                     0
+    #                 GET_ITER
+    #                 LOAD_FAST_AND_CLEAR      2 (l)
+    #                 SWAP                     2
+    #         L2:     BUILD_LIST               0
+    #                 SWAP                     2
+    #         L3:     FOR_ITER                28 (to L6)
+    #                 STORE_FAST               2 (l)
+    #                 LOAD_CONST               4 (':')
+    #                 LOAD_FAST_BORROW         2 (l)
+    #                 CONTAINS_OP              0 (in)
+    #         L4:     POP_JUMP_IF_TRUE         3 (to L5)
+    #                 NOT_TAKEN
+    #                 JUMP_BACKWARD           12 (to L3)
+    #         L5:     LOAD_FAST_BORROW         2 (l)
+    #                 LOAD_ATTR               11 (strip + NULL|self)
+    #                 CALL                     0
+    #                 LIST_APPEND              2
+    #                 JUMP_BACKWARD           30 (to L3)
+    #         L6:     END_FOR
+    #                 POP_ITER
+    #         L7:     STORE_FAST               3 (macs)
+    #                 STORE_FAST               2 (l)
+    # 
+    #   43            LOAD_FAST_BORROW         3 (macs)
+    #                 TO_BOOL
+    #                 POP_JUMP_IF_FALSE       35 (to L8)
+    #                 NOT_TAKEN
+    #                 LOAD_GLOBAL             13 (sorted + NULL)
+    #                 LOAD_FAST_BORROW         3 (macs)
+    #                 CALL                     1
+    #                 LOAD_SMALL_INT           0
+    #                 BINARY_OP               26 ([])
+    #                 LOAD_ATTR               15 (replace + NULL|self)
+    #                 LOAD_CONST               4 (':')
+    #                 LOAD_CONST               5 ('')
+    #                 CALL                     2
+    #                 JUMP_FORWARD             1 (to L9)
+    #         L8:     LOAD_CONST              11 ('000000000000')
+    #         L9:     STORE_FAST               4 (mac)
+    # 
+    #   45            LOAD_FAST_BORROW         0 (subprocess)
+    #                 LOAD_ATTR                3 (run + NULL|self)
+    # 
+    #   46            BUILD_LIST               0
+    #                 LOAD_CONST              12 (('wmic', 'diskdrive', 'get', 'SerialNumber'))
+    #                 LIST_EXTEND              1
+    # 
+    #   47            LOAD_CONST               2 (True)
+    #                 LOAD_SMALL_INT           5
+    # 
+    #   45            LOAD_CONST               3 (('capture_output', 'timeout'))
+    #                 CALL_KW                  3
+    #                 STORE_FAST               5 (result2)
+    # 
+    #   49            LOAD_FAST_BORROW         5 (result2)
+    #                 LOAD_ATTR                4 (stdout)
+    #                 LOAD_ATTR                7 (decode + NULL|self)
+    #                 CALL                     0
+    #                 LOAD_ATTR                9 (splitlines + NULL|self)
+    #                 CALL                     0
+    #                 GET_ITER
+    #                 LOAD_FAST_AND_CLEAR      2 (l)
+    #                 SWAP                     2
+    #        L10:     BUILD_LIST               0
+    #                 SWAP                     2
+    #        L11:     FOR_ITER                51 (to L16)
+    #                 STORE_FAST_LOAD_FAST    34 (l, l)
+    #                 LOAD_ATTR               11 (strip + NULL|self)
+    #                 CALL                     0
+    #                 TO_BOOL
+    #        L12:     POP_JUMP_IF_TRUE         3 (to L13)
+    #                 NOT_TAKEN
+    #                 JUMP_BACKWARD           26 (to L11)
+    #        L13:     LOAD_CONST               6 ('SerialNumber')
+    #                 LOAD_FAST_BORROW         2 (l)
+    #                 CONTAINS_OP              1 (not in)
+    #        L14:     POP_JUMP_IF_TRUE         3 (to L15)
+    #                 NOT_TAKEN
+    #                 JUMP_BACKWARD           35 (to L11)
+    #        L15:     LOAD_FAST_BORROW         2 (l)
+    #                 LOAD_ATTR               11 (strip + NULL|self)
+    #                 CALL                     0
+    #                 LIST_APPEND              2
+    #                 JUMP_BACKWARD           53 (to L11)
+    #        L16:     END_FOR
+    #                 POP_ITER
+    #        L17:     STORE_FAST               6 (serials)
+    #                 STORE_FAST               2 (l)
+    # 
+    #   50            LOAD_FAST_BORROW         6 (serials)
+    #                 TO_BOOL
+    #                 POP_JUMP_IF_FALSE       24 (to L18)
+    #                 NOT_TAKEN
+    #                 LOAD_FAST_BORROW         6 (serials)
+    #                 LOAD_SMALL_INT           0
+    #                 BINARY_OP               26 ([])
+    #                 LOAD_ATTR               11 (strip + NULL|self)
+    #                 CALL                     0
+    #                 JUMP_FORWARD             1 (to L19)
+    #        L18:     LOAD_CONST               7 ('00000000')
+    #        L19:     STORE_FAST               7 (disk)
+    # 
+    #   51            LOAD_FAST_BORROW         4 (mac)
+    #                 FORMAT_SIMPLE
+    #                 LOAD_CONST               8 ('-')
+    #                 LOAD_FAST_BORROW         7 (disk)
+    #                 FORMAT_SIMPLE
+    #                 BUILD_STRING             3
+    #                 STORE_FAST               8 (fingerprint)
+    # 
+    #   55   L20:     LOAD_GLOBAL             24 (hashlib)
+    #                 LOAD_ATTR               26 (sha256)
+    #                 PUSH_NULL
+    #                 LOAD_FAST_BORROW         8 (fingerprint)
+    #                 LOAD_ATTR               29 (encode + NULL|self)
+    #                 CALL                     0
+    #                 CALL                     1
+    #                 LOAD_ATTR               31 (hexdigest + NULL|self)
+    #                 CALL                     0
+    #                 LOAD_CONST               9 (slice(None, 16, None))
+    #                 BINARY_OP               26 ([])
+    #                 RETURN_VALUE
+    # 
+    #   --   L21:     SWAP                     2
+    #                 POP_TOP
+    # 
+    #   42            SWAP                     2
+    #                 STORE_FAST               2 (l)
+    #                 RERAISE                  0
+    # 
+    #   --   L22:     SWAP                     2
+    #                 POP_TOP
+    # 
+    #   49            SWAP                     2
+    #                 STORE_FAST               2 (l)
+    #                 RERAISE                  0
+    # 
+    #   --   L23:     PUSH_EXC_INFO
+    # 
+    #   52            LOAD_GLOBAL             16 (Exception)
+    #                 CHECK_EXC_MATCH
+    #                 POP_JUMP_IF_FALSE       33 (to L25)
+    #                 NOT_TAKEN
+    #                 POP_TOP
+    # 
+    #   53            LOAD_SMALL_INT           0
+    #                 LOAD_CONST               1 (None)
+    #                 IMPORT_NAME              9 (uuid)
+    #                 STORE_FAST               9 (_u)
+    # 
+    #   54            LOAD_GLOBAL             21 (str + NULL)
+    #                 LOAD_FAST                9 (_u)
+    #                 LOAD_ATTR               23 (getnode + NULL|self)
+    #                 CALL                     0
+    #                 CALL                     1
+    #                 STORE_FAST               8 (fingerprint)
+    #        L24:     POP_EXCEPT
+    #                 JUMP_BACKWARD_NO_INTERRUPT 109 (to L20)
+    # 
+    #   52   L25:     RERAISE                  0
+    # 
+    #   --   L26:     COPY                     3
+    #                 POP_EXCEPT
+    #                 RERAISE                  1
+    # ExceptionTable:
+    #   L1 to L2 -> L23 [0]
+    #   L2 to L4 -> L21 [2]
+    #   L5 to L7 -> L21 [2]
+    #   L7 to L10 -> L23 [0]
+    #   L10 to L12 -> L22 [2]
+    #   L13 to L14 -> L22 [2]
+    #   L15 to L17 -> L22 [2]
+    #   L17 to L20 -> L23 [0]
+    #   L21 to L23 -> L23 [0]
+    #   L23 to L24 -> L26 [1] lasti
+    #   L25 to L26 -> L26 [1] lasti
+    # --- end bytecode ---
+
+    # === CODE: <module>.__annotate__  (file=license_crypto.py, line=58) ===
+    # argcount=1, posonly=1, kwonly=0, stacksize=6
+    # varnames=('format',)
+    # freevars=(), cellvars=()
+    # names=('bytes',)
+    # constants:
+    #   [0] 2
+    #   [1] 'plaintext'
+    #   [2] 'aad'
+    #   [3] 'return'
+    # --- bytecode ---
+    #  58           RESUME                   0
+    #               LOAD_FAST_BORROW         0 (format)
+    #               LOAD_SMALL_INT           2
+    #               COMPARE_OP             132 (>)
+    #               POP_JUMP_IF_FALSE        3 (to L1)
+    #               NOT_TAKEN
+    #               LOAD_COMMON_CONSTANT     1 (NotImplementedError)
+    #               RAISE_VARARGS            1
+    #       L1:     LOAD_CONST               1 ('plaintext')
+    #               LOAD_GLOBAL              0 (bytes)
+    #               LOAD_CONST               2 ('aad')
+    #               LOAD_GLOBAL              0 (bytes)
+    #               LOAD_CONST               3 ('return')
+    #               LOAD_GLOBAL              0 (bytes)
+    #               BUILD_MAP                3
+    #               RETURN_VALUE
+    # --- end bytecode ---
+
+    # === CODE: <module>._aes_gcm_encrypt  (file=license_crypto.py, line=58) ===
+    # argcount=2, posonly=0, kwonly=0, stacksize=5
+    # varnames=('plaintext', 'aad', 'AESGCM', 'aesgcm', 'nonce', 'ct')
+    # freevars=(), cellvars=()
+    # names=('cryptography.hazmat.primitives.ciphers.aead', 'AESGCM', '_LICENSE_KEY', 'os', 'urandom', 'encrypt')
+    # constants:
+    #   [0] 'AES-256-GCM encrypt. Returns nonce(12) + tag(16) + ciphertext.'
+    #   [1] ('AESGCM',)
+    # --- bytecode ---
+    #  58           RESUME                   0
+    # 
+    #  60           LOAD_SMALL_INT           0
+    #               LOAD_CONST               1 (('AESGCM',))
+    #               IMPORT_NAME              0 (cryptography.hazmat.primitives.ciphers.aead)
+    #               IMPORT_FROM              1 (AESGCM)
+    #               STORE_FAST               2 (AESGCM)
+    #               POP_TOP
+    # 
+    #  61           LOAD_FAST_BORROW         2 (AESGCM)
+    #               PUSH_NULL
+    #               LOAD_GLOBAL              4 (_LICENSE_KEY)
+    #               CALL                     1
+    #               STORE_FAST               3 (aesgcm)
+    # 
+    #  62           LOAD_GLOBAL              6 (os)
+    #               LOAD_ATTR                8 (urandom)
+    #               PUSH_NULL
+    #               LOAD_SMALL_INT          12
+    #               CALL                     1
+    #               STORE_FAST               4 (nonce)
+    # 
+    #  63           LOAD_FAST_BORROW         3 (aesgcm)
+    #               LOAD_ATTR               11 (encrypt + NULL|self)
+    #               LOAD_FAST_BORROW_LOAD_FAST_BORROW 64 (nonce, plaintext)
+    #               LOAD_FAST_BORROW         1 (aad)
+    #               CALL                     3
+    #               STORE_FAST               5 (ct)
+    # 
+    #  64           LOAD_FAST_BORROW_LOAD_FAST_BORROW 69 (nonce, ct)
+    #               BINARY_OP                0 (+)
+    #               RETURN_VALUE
+    # --- end bytecode ---
+
+    # === CODE: <module>.__annotate__  (file=license_crypto.py, line=67) ===
+    # argcount=1, posonly=1, kwonly=0, stacksize=6
+    # varnames=('format',)
+    # freevars=(), cellvars=()
+    # names=('bytes',)
+    # constants:
+    #   [0] 2
+    #   [1] 'data'
+    #   [2] 'aad'
+    #   [3] 'return'
+    # --- bytecode ---
+    #  67           RESUME                   0
+    #               LOAD_FAST_BORROW         0 (format)
+    #               LOAD_SMALL_INT           2
+    #               COMPARE_OP             132 (>)
+    #               POP_JUMP_IF_FALSE        3 (to L1)
+    #               NOT_TAKEN
+    #               LOAD_COMMON_CONSTANT     1 (NotImplementedError)
+    #               RAISE_VARARGS            1
+    #       L1:     LOAD_CONST               1 ('data')
+    #               LOAD_GLOBAL              0 (bytes)
+    #               LOAD_CONST               2 ('aad')
+    #               LOAD_GLOBAL              0 (bytes)
+    #               LOAD_CONST               3 ('return')
+    #               LOAD_GLOBAL              0 (bytes)
+    #               BUILD_MAP                3
+    #               RETURN_VALUE
+    # --- end bytecode ---
+
+    # === CODE: <module>._aes_gcm_decrypt  (file=license_crypto.py, line=67) ===
+    # argcount=2, posonly=0, kwonly=0, stacksize=5
+    # varnames=('data', 'aad', 'AESGCM', 'aesgcm', 'nonce', 'ct')
+    # freevars=(), cellvars=()
+    # names=('cryptography.hazmat.primitives.ciphers.aead', 'AESGCM', '_LICENSE_KEY', 'decrypt')
+    # constants:
+    #   [0] 'AES-256-GCM decrypt. Input: nonce(12) + ciphertext+tag(N+16).'
+    #   [1] ('AESGCM',)
+    #   [2] slice(None, 12, None)
+    #   [3] slice(12, None, None)
+    # --- bytecode ---
+    #  67           RESUME                   0
+    # 
+    #  69           LOAD_SMALL_INT           0
+    #               LOAD_CONST               1 (('AESGCM',))
+    #               IMPORT_NAME              0 (cryptography.hazmat.primitives.ciphers.aead)
+    #               IMPORT_FROM              1 (AESGCM)
+    #               STORE_FAST               2 (AESGCM)
+    #               POP_TOP
+    # 
+    #  70           LOAD_FAST_BORROW         2 (AESGCM)
+    #               PUSH_NULL
+    #               LOAD_GLOBAL              4 (_LICENSE_KEY)
+    #               CALL                     1
+    #               STORE_FAST               3 (aesgcm)
+    # 
+    #  71           LOAD_FAST_BORROW         0 (data)
+    #               LOAD_CONST               2 (slice(None, 12, None))
+    #               BINARY_OP               26 ([])
+    #               STORE_FAST               4 (nonce)
+    # 
+    #  72           LOAD_FAST_BORROW         0 (data)
+    #               LOAD_CONST               3 (slice(12, None, None))
+    #               BINARY_OP               26 ([])
+    #               STORE_FAST               5 (ct)
+    # 
+    #  73           LOAD_FAST_BORROW         3 (aesgcm)
+    #               LOAD_ATTR                7 (decrypt + NULL|self)
+    #               LOAD_FAST_BORROW_LOAD_FAST_BORROW 69 (nonce, ct)
+    #               LOAD_FAST_BORROW         1 (aad)
+    #               CALL                     3
+    #               RETURN_VALUE
+    # --- end bytecode ---
+
+    # === CODE: <module>._pure_aes_ctr_keystream  (file=license_crypto.py, line=77) ===
+    # argcount=3, posonly=0, kwonly=0, stacksize=7
+    # varnames=('key', 'nonce', 'length', 'result', 'counter', 'block')
+    # freevars=(), cellvars=()
+    # names=('bytearray', 'len', 'hashlib', 'sha256', 'struct', 'pack', 'digest', 'extend', 'bytes')
+    # constants:
+    #   [0] 'Generate AES-CTR keystream using SHA-256 as PRF.'
+    #   [1] '>Q'
+    #   [2] None
+    # --- bytecode ---
+    #  77           RESUME                   0
+    # 
+    #  79           LOAD_GLOBAL              1 (bytearray + NULL)
+    #               CALL                     0
+    #               STORE_FAST               3 (result)
+    # 
+    #  80           LOAD_SMALL_INT           0
+    #               STORE_FAST               4 (counter)
+    # 
+    #  81   L1:     LOAD_GLOBAL              3 (len + NULL)
+    #               LOAD_FAST_BORROW         3 (result)
+    #               CALL                     1
+    #               LOAD_FAST_BORROW         2 (length)
+    #               COMPARE_OP              18 (bool(<))
+    #               POP_JUMP_IF_FALSE       99 (to L2)
+    #               NOT_TAKEN
+    # 
+    #  82           LOAD_GLOBAL              4 (hashlib)
+    #               LOAD_ATTR                6 (sha256)
+    #               PUSH_NULL
+    #               LOAD_FAST_BORROW_LOAD_FAST_BORROW 1 (key, nonce)
+    #               BINARY_OP                0 (+)
+    #               LOAD_GLOBAL              8 (struct)
+    #               LOAD_ATTR               10 (pack)
+    #               PUSH_NULL
+    #               LOAD_CONST               1 ('>Q')
+    #               LOAD_FAST_BORROW         4 (counter)
+    #               CALL                     2
+    #               BINARY_OP                0 (+)
+    #               CALL                     1
+    #               LOAD_ATTR               13 (digest + NULL|self)
+    #               CALL                     0
+    #               STORE_FAST               5 (block)
+    # 
+    #  83           LOAD_FAST_BORROW         3 (result)
+    #               LOAD_ATTR               15 (extend + NULL|self)
+    #               LOAD_FAST_BORROW         5 (block)
+    #               CALL                     1
+    #               POP_TOP
+    # 
+    #  84           LOAD_FAST_BORROW         4 (counter)
+    #               LOAD_SMALL_INT           1
+    #               BINARY_OP               13 (+=)
+    #               STORE_FAST               4 (counter)
+    #               JUMP_BACKWARD          114 (to L1)
+    # 
+    #  85   L2:     LOAD_GLOBAL             17 (bytes + NULL)
+    #               LOAD_FAST_BORROW         3 (result)
+    #               LOAD_CONST               2 (None)
+    #               LOAD_FAST_BORROW         2 (length)
+    #               BINARY_SLICE
+    #               CALL                     1
+    #               RETURN_VALUE
+    # --- end bytecode ---
+
+    # === CODE: <module>.__annotate__  (file=license_crypto.py, line=88) ===
+    # argcount=1, posonly=1, kwonly=0, stacksize=4
+    # varnames=('format',)
+    # freevars=(), cellvars=()
+    # names=('bytes',)
+    # constants:
+    #   [0] 2
+    #   [1] 'plaintext'
+    #   [2] 'return'
+    # --- bytecode ---
+    #  88           RESUME                   0
+    #               LOAD_FAST_BORROW         0 (format)
+    #               LOAD_SMALL_INT           2
+    #               COMPARE_OP             132 (>)
+    #               POP_JUMP_IF_FALSE        3 (to L1)
+    #               NOT_TAKEN
+    #               LOAD_COMMON_CONSTANT     1 (NotImplementedError)
+    #               RAISE_VARARGS            1
+    #       L1:     LOAD_CONST               1 ('plaintext')
+    #               LOAD_GLOBAL              0 (bytes)
+    #               LOAD_CONST               2 ('return')
+    #               LOAD_GLOBAL              0 (bytes)
+    #               BUILD_MAP                2
+    #               RETURN_VALUE
+    # --- end bytecode ---
+
+    # === CODE: <module>._pure_aes_encrypt  (file=license_crypto.py, line=88) ===
+    # argcount=1, posonly=0, kwonly=0, stacksize=7
+    # varnames=('plaintext', 'nonce', 'keystream', 'ciphertext', 'tag')
+    # freevars=(), cellvars=()
+    # names=('os', 'urandom', '_pure_aes_ctr_keystream', '_LICENSE_KEY', 'len', 'bytes', 'zip', 'hmac', 'new', '_APP_ID', 'hashlib', 'sha256', 'digest')
+    # constants:
+    #   [0] 'Pure-Python AES-GCM-like encrypt using SHA-256 based CTR + HMAC.'
+    #   [2] slice(None, 16, None)
+    # --- bytecode ---
+    #  88           RESUME                   0
+    # 
+    #  90           LOAD_GLOBAL              0 (os)
+    #               LOAD_ATTR                2 (urandom)
+    #               PUSH_NULL
+    #               LOAD_SMALL_INT          12
+    #               CALL                     1
+    #               STORE_FAST               1 (nonce)
+    # 
+    #  91           LOAD_GLOBAL              5 (_pure_aes_ctr_keystream + NULL)
+    #               LOAD_GLOBAL              6 (_LICENSE_KEY)
+    #               LOAD_FAST_BORROW         1 (nonce)
+    #               LOAD_GLOBAL              9 (len + NULL)
+    #               LOAD_FAST_BORROW         0 (plaintext)
+    #               CALL                     1
+    #               CALL                     3
+    #               STORE_FAST               2 (keystream)
+    # 
+    #  92           LOAD_GLOBAL             11 (bytes + NULL)
+    #               LOAD_CONST               1 (<code object <genexpr> at 0x7f11d7361ce0, file "license_crypto.py", line 92>)
+    #               MAKE_FUNCTION
+    #               LOAD_GLOBAL             13 (zip + NULL)
+    #               LOAD_FAST_BORROW_LOAD_FAST_BORROW 2 (plaintext, keystream)
+    #               CALL                     2
+    #               GET_ITER
+    #               CALL                     0
+    #               CALL                     1
+    #               STORE_FAST               3 (ciphertext)
+    # 
+    #  94           LOAD_GLOBAL             14 (hmac)
+    #               LOAD_ATTR               16 (new)
+    #               PUSH_NULL
+    #               LOAD_GLOBAL              6 (_LICENSE_KEY)
+    #               LOAD_FAST_BORROW_LOAD_FAST_BORROW 19 (nonce, ciphertext)
+    #               BINARY_OP                0 (+)
+    #               LOAD_GLOBAL             18 (_APP_ID)
+    #               BINARY_OP                0 (+)
+    #               LOAD_GLOBAL             20 (hashlib)
+    #               LOAD_ATTR               22 (sha256)
+    #               CALL                     3
+    #               LOAD_ATTR               25 (digest + NULL|self)
+    #               CALL                     0
+    #               LOAD_CONST               2 (slice(None, 16, None))
+    #               BINARY_OP               26 ([])
+    #               STORE_FAST               4 (tag)
+    # 
+    #  95           LOAD_FAST_BORROW_LOAD_FAST_BORROW 19 (nonce, ciphertext)
+    #               BINARY_OP                0 (+)
+    #               LOAD_FAST_BORROW         4 (tag)
+    #               BINARY_OP                0 (+)
+    #               RETURN_VALUE
+    # --- end bytecode ---
+
+        # === CODE: <module>._pure_aes_encrypt.<genexpr>  (file=license_crypto.py, line=92) ===
+        # argcount=1, posonly=0, kwonly=0, stacksize=3
+        # varnames=('.0', 'p', 'k')
+        # freevars=(), cellvars=()
+        # names=()
+        # constants:
+        #   [0] None
+        # --- bytecode ---
+        #   92           RETURN_GENERATOR
+        #                POP_TOP
+        #        L1:     RESUME                   0
+        #                LOAD_FAST                0 (.0)
+        #        L2:     FOR_ITER                15 (to L3)
+        #                UNPACK_SEQUENCE          2
+        #                STORE_FAST_STORE_FAST   18 (p, k)
+        #                LOAD_FAST_BORROW_LOAD_FAST_BORROW 18 (p, k)
+        #                BINARY_OP               12 (^)
+        #                YIELD_VALUE              0
+        #                RESUME                   5
+        #                POP_TOP
+        #                JUMP_BACKWARD           17 (to L2)
+        #        L3:     END_FOR
+        #                POP_ITER
+        #                LOAD_CONST               0 (None)
+        #                RETURN_VALUE
+        # 
+        #   --   L4:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+        #                RERAISE                  1
+        # ExceptionTable:
+        #   L1 to L4 -> L4 [0] lasti
+        # --- end bytecode ---
+
+    # === CODE: <module>.__annotate__  (file=license_crypto.py, line=98) ===
+    # argcount=1, posonly=1, kwonly=0, stacksize=4
+    # varnames=('format',)
+    # freevars=(), cellvars=()
+    # names=('bytes',)
+    # constants:
+    #   [0] 2
+    #   [1] 'data'
+    #   [2] 'return'
+    # --- bytecode ---
+    #  98           RESUME                   0
+    #               LOAD_FAST_BORROW         0 (format)
+    #               LOAD_SMALL_INT           2
+    #               COMPARE_OP             132 (>)
+    #               POP_JUMP_IF_FALSE        3 (to L1)
+    #               NOT_TAKEN
+    #               LOAD_COMMON_CONSTANT     1 (NotImplementedError)
+    #               RAISE_VARARGS            1
+    #       L1:     LOAD_CONST               1 ('data')
+    #               LOAD_GLOBAL              0 (bytes)
+    #               LOAD_CONST               2 ('return')
+    #               LOAD_GLOBAL              0 (bytes)
+    #               BUILD_MAP                2
+    #               RETURN_VALUE
+    # --- end bytecode ---
+
+    # === CODE: <module>._pure_aes_decrypt  (file=license_crypto.py, line=98) ===
+    # argcount=1, posonly=0, kwonly=0, stacksize=7
+    # varnames=('data', 'nonce', 'ciphertext', 'tag', 'expected_tag', 'keystream')
+    # freevars=(), cellvars=()
+    # names=('hmac', 'new', '_LICENSE_KEY', '_APP_ID', 'hashlib', 'sha256', 'digest', 'compare_digest', 'ValueError', '_pure_aes_ctr_keystream', 'len', 'bytes', 'zip')
+    # constants:
+    #   [0] 'Pure-Python AES-GCM-like decrypt.'
+    #   [1] slice(None, 12, None)
+    #   [2] None
+    #   [3] slice(None, 16, None)
+    #   [4] 'License integrity check failed'
+    #   [6] -16
+    # --- bytecode ---
+    #  98           RESUME                   0
+    # 
+    # 100           LOAD_FAST_BORROW         0 (data)
+    #               LOAD_CONST               1 (slice(None, 12, None))
+    #               BINARY_OP               26 ([])
+    #               STORE_FAST               1 (nonce)
+    # 
+    # 101           LOAD_FAST_BORROW         0 (data)
+    #               LOAD_SMALL_INT          12
+    #               LOAD_CONST               6 (-16)
+    #               BINARY_SLICE
+    #               STORE_FAST               2 (ciphertext)
+    # 
+    # 102           LOAD_FAST_BORROW         0 (data)
+    #               LOAD_CONST               6 (-16)
+    #               LOAD_CONST               2 (None)
+    #               BINARY_SLICE
+    #               STORE_FAST               3 (tag)
+    # 
+    # 104           LOAD_GLOBAL              0 (hmac)
+    #               LOAD_ATTR                2 (new)
+    #               PUSH_NULL
+    #               LOAD_GLOBAL              4 (_LICENSE_KEY)
+    #               LOAD_FAST_BORROW_LOAD_FAST_BORROW 18 (nonce, ciphertext)
+    #               BINARY_OP                0 (+)
+    #               LOAD_GLOBAL              6 (_APP_ID)
+    #               BINARY_OP                0 (+)
+    #               LOAD_GLOBAL              8 (hashlib)
+    #               LOAD_ATTR               10 (sha256)
+    #               CALL                     3
+    #               LOAD_ATTR               13 (digest + NULL|self)
+    #               CALL                     0
+    #               LOAD_CONST               3 (slice(None, 16, None))
+    #               BINARY_OP               26 ([])
+    #               STORE_FAST               4 (expected_tag)
+    # 
+    # 105           LOAD_GLOBAL              0 (hmac)
+    #               LOAD_ATTR               14 (compare_digest)
+    #               PUSH_NULL
+    #               LOAD_FAST_BORROW_LOAD_FAST_BORROW 52 (tag, expected_tag)
+    #               CALL                     2
+    #               TO_BOOL
+    #               POP_JUMP_IF_TRUE        12 (to L1)
+    #               NOT_TAKEN
+    # 
+    # 106           LOAD_GLOBAL             17 (ValueError + NULL)
+    #               LOAD_CONST               4 ('License integrity check failed')
+    #               CALL                     1
+    #               RAISE_VARARGS            1
+    # 
+    # 107   L1:     LOAD_GLOBAL             19 (_pure_aes_ctr_keystream + NULL)
+    #               LOAD_GLOBAL              4 (_LICENSE_KEY)
+    #               LOAD_FAST_BORROW         1 (nonce)
+    #               LOAD_GLOBAL             21 (len + NULL)
+    #               LOAD_FAST_BORROW         2 (ciphertext)
+    #               CALL                     1
+    #               CALL                     3
+    #               STORE_FAST               5 (keystream)
+    # 
+    # 108           LOAD_GLOBAL             23 (bytes + NULL)
+    #               LOAD_CONST               5 (<code object <genexpr> at 0x7f11d7361df0, file "license_crypto.py", line 108>)
+    #               MAKE_FUNCTION
+    #               LOAD_GLOBAL             25 (zip + NULL)
+    #               LOAD_FAST_BORROW_LOAD_FAST_BORROW 37 (ciphertext, keystream)
+    #               CALL                     2
+    #               GET_ITER
+    #               CALL                     0
+    #               CALL                     1
+    #               RETURN_VALUE
+    # --- end bytecode ---
+
+        # === CODE: <module>._pure_aes_decrypt.<genexpr>  (file=license_crypto.py, line=108) ===
+        # argcount=1, posonly=0, kwonly=0, stacksize=3
+        # varnames=('.0', 'p', 'k')
+        # freevars=(), cellvars=()
+        # names=()
+        # constants:
+        #   [0] None
+        # --- bytecode ---
+        #  108           RETURN_GENERATOR
+        #                POP_TOP
+        #        L1:     RESUME                   0
+        #                LOAD_FAST                0 (.0)
+        #        L2:     FOR_ITER                15 (to L3)
+        #                UNPACK_SEQUENCE          2
+        #                STORE_FAST_STORE_FAST   18 (p, k)
+        #                LOAD_FAST_BORROW_LOAD_FAST_BORROW 18 (p, k)
+        #                BINARY_OP               12 (^)
+        #                YIELD_VALUE              0
+        #                RESUME                   5
+        #                POP_TOP
+        #                JUMP_BACKWARD           17 (to L2)
+        #        L3:     END_FOR
+        #                POP_ITER
+        #                LOAD_CONST               0 (None)
+        #                RETURN_VALUE
+        # 
+        #   --   L4:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+        #                RERAISE                  1
+        # ExceptionTable:
+        #   L1 to L4 -> L4 [0] lasti
+        # --- end bytecode ---
+
+    # === CODE: <module>.__annotate__  (file=license_crypto.py, line=113) ===
+    # argcount=1, posonly=1, kwonly=0, stacksize=6
+    # varnames=('format',)
+    # freevars=(), cellvars=()
+    # names=('str', 'int')
+    # constants:
+    #   [0] 2
+    #   [1] 'machine_id'
+    #   [2] 'days'
+    #   [3] 'return'
+    # --- bytecode ---
+    # 113           RESUME                   0
+    #               LOAD_FAST_BORROW         0 (format)
+    #               LOAD_SMALL_INT           2
+    #               COMPARE_OP             132 (>)
+    #               POP_JUMP_IF_FALSE        3 (to L1)
+    #               NOT_TAKEN
+    #               LOAD_COMMON_CONSTANT     1 (NotImplementedError)
+    #               RAISE_VARARGS            1
+    #       L1:     LOAD_CONST               1 ('machine_id')
+    #               LOAD_GLOBAL              0 (str)
+    #               LOAD_CONST               2 ('days')
+    #               LOAD_GLOBAL              2 (int)
+    #               LOAD_CONST               3 ('return')
+    #               LOAD_GLOBAL              0 (str)
+    #               BUILD_MAP                3
+    #               RETURN_VALUE
+    # --- end bytecode ---
+
+    # === CODE: <module>.generate_license_key  (file=license_crypto.py, line=113) ===
+    # argcount=2, posonly=0, kwonly=0, stacksize=9
+    # varnames=('machine_id', 'days', '_st', 'app_hash', 'mid_hash', 'exp_ts', 'payload', 'encrypted')
+    # freevars=(), cellvars=('encoded',)
+    # names=('struct', 'hashlib', 'sha256', 'digest', 'encode', 'int', 'time', 'pack', '_aes_gcm_encrypt', '_APP_ID', 'ImportError', '_pure_aes_encrypt', 'base64', 'b32hexencode', 'decode', 'rstrip', 'join', 'range', 'len')
+    # constants:
+    #   [0] 'Generate a compact encrypted license key.'
+    #   [1] None
+    #   [2] b'BSC-OPC-Agent'
+    #   [3] slice(None, 8, None)
+    #   [4] 86400
+    #   [5] '>QI'
+    #   [6] '='
+    #   [7] '-'
+    # --- bytecode ---
+    #   --           MAKE_CELL                8 (encoded)
+    # 
+    #  113           RESUME                   0
+    # 
+    #  115           LOAD_SMALL_INT           0
+    #                LOAD_CONST               1 (None)
+    #                IMPORT_NAME              0 (struct)
+    #                STORE_FAST               2 (_st)
+    # 
+    #  117           LOAD_GLOBAL              2 (hashlib)
+    #                LOAD_ATTR                4 (sha256)
+    #                PUSH_NULL
+    #                LOAD_CONST               2 (b'BSC-OPC-Agent')
+    #                CALL                     1
+    #                LOAD_ATTR                7 (digest + NULL|self)
+    #                CALL                     0
+    #                LOAD_CONST               3 (slice(None, 8, None))
+    #                BINARY_OP               26 ([])
+    #                STORE_FAST               3 (app_hash)
+    # 
+    #  118           LOAD_GLOBAL              2 (hashlib)
+    #                LOAD_ATTR                4 (sha256)
+    #                PUSH_NULL
+    #                LOAD_FAST_BORROW         0 (machine_id)
+    #                LOAD_ATTR                9 (encode + NULL|self)
+    #                CALL                     0
+    #                CALL                     1
+    #                LOAD_ATTR                7 (digest + NULL|self)
+    #                CALL                     0
+    #                LOAD_CONST               3 (slice(None, 8, None))
+    #                BINARY_OP               26 ([])
+    #                STORE_FAST               4 (mid_hash)
+    # 
+    #  119           LOAD_GLOBAL             11 (int + NULL)
+    #                LOAD_GLOBAL             12 (time)
+    #                LOAD_ATTR               12 (time)
+    #                PUSH_NULL
+    #                CALL                     0
+    #                CALL                     1
+    #                LOAD_FAST_BORROW         1 (days)
+    #                LOAD_CONST               4 (86400)
+    #                BINARY_OP                5 (*)
+    #                BINARY_OP                0 (+)
+    #                STORE_FAST               5 (exp_ts)
+    # 
+    #  120           LOAD_FAST_BORROW_LOAD_FAST_BORROW 52 (app_hash, mid_hash)
+    #                BINARY_OP                0 (+)
+    #                LOAD_FAST_BORROW         2 (_st)
+    #                LOAD_ATTR               15 (pack + NULL|self)
+    #                LOAD_CONST               5 ('>QI')
+    #                LOAD_FAST_BORROW_LOAD_FAST_BORROW 81 (exp_ts, days)
+    #                CALL                     3
+    #                BINARY_OP                0 (+)
+    #                STORE_FAST               6 (payload)
+    # 
+    #  121           NOP
+    # 
+    #  122   L1:     LOAD_GLOBAL             17 (_aes_gcm_encrypt + NULL)
+    #                LOAD_FAST_BORROW         6 (payload)
+    #                LOAD_GLOBAL             18 (_APP_ID)
+    #                CALL                     2
+    #                STORE_FAST               7 (encrypted)
+    # 
+    #  125   L2:     LOAD_GLOBAL             24 (base64)
+    #                LOAD_ATTR               26 (b32hexencode)
+    #                PUSH_NULL
+    #                LOAD_FAST_BORROW         7 (encrypted)
+    #                CALL                     1
+    #                LOAD_ATTR               29 (decode + NULL|self)
+    #                CALL                     0
+    #                LOAD_ATTR               31 (rstrip + NULL|self)
+    #                LOAD_CONST               6 ('=')
+    #                CALL                     1
+    #                STORE_DEREF              8 (encoded)
+    # 
+    #  126           LOAD_CONST               7 ('-')
+    #                LOAD_ATTR               33 (join + NULL|self)
+    #                LOAD_FAST_BORROW         8 (encoded)
+    #                BUILD_TUPLE              1
+    #                LOAD_CONST               8 (<code object <genexpr> at 0x7f11d7362010, file "license_crypto.py", line 126>)
+    #                MAKE_FUNCTION
+    #                SET_FUNCTION_ATTRIBUTE   8 (closure)
+    #                LOAD_GLOBAL             35 (range + NULL)
+    #                LOAD_SMALL_INT           0
+    #                LOAD_GLOBAL             37 (len + NULL)
+    #                LOAD_DEREF               8 (encoded)
+    #                CALL                     1
+    #                LOAD_SMALL_INT           5
+    #                CALL                     3
+    #                GET_ITER
+    #                CALL                     0
+    #                CALL                     1
+    #                RETURN_VALUE
+    # 
+    #   --   L3:     PUSH_EXC_INFO
+    # 
+    #  123           LOAD_GLOBAL             20 (ImportError)
+    #                CHECK_EXC_MATCH
+    #                POP_JUMP_IF_FALSE       15 (to L5)
+    #                NOT_TAKEN
+    #                POP_TOP
+    # 
+    #  124           LOAD_GLOBAL             23 (_pure_aes_encrypt + NULL)
+    #                LOAD_FAST                6 (payload)
+    #                CALL                     1
+    #                STORE_FAST               7 (encrypted)
+    #        L4:     POP_EXCEPT
+    #                JUMP_BACKWARD_NO_INTERRUPT 122 (to L2)
+    # 
+    #  123   L5:     RERAISE                  0
+    # 
+    #   --   L6:     COPY                     3
+    #                POP_EXCEPT
+    #                RERAISE                  1
+    # ExceptionTable:
+    #   L1 to L2 -> L3 [0]
+    #   L3 to L4 -> L6 [1] lasti
+    #   L5 to L6 -> L6 [1] lasti
+    # --- end bytecode ---
+
+        # === CODE: <module>.generate_license_key.<genexpr>  (file=license_crypto.py, line=126) ===
+        # argcount=1, posonly=0, kwonly=0, stacksize=5
+        # varnames=('.0', 'i')
+        # freevars=('encoded',), cellvars=()
+        # names=()
+        # constants:
+        #   [0] 5
+        #   [1] None
+        # --- bytecode ---
+        #   --           COPY_FREE_VARS           1
+        # 
+        #  126           RETURN_GENERATOR
+        #                POP_TOP
+        #        L1:     RESUME                   0
+        #                LOAD_FAST                0 (.0)
+        #        L2:     FOR_ITER                16 (to L3)
+        #                STORE_FAST               1 (i)
+        #                LOAD_DEREF               2 (encoded)
+        #                LOAD_FAST_BORROW_LOAD_FAST_BORROW 17 (i, i)
+        #                LOAD_SMALL_INT           5
+        #                BINARY_OP                0 (+)
+        #                BINARY_SLICE
+        #                YIELD_VALUE              0
+        #                RESUME                   5
+        #                POP_TOP
+        #                JUMP_BACKWARD           18 (to L2)
+        #        L3:     END_FOR
+        #                POP_ITER
+        #                LOAD_CONST               1 (None)
+        #                RETURN_VALUE
+        # 
+        #   --   L4:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+        #                RERAISE                  1
+        # ExceptionTable:
+        #   L1 to L4 -> L4 [0] lasti
+        # --- end bytecode ---
+
+    # === CODE: <module>.__annotate__  (file=license_crypto.py, line=129) ===
+    # argcount=1, posonly=1, kwonly=0, stacksize=4
+    # varnames=('format',)
+    # freevars=(), cellvars=()
+    # names=('str', 'dict')
+    # constants:
+    #   [0] 2
+    #   [1] 'key_input'
+    #   [2] 'return'
+    # --- bytecode ---
+    # 129           RESUME                   0
+    #               LOAD_FAST_BORROW         0 (format)
+    #               LOAD_SMALL_INT           2
+    #               COMPARE_OP             132 (>)
+    #               POP_JUMP_IF_FALSE        3 (to L1)
+    #               NOT_TAKEN
+    #               LOAD_COMMON_CONSTANT     1 (NotImplementedError)
+    #               RAISE_VARARGS            1
+    #       L1:     LOAD_CONST               1 ('key_input')
+    #               LOAD_GLOBAL              0 (str)
+    #               LOAD_CONST               2 ('return')
+    #               LOAD_GLOBAL              2 (dict)
+    #               BUILD_MAP                2
+    #               RETURN_VALUE
+    # --- end bytecode ---
+
+    # === CODE: <module>.verify_and_save_license  (file=license_crypto.py, line=129) ===
+    # argcount=1, posonly=0, kwonly=0, stacksize=10
+    # varnames=('key_input', '_st', 'clean', 'padding', 'encrypted', 'payload_bytes', 'app_hash', 'loaded_app', 'loaded_mid', 'machine_id', 'expected_mid', 'exp_time', 'days', 'days_since', 'days_left')
+    # freevars=(), cellvars=()
+    # names=('struct', 'strip', 'upper', 'replace', 'len', 'ValueError', 'base64', 'b32hexdecode', 'encode', 'Exception', '_aes_gcm_decrypt', '_APP_ID', 'ImportError', '_pure_aes_decrypt', 'hashlib', 'sha256', 'digest', '_get_machine_id', 'unpack', 'time', '_fmt_date', 'max', 'int')
+    # constants:
+    #   [0] 'Verify a license key. Returns {valid, exp_date, days_left, mid} or raises.'
+    #   [1] None
+    #   [2] '-'
+    #   [3] ''
+    #   [4] ' '
+    #   [5] '密钥格式无效'
+    #   [6] '='
+    #   [7] '密钥解码失败'
+    #   [8] '密钥验证失败'
+    #   [9] '密钥数据损坏'
+    #   [10] b'BSC-OPC-Agent'
+    #   [11] slice(None, 8, None)
+    #   [12] '密钥不适用于本软件'
+    #   [13] slice(8, 16, None)
+    #   [14] '密钥未绑定本机 (机器码: '
+    #   [15] ')'
+    #   [16] '>QI'
+    #   [17] slice(16, 28, None)
+    #   [18] 86400
+    #   [19] '密钥已过期，请联系客服续期'
+    #   [20] 'valid'
+    #   [21] True
+    #   [22] 'exp_date'
+    #   [23] 'days_left'
+    #   [24] 'mid'
+    #   [25] 'grace'
+    # --- bytecode ---
+    #  129            RESUME                   0
+    # 
+    #  131            LOAD_SMALL_INT           0
+    #                 LOAD_CONST               1 (None)
+    #                 IMPORT_NAME              0 (struct)
+    #                 STORE_FAST               1 (_st)
+    # 
+    #  132            LOAD_FAST_BORROW         0 (key_input)
+    #                 LOAD_ATTR                3 (strip + NULL|self)
+    #                 CALL                     0
+    #                 LOAD_ATTR                5 (upper + NULL|self)
+    #                 CALL                     0
+    #                 LOAD_ATTR                7 (replace + NULL|self)
+    #                 LOAD_CONST               2 ('-')
+    #                 LOAD_CONST               3 ('')
+    #                 CALL                     2
+    #                 LOAD_ATTR                7 (replace + NULL|self)
+    #                 LOAD_CONST               4 (' ')
+    #                 LOAD_CONST               3 ('')
+    #                 CALL                     2
+    #                 STORE_FAST               2 (clean)
+    # 
+    #  133            LOAD_GLOBAL              9 (len + NULL)
+    #                 LOAD_FAST_BORROW         2 (clean)
+    #                 CALL                     1
+    #                 LOAD_SMALL_INT          20
+    #                 COMPARE_OP              18 (bool(<))
+    #                 POP_JUMP_IF_FALSE       12 (to L1)
+    #                 NOT_TAKEN
+    # 
+    #  134            LOAD_GLOBAL             11 (ValueError + NULL)
+    #                 LOAD_CONST               5 ('密钥格式无效')
+    #                 CALL                     1
+    #                 RAISE_VARARGS            1
+    # 
+    #  136    L1:     LOAD_SMALL_INT           8
+    #                 LOAD_GLOBAL              9 (len + NULL)
+    #                 LOAD_FAST_BORROW         2 (clean)
+    #                 CALL                     1
+    #                 LOAD_SMALL_INT           8
+    #                 BINARY_OP                6 (%)
+    #                 BINARY_OP               10 (-)
+    #                 STORE_FAST               3 (padding)
+    # 
+    #  137            LOAD_FAST_BORROW         3 (padding)
+    #                 LOAD_SMALL_INT           8
+    #                 COMPARE_OP              18 (bool(<))
+    #                 POP_JUMP_IF_FALSE       17 (to L2)
+    #                 NOT_TAKEN
+    # 
+    #  138            LOAD_FAST_BORROW         2 (clean)
+    #                 LOAD_CONST               6 ('=')
+    #                 LOAD_FAST_BORROW         3 (padding)
+    #                 BINARY_OP                5 (*)
+    #                 BINARY_OP               13 (+=)
+    #                 STORE_FAST               2 (clean)
+    # 
+    #  139    L2:     NOP
+    # 
+    #  140    L3:     LOAD_GLOBAL             12 (base64)
+    #                 LOAD_ATTR               14 (b32hexdecode)
+    #                 PUSH_NULL
+    #                 LOAD_FAST_BORROW         2 (clean)
+    #                 LOAD_ATTR               17 (encode + NULL|self)
+    #                 CALL                     0
+    #                 CALL                     1
+    #                 STORE_FAST               4 (encrypted)
+    # 
+    #  144    L4:     NOP
+    # 
+    #  145    L5:     LOAD_GLOBAL             21 (_aes_gcm_decrypt + NULL)
+    #                 LOAD_FAST                4 (encrypted)
+    #                 LOAD_GLOBAL             22 (_APP_ID)
+    #                 CALL                     2
+    #                 STORE_FAST               5 (payload_bytes)
+    # 
+    #  154    L6:     LOAD_GLOBAL              9 (len + NULL)
+    #                 LOAD_FAST                5 (payload_bytes)
+    #                 CALL                     1
+    #                 LOAD_SMALL_INT          28
+    #                 COMPARE_OP              18 (bool(<))
+    #                 POP_JUMP_IF_FALSE       12 (to L7)
+    #                 NOT_TAKEN
+    # 
+    #  155            LOAD_GLOBAL             11 (ValueError + NULL)
+    #                 LOAD_CONST               9 ('密钥数据损坏')
+    #                 CALL                     1
+    #                 RAISE_VARARGS            1
+    # 
+    #  158    L7:     LOAD_GLOBAL             28 (hashlib)
+    #                 LOAD_ATTR               30 (sha256)
+    #                 PUSH_NULL
+    #                 LOAD_CONST              10 (b'BSC-OPC-Agent')
+    #                 CALL                     1
+    #                 LOAD_ATTR               33 (digest + NULL|self)
+    #                 CALL                     0
+    #                 LOAD_CONST              11 (slice(None, 8, None))
+    #                 BINARY_OP               26 ([])
+    #                 STORE_FAST               6 (app_hash)
+    # 
+    #  159            LOAD_FAST                5 (payload_bytes)
+    #                 LOAD_CONST              11 (slice(None, 8, None))
+    #                 BINARY_OP               26 ([])
+    #                 STORE_FAST               7 (loaded_app)
+    # 
+    #  160            LOAD_FAST_LOAD_FAST    118 (loaded_app, app_hash)
+    #                 COMPARE_OP             119 (bool(!=))
+    #                 POP_JUMP_IF_FALSE       12 (to L8)
+    #                 NOT_TAKEN
+    # 
+    #  161            LOAD_GLOBAL             11 (ValueError + NULL)
+    #                 LOAD_CONST              12 ('密钥不适用于本软件')
+    #                 CALL                     1
+    #                 RAISE_VARARGS            1
+    # 
+    #  163    L8:     LOAD_FAST                5 (payload_bytes)
+    #                 LOAD_CONST              13 (slice(8, 16, None))
+    #                 BINARY_OP               26 ([])
+    #                 STORE_FAST               8 (loaded_mid)
+    # 
+    #  164            LOAD_GLOBAL             35 (_get_machine_id + NULL)
+    #                 CALL                     0
+    #                 STORE_FAST               9 (machine_id)
+    # 
+    #  165            LOAD_GLOBAL             28 (hashlib)
+    #                 LOAD_ATTR               30 (sha256)
+    #                 PUSH_NULL
+    #                 LOAD_FAST                9 (machine_id)
+    #                 LOAD_ATTR               17 (encode + NULL|self)
+    #                 CALL                     0
+    #                 CALL                     1
+    #                 LOAD_ATTR               33 (digest + NULL|self)
+    #                 CALL                     0
+    #                 LOAD_CONST              11 (slice(None, 8, None))
+    #                 BINARY_OP               26 ([])
+    #                 STORE_FAST              10 (expected_mid)
+    # 
+    #  166            LOAD_FAST_LOAD_FAST    138 (loaded_mid, expected_mid)
+    #                 COMPARE_OP             119 (bool(!=))
+    #                 POP_JUMP_IF_FALSE       37 (to L9)
+    #                 NOT_TAKEN
+    # 
+    #  167            LOAD_GLOBAL             11 (ValueError + NULL)
+    #                 LOAD_CONST              14 ('密钥未绑定本机 (机器码: ')
+    #                 LOAD_FAST                9 (machine_id)
+    #                 LOAD_CONST              11 (slice(None, 8, None))
+    #                 BINARY_OP               26 ([])
+    #                 LOAD_ATTR                5 (upper + NULL|self)
+    #                 CALL                     0
+    #                 FORMAT_SIMPLE
+    #                 LOAD_CONST              15 (')')
+    #                 BUILD_STRING             3
+    #                 CALL                     1
+    #                 RAISE_VARARGS            1
+    # 
+    #  169    L9:     LOAD_FAST                1 (_st)
+    #                 LOAD_ATTR               37 (unpack + NULL|self)
+    #                 LOAD_CONST              16 ('>QI')
+    #                 LOAD_FAST                5 (payload_bytes)
+    #                 LOAD_CONST              17 (slice(16, 28, None))
+    #                 BINARY_OP               26 ([])
+    #                 CALL                     2
+    #                 UNPACK_SEQUENCE          2
+    #                 STORE_FAST_STORE_FAST  188 (exp_time, days)
+    # 
+    #  170            LOAD_GLOBAL             38 (time)
+    #                 LOAD_ATTR               38 (time)
+    #                 PUSH_NULL
+    #                 CALL                     0
+    #                 LOAD_FAST               11 (exp_time)
+    #                 COMPARE_OP             148 (bool(>))
+    #                 POP_JUMP_IF_FALSE       75 (to L11)
+    #                 NOT_TAKEN
+    # 
+    #  171            LOAD_GLOBAL             38 (time)
+    #                 LOAD_ATTR               38 (time)
+    #                 PUSH_NULL
+    #                 CALL                     0
+    #                 LOAD_FAST               11 (exp_time)
+    #                 BINARY_OP               10 (-)
+    #                 LOAD_CONST              18 (86400)
+    #                 BINARY_OP               11 (/)
+    #                 STORE_FAST              13 (days_since)
+    # 
+    #  172            LOAD_FAST               13 (days_since)
+    #                 LOAD_SMALL_INT           3
+    #                 COMPARE_OP             148 (bool(>))
+    #                 POP_JUMP_IF_FALSE       12 (to L10)
+    #                 NOT_TAKEN
+    # 
+    #  173            LOAD_GLOBAL             11 (ValueError + NULL)
+    #                 LOAD_CONST              19 ('密钥已过期，请联系客服续期')
+    #                 CALL                     1
+    #                 RAISE_VARARGS            1
+    # 
+    #  174   L10:     LOAD_CONST              20 ('valid')
+    #                 LOAD_CONST              21 (True)
+    #                 LOAD_CONST              22 ('exp_date')
+    #                 LOAD_GLOBAL             41 (_fmt_date + NULL)
+    #                 LOAD_FAST               11 (exp_time)
+    #                 CALL                     1
+    #                 LOAD_CONST              23 ('days_left')
+    #                 LOAD_SMALL_INT           0
+    #                 LOAD_CONST              24 ('mid')
+    #                 LOAD_FAST                9 (machine_id)
+    #                 LOAD_CONST              25 ('grace')
+    #                 LOAD_CONST              21 (True)
+    #                 BUILD_MAP                5
+    #                 RETURN_VALUE
+    # 
+    #  176   L11:     LOAD_GLOBAL             43 (max + NULL)
+    #                 LOAD_SMALL_INT           0
+    #                 LOAD_GLOBAL             45 (int + NULL)
+    #                 LOAD_FAST               11 (exp_time)
+    #                 LOAD_GLOBAL             38 (time)
+    #                 LOAD_ATTR               38 (time)
+    #                 PUSH_NULL
+    #                 CALL                     0
+    #                 BINARY_OP               10 (-)
+    #                 LOAD_CONST              18 (86400)
+    #                 BINARY_OP               11 (/)
+    #                 CALL                     1
+    #                 CALL                     2
+    #                 STORE_FAST              14 (days_left)
+    # 
+    #  177            LOAD_CONST              20 ('valid')
+    #                 LOAD_CONST              21 (True)
+    #                 LOAD_CONST              22 ('exp_date')
+    #                 LOAD_GLOBAL             41 (_fmt_date + NULL)
+    #                 LOAD_FAST               11 (exp_time)
+    #                 CALL                     1
+    #                 LOAD_CONST              23 ('days_left')
+    #                 LOAD_FAST               14 (days_left)
+    #                 LOAD_CONST              24 ('mid')
+    #                 LOAD_FAST                9 (machine_id)
+    #                 BUILD_MAP                4
+    #                 RETURN_VALUE
+    # 
+    #   --   L12:     PUSH_EXC_INFO
+    # 
+    #  141            LOAD_GLOBAL             18 (Exception)
+    #                 CHECK_EXC_MATCH
+    #                 POP_JUMP_IF_FALSE       13 (to L13)
+    #                 NOT_TAKEN
+    #                 POP_TOP
+    # 
+    #  142            LOAD_GLOBAL             11 (ValueError + NULL)
+    #                 LOAD_CONST               7 ('密钥解码失败')
+    #                 CALL                     1
+    #                 RAISE_VARARGS            1
+    # 
+    #  141   L13:     RERAISE                  0
+    # 
+    #   --   L14:     COPY                     3
+    #                 POP_EXCEPT
+    #                 RERAISE                  1
+    #        L15:     PUSH_EXC_INFO
+    # 
+    #  146            LOAD_GLOBAL             24 (ImportError)
+    #                 CHECK_EXC_MATCH
+    #                 POP_JUMP_IF_FALSE       43 (to L22)
+    #                 NOT_TAKEN
+    #                 POP_TOP
+    # 
+    #  147   L16:     NOP
+    # 
+    #  148   L17:     LOAD_GLOBAL             27 (_pure_aes_decrypt + NULL)
+    #                 LOAD_FAST                4 (encrypted)
+    #                 CALL                     1
+    #                 STORE_FAST               5 (payload_bytes)
+    #        L18:     POP_EXCEPT
+    #                 EXTENDED_ARG             1
+    #                 JUMP_BACKWARD_NO_INTERRUPT 466 (to L6)
+    # 
+    #   --   L19:     PUSH_EXC_INFO
+    # 
+    #  149            LOAD_GLOBAL             18 (Exception)
+    #                 CHECK_EXC_MATCH
+    #                 POP_JUMP_IF_FALSE       13 (to L20)
+    #                 NOT_TAKEN
+    #                 POP_TOP
+    # 
+    #  150            LOAD_GLOBAL             11 (ValueError + NULL)
+    #                 LOAD_CONST               8 ('密钥验证失败')
+    #                 CALL                     1
+    #                 RAISE_VARARGS            1
+    # 
+    #  149   L20:     RERAISE                  0
+    # 
+    #   --   L21:     COPY                     3
+    #                 POP_EXCEPT
+    #                 RERAISE                  1
+    # 
+    #  151   L22:     LOAD_GLOBAL             18 (Exception)
+    #                 CHECK_EXC_MATCH
+    #                 POP_JUMP_IF_FALSE       13 (to L25)
+    #        L23:     NOT_TAKEN
+    #        L24:     POP_TOP
+    # 
+    #  152            LOAD_GLOBAL             11 (ValueError + NULL)
+    #                 LOAD_CONST               8 ('密钥验证失败')
+    #                 CALL                     1
+    #                 RAISE_VARARGS            1
+    # 
+    #  151   L25:     RERAISE                  0
+    # 
+    #   --   L26:     COPY                     3
+    #                 POP_EXCEPT
+    #                 RERAISE                  1
+    # ExceptionTable:
+    #   L3 to L4 -> L12 [0]
+    #   L5 to L6 -> L15 [0]
+    #   L12 to L14 -> L14 [1] lasti
+    #   L15 to L16 -> L26 [1] lasti
+    #   L17 to L18 -> L19 [1]
+    #   L19 to L21 -> L21 [2] lasti
+    #   L21 to L23 -> L26 [1] lasti
+    #   L24 to L26 -> L26 [1] lasti
+    # --- end bytecode ---
+
+    # === CODE: <module>.__annotate__  (file=license_crypto.py, line=180) ===
+    # argcount=1, posonly=1, kwonly=0, stacksize=4
+    # varnames=('format',)
+    # freevars=(), cellvars=()
+    # names=('str', 'dict')
+    # constants:
+    #   [0] 2
+    #   [1] 'key_input'
+    #   [2] 'return'
+    # --- bytecode ---
+    # 180           RESUME                   0
+    #               LOAD_FAST_BORROW         0 (format)
+    #               LOAD_SMALL_INT           2
+    #               COMPARE_OP             132 (>)
+    #               POP_JUMP_IF_FALSE        3 (to L1)
+    #               NOT_TAKEN
+    #               LOAD_COMMON_CONSTANT     1 (NotImplementedError)
+    #               RAISE_VARARGS            1
+    #       L1:     LOAD_CONST               1 ('key_input')
+    #               LOAD_GLOBAL              0 (str)
+    #               LOAD_CONST               2 ('return')
+    #               LOAD_GLOBAL              2 (dict)
+    #               BUILD_MAP                2
+    #               RETURN_VALUE
+    # --- end bytecode ---
+
+    # === CODE: <module>.save_license  (file=license_crypto.py, line=180) ===
+    # argcount=1, posonly=0, kwonly=0, stacksize=15
+    # varnames=('key_input', 'result', 'content', 'saved', 'license_path')
+    # freevars=(), cellvars=()
+    # names=('verify_and_save_license', 'json', 'dumps', 'hashlib', 'sha256', 'encode', 'hexdigest', 'get', 'int', 'time', '_aes_gcm_encrypt', '_APP_ID', 'ImportError', '_pure_aes_encrypt', '_get_base_dir', '_LICENSE_FILE', 'write_bytes')
+    # constants:
+    #   [0] 'Verify and save license to file.'
+    #   [1] 'key_hash'
+    #   [2] 'mid'
+    #   [3] ''
+    #   [4] 'exp_date'
+    #   [5] 'days_left'
+    #   [6] 'saved_at'
+    # --- bytecode ---
+    #  180           RESUME                   0
+    # 
+    #  182           LOAD_GLOBAL              1 (verify_and_save_license + NULL)
+    #                LOAD_FAST_BORROW         0 (key_input)
+    #                CALL                     1
+    #                STORE_FAST               1 (result)
+    # 
+    #  183           LOAD_GLOBAL              2 (json)
+    #                LOAD_ATTR                4 (dumps)
+    #                PUSH_NULL
+    # 
+    #  184           LOAD_CONST               1 ('key_hash')
+    #                LOAD_GLOBAL              6 (hashlib)
+    #                LOAD_ATTR                8 (sha256)
+    #                PUSH_NULL
+    #                LOAD_FAST_BORROW         0 (key_input)
+    #                LOAD_ATTR               11 (encode + NULL|self)
+    #                CALL                     0
+    #                CALL                     1
+    #                LOAD_ATTR               13 (hexdigest + NULL|self)
+    #                CALL                     0
+    # 
+    #  185           LOAD_CONST               2 ('mid')
+    #                LOAD_FAST_BORROW         1 (result)
+    #                LOAD_ATTR               15 (get + NULL|self)
+    #                LOAD_CONST               2 ('mid')
+    #                LOAD_CONST               3 ('')
+    #                CALL                     2
+    # 
+    #  186           LOAD_CONST               4 ('exp_date')
+    #                LOAD_FAST_BORROW         1 (result)
+    #                LOAD_ATTR               15 (get + NULL|self)
+    #                LOAD_CONST               4 ('exp_date')
+    #                LOAD_CONST               3 ('')
+    #                CALL                     2
+    # 
+    #  187           LOAD_CONST               5 ('days_left')
+    #                LOAD_FAST_BORROW         1 (result)
+    #                LOAD_ATTR               15 (get + NULL|self)
+    #                LOAD_CONST               5 ('days_left')
+    #                LOAD_SMALL_INT           0
+    #                CALL                     2
+    # 
+    #  188           LOAD_CONST               6 ('saved_at')
+    #                LOAD_GLOBAL             17 (int + NULL)
+    #                LOAD_GLOBAL             18 (time)
+    #                LOAD_ATTR               18 (time)
+    #                PUSH_NULL
+    #                CALL                     0
+    #                CALL                     1
+    # 
+    #  183           BUILD_MAP                5
+    #                CALL                     1
+    #                STORE_FAST               2 (content)
+    # 
+    #  191           NOP
+    # 
+    #  192   L1:     LOAD_GLOBAL             21 (_aes_gcm_encrypt + NULL)
+    #                LOAD_FAST_BORROW         2 (content)
+    #                LOAD_ATTR               11 (encode + NULL|self)
+    #                CALL                     0
+    #                LOAD_GLOBAL             22 (_APP_ID)
+    #                CALL                     2
+    #                STORE_FAST               3 (saved)
+    # 
+    #  195   L2:     LOAD_GLOBAL             29 (_get_base_dir + NULL)
+    #                CALL                     0
+    #                LOAD_GLOBAL             30 (_LICENSE_FILE)
+    #                BINARY_OP               11 (/)
+    #                STORE_FAST               4 (license_path)
+    # 
+    #  196           LOAD_FAST_BORROW         4 (license_path)
+    #                LOAD_ATTR               33 (write_bytes + NULL|self)
+    #                LOAD_FAST_BORROW         3 (saved)
+    #                CALL                     1
+    #                POP_TOP
+    # 
+    #  197           LOAD_FAST_BORROW         1 (result)
+    #                RETURN_VALUE
+    # 
+    #   --   L3:     PUSH_EXC_INFO
+    # 
+    #  193           LOAD_GLOBAL             24 (ImportError)
+    #                CHECK_EXC_MATCH
+    #                POP_JUMP_IF_FALSE       29 (to L5)
+    #                NOT_TAKEN
+    #                POP_TOP
+    # 
+    #  194           LOAD_GLOBAL             27 (_pure_aes_encrypt + NULL)
+    #                LOAD_FAST                2 (content)
+    #                LOAD_ATTR               11 (encode + NULL|self)
+    #                CALL                     0
+    #                CALL                     1
+    #                STORE_FAST               3 (saved)
+    #        L4:     POP_EXCEPT
+    #                JUMP_BACKWARD_NO_INTERRUPT 78 (to L2)
+    # 
+    #  193   L5:     RERAISE                  0
+    # 
+    #   --   L6:     COPY                     3
+    #                POP_EXCEPT
+    #                RERAISE                  1
+    # ExceptionTable:
+    #   L1 to L2 -> L3 [0]
+    #   L3 to L4 -> L6 [1] lasti
+    #   L5 to L6 -> L6 [1] lasti
+    # --- end bytecode ---
+
+    # === CODE: <module>.__annotate__  (file=license_crypto.py, line=200) ===
+    # argcount=1, posonly=1, kwonly=0, stacksize=2
+    # varnames=('format',)
+    # freevars=(), cellvars=()
+    # names=('dict',)
+    # constants:
+    #   [0] 2
+    #   [1] 'return'
+    # --- bytecode ---
+    # 200           RESUME                   0
+    #               LOAD_FAST_BORROW         0 (format)
+    #               LOAD_SMALL_INT           2
+    #               COMPARE_OP             132 (>)
+    #               POP_JUMP_IF_FALSE        3 (to L1)
+    #               NOT_TAKEN
+    #               LOAD_COMMON_CONSTANT     1 (NotImplementedError)
+    #               RAISE_VARARGS            1
+    #       L1:     LOAD_CONST               1 ('return')
+    #               LOAD_GLOBAL              0 (dict)
+    #               BUILD_MAP                1
+    #               RETURN_VALUE
+    # --- end bytecode ---
+
+    # === CODE: <module>.check_license  (file=license_crypto.py, line=200) ===
+    # argcount=0, posonly=0, kwonly=0, stacksize=6
+    # varnames=('license_path', 'saved', 'content_bytes', 'saved_data', 'current_mid')
+    # freevars=(), cellvars=()
+    # names=('_get_base_dir', '_LICENSE_FILE', 'exists', 'FileNotFoundError', 'read_bytes', '_aes_gcm_decrypt', '_APP_ID', 'ImportError', '_pure_aes_decrypt', 'Exception', 'unlink', 'ValueError', 'json', 'loads', 'decode', '_get_machine_id', 'get')
+    # constants:
+    #   [0] 'Check if a valid license exists. Returns {valid, exp_date, days_left} or raises.'
+    #   [1] '未找到激活文件'
+    #   [2] True
+    #   [3] ('missing_ok',)
+    #   [4] '激活文件损坏，请重新激活'
+    #   [5] '激活文件损坏'
+    #   [6] 'mid'
+    #   [7] '机器环境变更，请重新激活'
+    #   [8] 'valid'
+    #   [9] 'message'
+    #   [10] 'License OK'
+    # --- bytecode ---
+    #  200            RESUME                   0
+    # 
+    #  202            LOAD_GLOBAL              1 (_get_base_dir + NULL)
+    #                 CALL                     0
+    #                 LOAD_GLOBAL              2 (_LICENSE_FILE)
+    #                 BINARY_OP               11 (/)
+    #                 STORE_FAST               0 (license_path)
+    # 
+    #  203            LOAD_FAST_BORROW         0 (license_path)
+    #                 LOAD_ATTR                5 (exists + NULL|self)
+    #                 CALL                     0
+    #                 TO_BOOL
+    #                 POP_JUMP_IF_TRUE        12 (to L1)
+    #                 NOT_TAKEN
+    # 
+    #  204            LOAD_GLOBAL              7 (FileNotFoundError + NULL)
+    #                 LOAD_CONST               1 ('未找到激活文件')
+    #                 CALL                     1
+    #                 RAISE_VARARGS            1
+    # 
+    #  206    L1:     LOAD_FAST_BORROW         0 (license_path)
+    #                 LOAD_ATTR                9 (read_bytes + NULL|self)
+    #                 CALL                     0
+    #                 STORE_FAST               1 (saved)
+    # 
+    #  207            NOP
+    # 
+    #  208    L2:     LOAD_GLOBAL             11 (_aes_gcm_decrypt + NULL)
+    #                 LOAD_FAST_BORROW         1 (saved)
+    #                 LOAD_GLOBAL             12 (_APP_ID)
+    #                 CALL                     2
+    #                 STORE_FAST               2 (content_bytes)
+    # 
+    #  219    L3:     NOP
+    # 
+    #  220    L4:     LOAD_GLOBAL             24 (json)
+    #                 LOAD_ATTR               26 (loads)
+    #                 PUSH_NULL
+    #                 LOAD_FAST                2 (content_bytes)
+    #                 LOAD_ATTR               29 (decode + NULL|self)
+    #                 CALL                     0
+    #                 CALL                     1
+    #                 STORE_FAST               3 (saved_data)
+    # 
+    #  226    L5:     LOAD_GLOBAL             31 (_get_machine_id + NULL)
+    #                 CALL                     0
+    #                 STORE_FAST               4 (current_mid)
+    # 
+    #  227            LOAD_FAST                3 (saved_data)
+    #                 LOAD_ATTR               33 (get + NULL|self)
+    #                 LOAD_CONST               6 ('mid')
+    #                 CALL                     1
+    #                 LOAD_FAST                4 (current_mid)
+    #                 COMPARE_OP             119 (bool(!=))
+    #                 POP_JUMP_IF_FALSE       12 (to L6)
+    #                 NOT_TAKEN
+    # 
+    #  228            LOAD_GLOBAL             23 (ValueError + NULL)
+    #                 LOAD_CONST               7 ('机器环境变更，请重新激活')
+    #                 CALL                     1
+    #                 RAISE_VARARGS            1
+    # 
+    #  233    L6:     LOAD_CONST               8 ('valid')
+    #                 LOAD_CONST               2 (True)
+    #                 LOAD_CONST               6 ('mid')
+    #                 LOAD_FAST                4 (current_mid)
+    #                 LOAD_CONST               9 ('message')
+    #                 LOAD_CONST              10 ('License OK')
+    #                 BUILD_MAP                3
+    #                 RETURN_VALUE
+    # 
+    #   --    L7:     PUSH_EXC_INFO
+    # 
+    #  209            LOAD_GLOBAL             14 (ImportError)
+    #                 CHECK_EXC_MATCH
+    #                 POP_JUMP_IF_FALSE       60 (to L14)
+    #                 NOT_TAKEN
+    #                 POP_TOP
+    # 
+    #  210    L8:     NOP
+    # 
+    #  211    L9:     LOAD_GLOBAL             17 (_pure_aes_decrypt + NULL)
+    #                 LOAD_FAST                1 (saved)
+    #                 CALL                     1
+    #                 STORE_FAST               2 (content_bytes)
+    #        L10:     POP_EXCEPT
+    #                 JUMP_BACKWARD_NO_INTERRUPT 113 (to L3)
+    # 
+    #   --   L11:     PUSH_EXC_INFO
+    # 
+    #  212            LOAD_GLOBAL             18 (Exception)
+    #                 CHECK_EXC_MATCH
+    #                 POP_JUMP_IF_FALSE       31 (to L12)
+    #                 NOT_TAKEN
+    #                 POP_TOP
+    # 
+    #  213            LOAD_FAST                0 (license_path)
+    #                 LOAD_ATTR               21 (unlink + NULL|self)
+    #                 LOAD_CONST               2 (True)
+    #                 LOAD_CONST               3 (('missing_ok',))
+    #                 CALL_KW                  1
+    #                 POP_TOP
+    # 
+    #  214            LOAD_GLOBAL             23 (ValueError + NULL)
+    #                 LOAD_CONST               4 ('激活文件损坏，请重新激活')
+    #                 CALL                     1
+    #                 RAISE_VARARGS            1
+    # 
+    #  212   L12:     RERAISE                  0
+    # 
+    #   --   L13:     COPY                     3
+    #                 POP_EXCEPT
+    #                 RERAISE                  1
+    # 
+    #  215   L14:     LOAD_GLOBAL             18 (Exception)
+    #                 CHECK_EXC_MATCH
+    #                 POP_JUMP_IF_FALSE       31 (to L17)
+    #        L15:     NOT_TAKEN
+    #        L16:     POP_TOP
+    # 
+    #  216            LOAD_FAST                0 (license_path)
+    #                 LOAD_ATTR               21 (unlink + NULL|self)
+    #                 LOAD_CONST               2 (True)
+    #                 LOAD_CONST               3 (('missing_ok',))
+    #                 CALL_KW                  1
+    #                 POP_TOP
+    # 
+    #  217            LOAD_GLOBAL             23 (ValueError + NULL)
+    #                 LOAD_CONST               4 ('激活文件损坏，请重新激活')
+    #                 CALL                     1
+    #                 RAISE_VARARGS            1
+    # 
+    #  215   L17:     RERAISE                  0
+    # 
+    #   --   L18:     COPY                     3
+    #                 POP_EXCEPT
+    #                 RERAISE                  1
+    #        L19:     PUSH_EXC_INFO
+    # 
+    #  221            LOAD_GLOBAL             18 (Exception)
+    #                 CHECK_EXC_MATCH
+    #                 POP_JUMP_IF_FALSE       31 (to L20)
+    #                 NOT_TAKEN
+    #                 POP_TOP
+    # 
+    #  222            LOAD_FAST                0 (license_path)
+    #                 LOAD_ATTR               21 (unlink + NULL|self)
+    #                 LOAD_CONST               2 (True)
+    #                 LOAD_CONST               3 (('missing_ok',))
+    #                 CALL_KW                  1
+    #                 POP_TOP
+    # 
+    #  223            LOAD_GLOBAL             23 (ValueError + NULL)
+    #                 LOAD_CONST               5 ('激活文件损坏')
+    #                 CALL                     1
+    #                 RAISE_VARARGS            1
+    # 
+    #  221   L20:     RERAISE                  0
+    # 
+    #   --   L21:     COPY                     3
+    #                 POP_EXCEPT
+    #                 RERAISE                  1
+    # ExceptionTable:
+    #   L2 to L3 -> L7 [0]
+    #   L4 to L5 -> L19 [0]
+    #   L7 to L8 -> L18 [1] lasti
+    #   L9 to L10 -> L11 [1]
+    #   L11 to L13 -> L13 [2] lasti
+    #   L13 to L15 -> L18 [1] lasti
+    #   L16 to L18 -> L18 [1] lasti
+    #   L19 to L21 -> L21 [1] lasti
+    # --- end bytecode ---
+
+    # === CODE: <module>._trial_file  (file=license_crypto.py, line=236) ===
+    # argcount=0, posonly=0, kwonly=0, stacksize=2
+    # varnames=()
+    # freevars=(), cellvars=()
+    # names=('_get_base_dir',)
+    # constants:
+    #   [0] 'trial_start.key'
+    # --- bytecode ---
+    # 236           RESUME                   0
+    # 
+    # 237           LOAD_GLOBAL              1 (_get_base_dir + NULL)
+    #               CALL                     0
+    #               LOAD_CONST               0 ('trial_start.key')
+    #               BINARY_OP               11 (/)
+    #               RETURN_VALUE
+    # --- end bytecode ---
+
+    # === CODE: <module>.start_trial  (file=license_crypto.py, line=240) ===
+    # argcount=0, posonly=0, kwonly=0, stacksize=8
+    # varnames=('tf',)
+    # freevars=(), cellvars=()
+    # names=('_trial_file', 'exists', 'write_text', 'str', 'int', 'time', 'trial_days_left')
+    # constants:
+    #   [0] 'Record trial start time. Returns remaining trial days.'
+    # --- bytecode ---
+    # 240           RESUME                   0
+    # 
+    # 242           LOAD_GLOBAL              1 (_trial_file + NULL)
+    #               CALL                     0
+    #               STORE_FAST               0 (tf)
+    # 
+    # 243           LOAD_FAST_BORROW         0 (tf)
+    #               LOAD_ATTR                3 (exists + NULL|self)
+    #               CALL                     0
+    #               TO_BOOL
+    #               POP_JUMP_IF_TRUE        55 (to L1)
+    #               NOT_TAKEN
+    # 
+    # 244           LOAD_FAST_BORROW         0 (tf)
+    #               LOAD_ATTR                5 (write_text + NULL|self)
+    #               LOAD_GLOBAL              7 (str + NULL)
+    #               LOAD_GLOBAL              9 (int + NULL)
+    #               LOAD_GLOBAL             10 (time)
+    #               LOAD_ATTR               10 (time)
+    #               PUSH_NULL
+    #               CALL                     0
+    #               CALL                     1
+    #               CALL                     1
+    #               CALL                     1
+    #               POP_TOP
+    # 
+    # 245   L1:     LOAD_GLOBAL             13 (trial_days_left + NULL)
+    #               CALL                     0
+    #               RETURN_VALUE
+    # --- end bytecode ---
+
+    # === CODE: <module>.trial_days_left  (file=license_crypto.py, line=248) ===
+    # argcount=0, posonly=0, kwonly=0, stacksize=7
+    # varnames=('tf', 'started', 'elapsed', 'remaining')
+    # freevars=(), cellvars=()
+    # names=('_trial_file', 'exists', 'int', 'read_text', 'strip', 'Exception', 'time', 'max')
+    # constants:
+    #   [0] 'Get remaining trial days. -1 = expired, 0 = last day.'
+    #   [1] 86400
+    #   [2] 0.5
+    #   [3] -1
+    # --- bytecode ---
+    #  248           RESUME                   0
+    # 
+    #  250           LOAD_GLOBAL              1 (_trial_file + NULL)
+    #                CALL                     0
+    #                STORE_FAST               0 (tf)
+    # 
+    #  251           LOAD_FAST_BORROW         0 (tf)
+    #                LOAD_ATTR                3 (exists + NULL|self)
+    #                CALL                     0
+    #                TO_BOOL
+    #                POP_JUMP_IF_TRUE         3 (to L1)
+    #                NOT_TAKEN
+    # 
+    #  252           LOAD_SMALL_INT           3
+    #                RETURN_VALUE
+    # 
+    #  253   L1:     NOP
+    # 
+    #  254   L2:     LOAD_GLOBAL              5 (int + NULL)
+    #                LOAD_FAST_BORROW         0 (tf)
+    #                LOAD_ATTR                7 (read_text + NULL|self)
+    #                CALL                     0
+    #                LOAD_ATTR                9 (strip + NULL|self)
+    #                CALL                     0
+    #                CALL                     1
+    #                STORE_FAST               1 (started)
+    # 
+    #  257   L3:     LOAD_GLOBAL             12 (time)
+    #                LOAD_ATTR               12 (time)
+    #                PUSH_NULL
+    #                CALL                     0
+    #                LOAD_FAST                1 (started)
+    #                BINARY_OP               10 (-)
+    #                LOAD_CONST               1 (86400)
+    #                BINARY_OP               11 (/)
+    #                STORE_FAST               2 (elapsed)
+    # 
+    #  258           LOAD_GLOBAL             15 (max + NULL)
+    #                LOAD_CONST               3 (-1)
+    #                LOAD_GLOBAL              5 (int + NULL)
+    #                LOAD_SMALL_INT           3
+    #                LOAD_FAST                2 (elapsed)
+    #                BINARY_OP               10 (-)
+    #                LOAD_CONST               2 (0.5)
+    #                BINARY_OP                0 (+)
+    #                CALL                     1
+    #                CALL                     2
+    #                STORE_FAST               3 (remaining)
+    # 
+    #  259           LOAD_FAST                3 (remaining)
+    #                RETURN_VALUE
+    # 
+    #   --   L4:     PUSH_EXC_INFO
+    # 
+    #  255           LOAD_GLOBAL             10 (Exception)
+    #                CHECK_EXC_MATCH
+    #                POP_JUMP_IF_FALSE        5 (to L6)
+    #                NOT_TAKEN
+    #                POP_TOP
+    # 
+    #  256   L5:     POP_EXCEPT
+    #                LOAD_SMALL_INT           3
+    #                RETURN_VALUE
+    # 
+    #  255   L6:     RERAISE                  0
+    # 
+    #   --   L7:     COPY                     3
+    #                POP_EXCEPT
+    #                RERAISE                  1
+    # ExceptionTable:
+    #   L2 to L3 -> L4 [0]
+    #   L4 to L5 -> L7 [1] lasti
+    #   L6 to L7 -> L7 [1] lasti
+    # --- end bytecode ---
+
+    # === CODE: <module>.has_trial_expired  (file=license_crypto.py, line=262) ===
+    # argcount=0, posonly=0, kwonly=0, stacksize=2
+    # varnames=('tf',)
+    # freevars=(), cellvars=()
+    # names=('_trial_file', 'exists', 'trial_days_left')
+    # constants:
+    #   [0] 'True if trial has expired (no file = never started = not expired).'
+    #   [1] False
+    # --- bytecode ---
+    # 262           RESUME                   0
+    # 
+    # 264           LOAD_GLOBAL              1 (_trial_file + NULL)
+    #               CALL                     0
+    #               STORE_FAST               0 (tf)
+    # 
+    # 265           LOAD_FAST_BORROW         0 (tf)
+    #               LOAD_ATTR                3 (exists + NULL|self)
+    #               CALL                     0
+    #               TO_BOOL
+    #               POP_JUMP_IF_TRUE         3 (to L1)
+    #               NOT_TAKEN
+    # 
+    # 266           LOAD_CONST               1 (False)
+    #               RETURN_VALUE
+    # 
+    # 267   L1:     LOAD_GLOBAL              5 (trial_days_left + NULL)
+    #               CALL                     0
+    #               LOAD_SMALL_INT           0
+    #               COMPARE_OP               2 (<)
+    #               RETURN_VALUE
+    # --- end bytecode ---
+
+    # === CODE: <module>.__annotate__  (file=license_crypto.py, line=270) ===
+    # argcount=1, posonly=1, kwonly=0, stacksize=2
+    # varnames=('format',)
+    # freevars=(), cellvars=()
+    # names=('dict',)
+    # constants:
+    #   [0] 2
+    #   [1] 'return'
+    # --- bytecode ---
+    # 270           RESUME                   0
+    #               LOAD_FAST_BORROW         0 (format)
+    #               LOAD_SMALL_INT           2
+    #               COMPARE_OP             132 (>)
+    #               POP_JUMP_IF_FALSE        3 (to L1)
+    #               NOT_TAKEN
+    #               LOAD_COMMON_CONSTANT     1 (NotImplementedError)
+    #               RAISE_VARARGS            1
+    #       L1:     LOAD_CONST               1 ('return')
+    #               LOAD_GLOBAL              0 (dict)
+    #               BUILD_MAP                1
+    #               RETURN_VALUE
+    # --- end bytecode ---
+
+    # === CODE: <module>.get_license_info  (file=license_crypto.py, line=270) ===
+    # argcount=0, posonly=0, kwonly=0, stacksize=11
+    # varnames=('status', 'lf', 'raw', 'payload', 'saved', 'exp_date', 'days', 'remaining')
+    # freevars=(), cellvars=()
+    # names=('check_and_activate', '_get_base_dir', '_LICENSE_FILE', 'read_bytes', '_aes_gcm_decrypt', '_APP_ID', 'ImportError', '_pure_aes_decrypt', 'json', 'loads', 'decode', 'get', 'Exception', 'trial_days_left')
+    # constants:
+    #   [0] 'Get full license info for display. Returns {status, exp_date, days_left, mid}.'
+    #   [1] 'active'
+    #   [2] 'exp_date'
+    #   [3] ''
+    #   [4] 'days_left'
+    #   [5] 'status'
+    #   [6] 'mid'
+    #   [7] slice(None, 8, None)
+    #   [8] '—'
+    #   [9] 'trial'
+    #   [10] 'expired'
+    #   [11] 'none'
+    # --- bytecode ---
+    #  270            RESUME                   0
+    # 
+    #  272            LOAD_GLOBAL              1 (check_and_activate + NULL)
+    #                 CALL                     0
+    #                 STORE_FAST               0 (status)
+    # 
+    #  273            LOAD_FAST_BORROW         0 (status)
+    #                 LOAD_CONST               1 ('active')
+    #                 COMPARE_OP              88 (bool(==))
+    #                 POP_JUMP_IF_FALSE      161 (to L6)
+    #                 NOT_TAKEN
+    # 
+    #  274            NOP
+    # 
+    #  275    L1:     LOAD_GLOBAL              3 (_get_base_dir + NULL)
+    #                 CALL                     0
+    #                 LOAD_GLOBAL              4 (_LICENSE_FILE)
+    #                 BINARY_OP               11 (/)
+    #                 STORE_FAST               1 (lf)
+    # 
+    #  276            LOAD_FAST_BORROW         1 (lf)
+    #                 LOAD_ATTR                7 (read_bytes + NULL|self)
+    #                 CALL                     0
+    #                 STORE_FAST               2 (raw)
+    # 
+    #  277    L2:     NOP
+    # 
+    #  278    L3:     LOAD_GLOBAL              9 (_aes_gcm_decrypt + NULL)
+    #                 LOAD_FAST_BORROW         2 (raw)
+    #                 LOAD_GLOBAL             10 (_APP_ID)
+    #                 CALL                     2
+    #                 STORE_FAST               3 (payload)
+    # 
+    #  281    L4:     LOAD_GLOBAL             16 (json)
+    #                 LOAD_ATTR               18 (loads)
+    #                 PUSH_NULL
+    #                 LOAD_FAST_BORROW         3 (payload)
+    #                 LOAD_ATTR               21 (decode + NULL|self)
+    #                 CALL                     0
+    #                 CALL                     1
+    #                 STORE_FAST               4 (saved)
+    # 
+    #  282            LOAD_FAST_BORROW         4 (saved)
+    #                 LOAD_ATTR               23 (get + NULL|self)
+    #                 LOAD_CONST               2 ('exp_date')
+    #                 LOAD_CONST               3 ('')
+    #                 CALL                     2
+    #                 STORE_FAST               5 (exp_date)
+    # 
+    #  283            LOAD_FAST_BORROW         4 (saved)
+    #                 LOAD_ATTR               23 (get + NULL|self)
+    #                 LOAD_CONST               4 ('days_left')
+    #                 LOAD_SMALL_INT           0
+    #                 CALL                     2
+    #                 STORE_FAST               6 (days)
+    # 
+    #  285            LOAD_CONST               5 ('status')
+    #                 LOAD_CONST               1 ('active')
+    # 
+    #  286            LOAD_CONST               2 ('exp_date')
+    #                 LOAD_FAST_BORROW         5 (exp_date)
+    # 
+    #  287            LOAD_CONST               4 ('days_left')
+    #                 LOAD_FAST_BORROW         6 (days)
+    # 
+    #  288            LOAD_CONST               6 ('mid')
+    #                 LOAD_FAST_BORROW         4 (saved)
+    #                 LOAD_ATTR               23 (get + NULL|self)
+    #                 LOAD_CONST               6 ('mid')
+    #                 LOAD_CONST               3 ('')
+    #                 CALL                     2
+    #                 LOAD_CONST               7 (slice(None, 8, None))
+    #                 BINARY_OP               26 ([])
+    # 
+    #  284            BUILD_MAP                4
+    #         L5:     RETURN_VALUE
+    # 
+    #  292    L6:     LOAD_FAST_BORROW         0 (status)
+    #                 LOAD_CONST               9 ('trial')
+    #                 COMPARE_OP              88 (bool(==))
+    #                 POP_JUMP_IF_FALSE       17 (to L7)
+    #                 NOT_TAKEN
+    # 
+    #  293            LOAD_GLOBAL             27 (trial_days_left + NULL)
+    #                 CALL                     0
+    #                 STORE_FAST               7 (remaining)
+    # 
+    #  294            LOAD_CONST               5 ('status')
+    #                 LOAD_CONST               9 ('trial')
+    #                 LOAD_CONST               4 ('days_left')
+    #                 LOAD_FAST_BORROW         7 (remaining)
+    #                 BUILD_MAP                2
+    #                 RETURN_VALUE
+    # 
+    #  295    L7:     LOAD_FAST_BORROW         0 (status)
+    #                 LOAD_CONST              10 ('expired')
+    #                 COMPARE_OP              88 (bool(==))
+    #                 POP_JUMP_IF_FALSE        5 (to L8)
+    #                 NOT_TAKEN
+    # 
+    #  296            LOAD_CONST               5 ('status')
+    #                 LOAD_CONST              10 ('expired')
+    #                 BUILD_MAP                1
+    #                 RETURN_VALUE
+    # 
+    #  297    L8:     LOAD_CONST               5 ('status')
+    #                 LOAD_CONST              11 ('none')
+    #                 BUILD_MAP                1
+    #                 RETURN_VALUE
+    # 
+    #   --    L9:     PUSH_EXC_INFO
+    # 
+    #  279            LOAD_GLOBAL             12 (ImportError)
+    #                 CHECK_EXC_MATCH
+    #                 POP_JUMP_IF_FALSE       15 (to L11)
+    #                 NOT_TAKEN
+    #                 POP_TOP
+    # 
+    #  280            LOAD_GLOBAL             15 (_pure_aes_decrypt + NULL)
+    #                 LOAD_FAST                2 (raw)
+    #                 CALL                     1
+    #                 STORE_FAST               3 (payload)
+    #        L10:     POP_EXCEPT
+    #                 JUMP_BACKWARD_NO_INTERRUPT 167 (to L4)
+    # 
+    #  279   L11:     RERAISE                  0
+    # 
+    #   --   L12:     COPY                     3
+    #                 POP_EXCEPT
+    #                 RERAISE                  1
+    #        L13:     PUSH_EXC_INFO
+    # 
+    #  290            LOAD_GLOBAL             24 (Exception)
+    #                 CHECK_EXC_MATCH
+    #                 POP_JUMP_IF_FALSE       12 (to L15)
+    #                 NOT_TAKEN
+    #                 POP_TOP
+    # 
+    #  291            LOAD_CONST               5 ('status')
+    #                 LOAD_CONST               1 ('active')
+    #                 LOAD_CONST               2 ('exp_date')
+    #                 LOAD_CONST               8 ('—')
+    #                 LOAD_CONST               4 ('days_left')
+    #                 LOAD_CONST               8 ('—')
+    #                 BUILD_MAP                3
+    #                 SWAP                     2
+    #        L14:     POP_EXCEPT
+    #                 RETURN_VALUE
+    # 
+    #  290   L15:     RERAISE                  0
+    # 
+    #   --   L16:     COPY                     3
+    #                 POP_EXCEPT
+    #                 RERAISE                  1
+    # ExceptionTable:
+    #   L1 to L2 -> L13 [0]
+    #   L3 to L4 -> L9 [0]
+    #   L4 to L5 -> L13 [0]
+    #   L9 to L10 -> L12 [1] lasti
+    #   L10 to L11 -> L13 [0]
+    #   L11 to L12 -> L12 [1] lasti
+    #   L12 to L13 -> L13 [0]
+    #   L13 to L14 -> L16 [1] lasti
+    #   L15 to L16 -> L16 [1] lasti
+    # --- end bytecode ---
+
+    # === CODE: <module>.check_and_activate  (file=license_crypto.py, line=300) ===
+    # argcount=0, posonly=0, kwonly=0, stacksize=4
+    # varnames=('tf', 'remaining')
+    # freevars=(), cellvars=()
+    # names=('check_license', 'FileNotFoundError', 'ValueError', '_trial_file', 'exists', 'trial_days_left')
+    # constants:
+    #   [0] "Full license flow. Returns: 'active' | 'trial' | 'expired'"
+    #   [1] 'active'
+    #   [2] 'none'
+    #   [3] 'trial'
+    #   [4] 'expired'
+    # --- bytecode ---
+    #  300           RESUME                   0
+    # 
+    #  303           NOP
+    # 
+    #  304   L1:     LOAD_GLOBAL              1 (check_license + NULL)
+    #                CALL                     0
+    #                POP_TOP
+    # 
+    #  305   L2:     LOAD_CONST               1 ('active')
+    #                RETURN_VALUE
+    # 
+    #   --   L3:     PUSH_EXC_INFO
+    # 
+    #  306           LOAD_GLOBAL              2 (FileNotFoundError)
+    #                LOAD_GLOBAL              4 (ValueError)
+    #                BUILD_TUPLE              2
+    #                CHECK_EXC_MATCH
+    #                POP_JUMP_IF_FALSE        4 (to L5)
+    #                NOT_TAKEN
+    #                POP_TOP
+    # 
+    #  307   L4:     POP_EXCEPT
+    #                JUMP_FORWARD             4 (to L7)
+    # 
+    #  306   L5:     RERAISE                  0
+    # 
+    #   --   L6:     COPY                     3
+    #                POP_EXCEPT
+    #                RERAISE                  1
+    # 
+    #  309   L7:     LOAD_GLOBAL              7 (_trial_file + NULL)
+    #                CALL                     0
+    #                STORE_FAST               0 (tf)
+    # 
+    #  310           LOAD_FAST                0 (tf)
+    #                LOAD_ATTR                9 (exists + NULL|self)
+    #                CALL                     0
+    #                TO_BOOL
+    #                POP_JUMP_IF_TRUE         3 (to L8)
+    #                NOT_TAKEN
+    # 
+    #  311           LOAD_CONST               2 ('none')
+    #                RETURN_VALUE
+    # 
+    #  312   L8:     LOAD_GLOBAL             11 (trial_days_left + NULL)
+    #                CALL                     0
+    #                STORE_FAST               1 (remaining)
+    # 
+    #  313           LOAD_FAST                1 (remaining)
+    #                LOAD_SMALL_INT           0
+    #                COMPARE_OP             188 (bool(>=))
+    #                POP_JUMP_IF_FALSE        3 (to L9)
+    #                NOT_TAKEN
+    # 
+    #  314           LOAD_CONST               3 ('trial')
+    #                RETURN_VALUE
+    # 
+    #  315   L9:     LOAD_CONST               4 ('expired')
+    #                RETURN_VALUE
+    # ExceptionTable:
+    #   L1 to L2 -> L3 [0]
+    #   L3 to L4 -> L6 [1] lasti
+    #   L5 to L6 -> L6 [1] lasti
+    # --- end bytecode ---
+
+    # === CODE: <module>._fmt_date  (file=license_crypto.py, line=318) ===
+    # argcount=1, posonly=0, kwonly=0, stacksize=3
+    # varnames=('ts', 'datetime')
+    # freevars=(), cellvars=()
+    # names=('datetime', 'fromtimestamp', 'strftime')
+    # constants:
+    #   [0] 'Format timestamp to date string.'
+    #   [1] None
+    #   [2] '%Y-%m-%d'
+    # --- bytecode ---
+    # 318           RESUME                   0
+    # 
+    # 320           LOAD_SMALL_INT           0
+    #               LOAD_CONST               1 (None)
+    #               IMPORT_NAME              0 (datetime)
+    #               STORE_FAST               1 (datetime)
+    # 
+    # 321           LOAD_FAST_BORROW         1 (datetime)
+    #               LOAD_ATTR                0 (datetime)
+    #               LOAD_ATTR                3 (fromtimestamp + NULL|self)
+    #               LOAD_FAST_BORROW         0 (ts)
+    #               CALL                     1
+    #               LOAD_ATTR                5 (strftime + NULL|self)
+    #               LOAD_CONST               2 ('%Y-%m-%d')
+    #               CALL                     1
+    #               RETURN_VALUE
+    # --- end bytecode ---
+
+    # === CODE: <module>.get_machine_id  (file=license_crypto.py, line=324) ===
+    # argcount=0, posonly=0, kwonly=0, stacksize=2
+    # varnames=()
+    # freevars=(), cellvars=()
+    # names=('_get_machine_id',)
+    # constants:
+    #   [0] 'Public accessor for machine ID.'
+    # --- bytecode ---
+    # 324           RESUME                   0
+    # 
+    # 326           LOAD_GLOBAL              1 (_get_machine_id + NULL)
+    #               CALL                     0
+    #               RETURN_VALUE
+    # --- end bytecode ---
+
+    # === CODE: <module>.__annotate__  (file=license_crypto.py, line=331) ===
+    # argcount=1, posonly=1, kwonly=0, stacksize=4
+    # varnames=('format',)
+    # freevars=(), cellvars=()
+    # names=('str',)
+    # constants:
+    #   [0] 2
+    #   [1] 'plaintext'
+    #   [2] 'return'
+    # --- bytecode ---
+    # 331           RESUME                   0
+    #               LOAD_FAST_BORROW         0 (format)
+    #               LOAD_SMALL_INT           2
+    #               COMPARE_OP             132 (>)
+    #               POP_JUMP_IF_FALSE        3 (to L1)
+    #               NOT_TAKEN
+    #               LOAD_COMMON_CONSTANT     1 (NotImplementedError)
+    #               RAISE_VARARGS            1
+    #       L1:     LOAD_CONST               1 ('plaintext')
+    #               LOAD_GLOBAL              0 (str)
+    #               LOAD_CONST               2 ('return')
+    #               LOAD_GLOBAL              0 (str)
+    #               BUILD_MAP                2
+    #               RETURN_VALUE
+    # --- end bytecode ---
+
+    # === CODE: <module>.encrypt_config_value  (file=license_crypto.py, line=331) ===
+    # argcount=1, posonly=0, kwonly=0, stacksize=4
+    # varnames=('plaintext', 'payload', 'encrypted')
+    # freevars=(), cellvars=()
+    # names=('encode', '_aes_gcm_encrypt', 'ImportError', '_pure_aes_encrypt', 'base64', 'b32hexencode', 'decode')
+    # constants:
+    #   [0] 'Encrypt a sensitive config value. Returns base64-encoded string.'
+    #   [1] ''
+    #   [2] b'CONFIG'
+    # --- bytecode ---
+    #  331           RESUME                   0
+    # 
+    #  333           LOAD_FAST_BORROW         0 (plaintext)
+    #                TO_BOOL
+    #                POP_JUMP_IF_TRUE         3 (to L1)
+    #                NOT_TAKEN
+    # 
+    #  334           LOAD_CONST               1 ('')
+    #                RETURN_VALUE
+    # 
+    #  335   L1:     LOAD_FAST_BORROW         0 (plaintext)
+    #                LOAD_ATTR                1 (encode + NULL|self)
+    #                CALL                     0
+    #                STORE_FAST               1 (payload)
+    # 
+    #  336           NOP
+    # 
+    #  337   L2:     LOAD_GLOBAL              3 (_aes_gcm_encrypt + NULL)
+    #                LOAD_FAST_BORROW         1 (payload)
+    #                LOAD_CONST               2 (b'CONFIG')
+    #                CALL                     2
+    #                STORE_FAST               2 (encrypted)
+    # 
+    #  340   L3:     LOAD_GLOBAL              8 (base64)
+    #                LOAD_ATTR               10 (b32hexencode)
+    #                PUSH_NULL
+    #                LOAD_FAST_BORROW         2 (encrypted)
+    #                CALL                     1
+    #                LOAD_ATTR               13 (decode + NULL|self)
+    #                CALL                     0
+    #                RETURN_VALUE
+    # 
+    #   --   L4:     PUSH_EXC_INFO
+    # 
+    #  338           LOAD_GLOBAL              4 (ImportError)
+    #                CHECK_EXC_MATCH
+    #                POP_JUMP_IF_FALSE       15 (to L6)
+    #                NOT_TAKEN
+    #                POP_TOP
+    # 
+    #  339           LOAD_GLOBAL              7 (_pure_aes_encrypt + NULL)
+    #                LOAD_FAST                1 (payload)
+    #                CALL                     1
+    #                STORE_FAST               2 (encrypted)
+    #        L5:     POP_EXCEPT
+    #                JUMP_BACKWARD_NO_INTERRUPT 60 (to L3)
+    # 
+    #  338   L6:     RERAISE                  0
+    # 
+    #   --   L7:     COPY                     3
+    #                POP_EXCEPT
+    #                RERAISE                  1
+    # ExceptionTable:
+    #   L2 to L3 -> L4 [0]
+    #   L4 to L5 -> L7 [1] lasti
+    #   L6 to L7 -> L7 [1] lasti
+    # --- end bytecode ---
+
+    # === CODE: <module>.__annotate__  (file=license_crypto.py, line=343) ===
+    # argcount=1, posonly=1, kwonly=0, stacksize=4
+    # varnames=('format',)
+    # freevars=(), cellvars=()
+    # names=('str',)
+    # constants:
+    #   [0] 2
+    #   [1] 'encoded'
+    #   [2] 'return'
+    # --- bytecode ---
+    # 343           RESUME                   0
+    #               LOAD_FAST_BORROW         0 (format)
+    #               LOAD_SMALL_INT           2
+    #               COMPARE_OP             132 (>)
+    #               POP_JUMP_IF_FALSE        3 (to L1)
+    #               NOT_TAKEN
+    #               LOAD_COMMON_CONSTANT     1 (NotImplementedError)
+    #               RAISE_VARARGS            1
+    #       L1:     LOAD_CONST               1 ('encoded')
+    #               LOAD_GLOBAL              0 (str)
+    #               LOAD_CONST               2 ('return')
+    #               LOAD_GLOBAL              0 (str)
+    #               BUILD_MAP                2
+    #               RETURN_VALUE
+    # --- end bytecode ---
+
+    # === CODE: <module>.decrypt_config_value  (file=license_crypto.py, line=343) ===
+    # argcount=1, posonly=0, kwonly=0, stacksize=4
+    # varnames=('encoded', 'encrypted', 'payload')
+    # freevars=(), cellvars=()
+    # names=('base64', 'b32hexdecode', 'encode', '_aes_gcm_decrypt', 'ImportError', '_pure_aes_decrypt', 'decode', 'Exception')
+    # constants:
+    #   [0] 'Decrypt a sensitive config value. Returns plaintext string.'
+    #   [1] ''
+    #   [2] b'CONFIG'
+    # --- bytecode ---
+    #  343            RESUME                   0
+    # 
+    #  345            LOAD_FAST_BORROW         0 (encoded)
+    #                 TO_BOOL
+    #                 POP_JUMP_IF_TRUE         3 (to L1)
+    #                 NOT_TAKEN
+    # 
+    #  346            LOAD_CONST               1 ('')
+    #                 RETURN_VALUE
+    # 
+    #  347    L1:     NOP
+    # 
+    #  348    L2:     LOAD_GLOBAL              0 (base64)
+    #                 LOAD_ATTR                2 (b32hexdecode)
+    #                 PUSH_NULL
+    #                 LOAD_FAST_BORROW         0 (encoded)
+    #                 LOAD_ATTR                5 (encode + NULL|self)
+    #                 CALL                     0
+    #                 CALL                     1
+    #                 STORE_FAST               1 (encrypted)
+    # 
+    #  349    L3:     NOP
+    # 
+    #  350    L4:     LOAD_GLOBAL              7 (_aes_gcm_decrypt + NULL)
+    #                 LOAD_FAST_BORROW         1 (encrypted)
+    #                 LOAD_CONST               2 (b'CONFIG')
+    #                 CALL                     2
+    #                 STORE_FAST               2 (payload)
+    # 
+    #  353    L5:     LOAD_FAST_BORROW         2 (payload)
+    #                 LOAD_ATTR               13 (decode + NULL|self)
+    #                 CALL                     0
+    #         L6:     RETURN_VALUE
+    # 
+    #   --    L7:     PUSH_EXC_INFO
+    # 
+    #  351            LOAD_GLOBAL              8 (ImportError)
+    #                 CHECK_EXC_MATCH
+    #                 POP_JUMP_IF_FALSE       15 (to L9)
+    #                 NOT_TAKEN
+    #                 POP_TOP
+    # 
+    #  352            LOAD_GLOBAL             11 (_pure_aes_decrypt + NULL)
+    #                 LOAD_FAST                1 (encrypted)
+    #                 CALL                     1
+    #                 STORE_FAST               2 (payload)
+    #         L8:     POP_EXCEPT
+    #                 JUMP_BACKWARD_NO_INTERRUPT 40 (to L5)
+    # 
+    #  351    L9:     RERAISE                  0
+    # 
+    #   --   L10:     COPY                     3
+    #                 POP_EXCEPT
+    #                 RERAISE                  1
+    #        L11:     PUSH_EXC_INFO
+    # 
+    #  354            LOAD_GLOBAL             14 (Exception)
+    #                 CHECK_EXC_MATCH
+    #                 POP_JUMP_IF_FALSE        6 (to L13)
+    #                 NOT_TAKEN
+    #                 POP_TOP
+    # 
+    #  356            LOAD_FAST                0 (encoded)
+    #                 SWAP                     2
+    #        L12:     POP_EXCEPT
+    #                 RETURN_VALUE
+    # 
+    #  354   L13:     RERAISE                  0
+    # 
+    #   --   L14:     COPY                     3
+    #                 POP_EXCEPT
+    #                 RERAISE                  1
+    # ExceptionTable:
+    #   L2 to L3 -> L11 [0]
+    #   L4 to L5 -> L7 [0]
+    #   L5 to L6 -> L11 [0]
+    #   L7 to L8 -> L10 [1] lasti
+    #   L8 to L9 -> L11 [0]
+    #   L9 to L10 -> L10 [1] lasti
+    #   L10 to L11 -> L11 [0]
+    #   L11 to L12 -> L14 [1] lasti
+    #   L13 to L14 -> L14 [1] lasti
+    # --- end bytecode ---
+

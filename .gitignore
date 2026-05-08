@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+.env
+config.json
+# transient outputs
+input/
+output/
+prompts/
+logs/
