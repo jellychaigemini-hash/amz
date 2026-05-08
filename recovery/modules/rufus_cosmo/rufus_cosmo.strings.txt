@@ -1,0 +1,489 @@
+[<module>]
+  \nRufus & COSMO Algorithm Integration Module\n============================================\nIntegrates Rufus/COSMO/GEO algorithmic principles into the GPT Image-2 prompt generation pipeline.\nLoaded from local Wiki/06-Rufus-Cosmo/ — no external F: drive dependency.\n\nUsage:\n    from rufus_cosmo import RufusCosmoEngine\n    engine = RufusCosmoEngine()\n    context = engine.enrich_context(base_context)\n    prompt_hints = engine.get_prompt_hints(category, style)\n
+
+[<module>]
+  Wiki
+
+[<module>]
+  06-Rufus-Cosmo
+
+[<module>]
+  used_for
+
+[<module>]
+  zh
+
+[<module>]
+  用途/使用场景
+
+[<module>]
+  prompt_guide
+
+[<module>]
+  Describe what scenario/purpose the product serves — naturally, not as a label.
+
+[<module>]
+  capable_of
+
+[<module>]
+  功能/能力
+
+[<module>]
+  Describe what the product can do — show capability through scene, not list.
+
+[<module>]
+  isA
+
+[<module>]
+  属性/类别归属
+
+[<module>]
+  Ensure the product category and key attributes are clear from context.
+
+[<module>]
+  cause
+
+[<module>]
+  因果/优势
+
+[<module>]
+  Show cause-and-effect: this material/design choice → this benefit for the user.
+
+[<module>]
+  statistics
+
+[<module>]
+  weight
+
+[<module>]
+  guide
+
+[<module>]
+  Include specific quantitative data rather than qualitative descriptions.
+
+[<module>]
+  citations
+
+[<module>]
+  Reference trusted sources, certifications, or authority endorsements.
+
+[<module>]
+  source_quoting
+
+[<module>]
+  Cite reliable sources for claims. E.g., 'As tested by...' or 'Certified by...'
+
+[<module>]
+  fluency
+
+[<module>]
+  Ensure natural, fluent language — avoid keyword stuffing.
+
+[<module>]
+  authority
+
+[<module>]
+  baseline
+
+[<module>]
+  Establish brand authority through consistent professional presentation.
+
+[<module>]
+  product_catalog
+
+[<module>]
+  商品目录信息
+
+[<module>]
+  title
+
+[<module>]
+  bullets
+
+[<module>]
+  description
+
+[<module>]
+  reviews
+
+[<module>]
+  买家评论
+
+[<module>]
+  qa
+
+[<module>]
+  社区问答
+
+[<module>]
+  aplus
+
+[<module>]
+  A+内容/品牌故事
+
+[<module>]
+  external
+
+[<module>]
+  外部网络信息
+
+[<module>]
+  formula
+
+[<module>]
+  [品牌] + [ABA核心大词] + [针对竞品痛点改进] + [COSMO场景] + [属性]
+
+[<module>]
+  rule
+
+[<module>]
+  前50字符必须包含最高权重关键词，硬条件前置
+
+[<module>]
+  痛点 → 机制/原理 → 结果 → 边界条件
+
+[<module>]
+  structure
+
+[<module>]
+  must_have
+
+[<module>]
+  backend_attributes
+
+[<module>]
+  全部填满，数据一致性（所有地方数字统一）
+
+[<module>]
+  images
+
+[<module>.RufusCosmoEngine]
+  RufusCosmoEngine
+
+[<module>.RufusCosmoEngine]
+  Engine that enriches product context and prompt generation with Rufus/COSMO algorithms.
+
+[<module>.RufusCosmoEngine.load_algorithms]
+  06-Rufus-Cosmo/algorithms.md
+
+[<module>.RufusCosmoEngine.load_algorithms]
+  algorithms.md
+
+[<module>.RufusCosmoEngine.load_algorithms]
+  utf-8
+
+[<module>.RufusCosmoEngine.load_algorithms]
+  
+
+[<module>.RufusCosmoEngine.load_methodology]
+  06-Rufus-Cosmo/methodology.md
+
+[<module>.RufusCosmoEngine.load_methodology]
+  methodology.md
+
+[<module>.RufusCosmoEngine.load_methodology]
+  utf-8
+
+[<module>.RufusCosmoEngine.load_methodology]
+  
+
+[<module>.RufusCosmoEngine.enrich_context]
+  Enrich a product context dict with Rufus/COSMO algorithmic insights.\nThis fills gaps that MCP services leave empty.\n
+
+[<module>.RufusCosmoEngine.enrich_context]
+  visual_features
+
+[<module>.RufusCosmoEngine.enrich_context]
+  cosmo_intents
+
+[<module>.RufusCosmoEngine.enrich_context]
+  geo_hints
+
+[<module>.RufusCosmoEngine.enrich_context]
+  rufus_qa_suggestions
+
+[<module>.RufusCosmoEngine.enrich_context]
+  rufus_cosmo_enriched
+
+[<module>.RufusCosmoEngine.get_prompt_hints]
+  Get algorithm-driven prompt enhancement hints for a given category and style.\n\nReturns a dict with:\n- cosmo_relations: which COSMO relations to naturally embed\n- geo_additions: GEO factors to include\n- scene_suggestions: usage scenes that resonate with Rufus\n- constraint_reminders: compliance and quality reminders\n
+
+[<module>.RufusCosmoEngine.get_prompt_hints]
+  cosmo_relations
+
+[<module>.RufusCosmoEngine.get_prompt_hints]
+  geo_additions
+
+[<module>.RufusCosmoEngine.get_prompt_hints]
+  scene_suggestions
+
+[<module>.RufusCosmoEngine.get_prompt_hints]
+  constraint_reminders
+
+[<module>.RufusCosmoEngine.get_prompt_hints]
+  main
+
+[<module>.RufusCosmoEngine.get_prompt_hints]
+  isA: clearly establish product category and type
+
+[<module>.RufusCosmoEngine.get_prompt_hints]
+  capable_of: show key features/functionality visually
+
+[<module>.RufusCosmoEngine.get_prompt_hints]
+  used_for: show the product in its natural use context
+
+[<module>.RufusCosmoEngine.get_prompt_hints]
+  cause: demonstrate how product features create user benefits
+
+[<module>.RufusCosmoEngine.get_prompt_hints]
+  detail
+
+[<module>.RufusCosmoEngine.get_prompt_hints]
+  capable_of: highlight material quality and build precision
+
+[<module>.RufusCosmoEngine.get_prompt_hints]
+  isA: reinforce premium/quality attributes
+
+[<module>.RufusCosmoEngine.get_prompt_hints]
+  health
+
+[<module>.RufusCosmoEngine.get_prompt_hints]
+  home
+
+[<module>.RufusCosmoEngine.get_prompt_hints]
+  tech
+
+[<module>.RufusCosmoEngine.get_prompt_hints]
+  fashion
+
+[<module>.RufusCosmoEngine.get_prompt_hints]
+  beauty
+
+[<module>.RufusCosmoEngine.get_prompt_hints]
+  food
+
+[<module>.RufusCosmoEngine.get_prompt_hints]
+  sports
+
+[<module>.RufusCosmoEngine.get_prompt_hints]
+  
+
+[<module>.RufusCosmoEngine.enhance_prompt]
+  Add algorithmic enhancement notes to an existing prompt.\n\nThese are appended as natural language hints that guide the image generation\ntoward COSMO/Rufus-optimized visual content.\n
+
+[<module>.RufusCosmoEngine.enhance_prompt]
+  cosmo_relations
+
+[<module>.RufusCosmoEngine.enhance_prompt]
+  Visual storytelling should convey: 
+
+[<module>.RufusCosmoEngine.enhance_prompt]
+  ; 
+
+[<module>.RufusCosmoEngine.enhance_prompt]
+  scene_suggestions
+
+[<module>.RufusCosmoEngine.enhance_prompt]
+  scene
+
+[<module>.RufusCosmoEngine.enhance_prompt]
+  The product should feel at home in contexts like: 
+
+[<module>.RufusCosmoEngine.enhance_prompt]
+  , 
+
+[<module>.RufusCosmoEngine.enhance_prompt]
+  Include specific, quantifiable product details visible in the image.
+
+[<module>.RufusCosmoEngine.enhance_prompt]
+  \n
+
+[<module>.RufusCosmoEngine._infer_visual_features]
+  Infer basic visual features from available context data.
+
+[<module>.RufusCosmoEngine._infer_visual_features]
+  product_shape
+
+[<module>.RufusCosmoEngine._infer_visual_features]
+  
+
+[<module>.RufusCosmoEngine._infer_visual_features]
+  primary_colors
+
+[<module>.RufusCosmoEngine._infer_visual_features]
+  accent_colors
+
+[<module>.RufusCosmoEngine._infer_visual_features]
+  materials
+
+[<module>.RufusCosmoEngine._infer_visual_features]
+  key_visual_elements
+
+[<module>.RufusCosmoEngine._infer_visual_features]
+  title
+
+[<module>.RufusCosmoEngine._infer_visual_features]
+   
+
+[<module>.RufusCosmoEngine._infer_visual_features]
+  bullets
+
+[<module>.RufusCosmoEngine._infer_visual_features]
+  category
+
+[<module>.RufusCosmoEngine._infer_visual_features]
+  stainless steel
+
+[<module>.RufusCosmoEngine._infer_visual_features]
+  wood
+
+[<module>.RufusCosmoEngine._infer_visual_features]
+  bamboo
+
+[<module>.RufusCosmoEngine._infer_visual_features]
+  glass
+
+[<module>.RufusCosmoEngine._infer_visual_features]
+  ceramic
+
+[<module>.RufusCosmoEngine._infer_visual_features]
+  silicone
+
+[<module>.RufusCosmoEngine._infer_visual_features]
+  plastic
+
+[<module>.RufusCosmoEngine._infer_visual_features]
+  aluminum
+
+[<module>.RufusCosmoEngine._infer_visual_features]
+  cotton
+
+[<module>.RufusCosmoEngine._infer_visual_features]
+  leather
+
+[<module>.RufusCosmoEngine._infer_visual_features]
+  metal
+
+[<module>.RufusCosmoEngine._infer_visual_features]
+  rubber
+
+[<module>.RufusCosmoEngine._infer_visual_features]
+  memory foam
+
+[<module>.RufusCosmoEngine._infer_visual_features]
+  fabric
+
+[<module>.RufusCosmoEngine._infer_visual_features]
+  mesh
+
+[<module>.RufusCosmoEngine._generate_cosmo_intents]
+  Generate COSMO intent tags from product context.
+
+[<module>.RufusCosmoEngine._generate_cosmo_intents]
+  title
+
+[<module>.RufusCosmoEngine._generate_cosmo_intents]
+  
+
+[<module>.RufusCosmoEngine._generate_cosmo_intents]
+   
+
+[<module>.RufusCosmoEngine._generate_cosmo_intents]
+  bullets
+
+[<module>.RufusCosmoEngine._generate_cosmo_intents]
+  category
+
+[<module>.RufusCosmoEngine._generate_cosmo_intents]
+  portable
+
+[<module>.RufusCosmoEngine._generate_cosmo_intents]
+  durable
+
+[<module>.RufusCosmoEngine._generate_cosmo_intents]
+  easy_use
+
+[<module>.RufusCosmoEngine._generate_cosmo_intents]
+  safe
+
+[<module>.RufusCosmoEngine._generate_cosmo_intents]
+  gift
+
+[<module>.RufusCosmoEngine._generate_cosmo_intents]
+  professional
+
+[<module>.RufusCosmoEngine._generate_cosmo_intents]
+  eco
+
+[<module>.RufusCosmoEngine._generate_cosmo_intents]
+  space_saving
+
+[<module>.RufusCosmoEngine._generate_geo_hints]
+  Generate GEO optimization hints based on available data.
+
+[<module>.RufusCosmoEngine._generate_geo_hints]
+  bullets
+
+[<module>.RufusCosmoEngine._generate_geo_hints]
+  Include specific quantitative data in visual presentation (GEO statistics factor)
+
+[<module>.RufusCosmoEngine._generate_geo_hints]
+  review_summary
+
+[<module>.RufusCosmoEngine._generate_geo_hints]
+  positive
+
+[<module>.RufusCosmoEngine._generate_geo_hints]
+  Visualize user-validated benefits (GEO citations factor)
+
+[<module>.RufusCosmoEngine._generate_geo_hints]
+  keywords
+
+[<module>.RufusCosmoEngine._generate_geo_hints]
+  Ensure visual elements reflect key product attributes naturally (not keyword-stuffed)
+
+[<module>.RufusCosmoEngine._generate_rufus_qa]
+  Generate suggested Rufus Q&A pairs based on product context.
+
+[<module>.RufusCosmoEngine._generate_rufus_qa]
+  title
+
+[<module>.RufusCosmoEngine._generate_rufus_qa]
+  
+
+[<module>.RufusCosmoEngine._generate_rufus_qa]
+  bullets
+
+[<module>.RufusCosmoEngine._generate_rufus_qa]
+  category
+
+[<module>.RufusCosmoEngine._generate_rufus_qa]
+  q
+
+[<module>.RufusCosmoEngine._generate_rufus_qa]
+  Is this 
+
+[<module>.RufusCosmoEngine._generate_rufus_qa]
+   suitable for daily use?
+
+[<module>.RufusCosmoEngine._generate_rufus_qa]
+  a
+
+[<module>.RufusCosmoEngine._generate_rufus_qa]
+  Yes, designed with practical daily use in mind — built with quality materials for everyday reliability.
+
+[<module>.RufusCosmoEngine._generate_rufus_qa]
+  gift
+
+[<module>.RufusCosmoEngine._generate_rufus_qa]
+  Would this make a good gift?
+
+[<module>.RufusCosmoEngine._generate_rufus_qa]
+  Absolutely — the elegant presentation and practical functionality make it an excellent gift choice.
+
+[<module>]
+  RufusCosmoEngine
+
+[<module>.get_engine]
+  Get or create the singleton RufusCosmoEngine.
+

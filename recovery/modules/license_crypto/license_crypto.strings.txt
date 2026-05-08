@@ -1,0 +1,339 @@
+[<module>]
+  \nLicense verification and activation for BSC OPC Agent OS.\n==========================================================\nAES-256-GCM encrypted license keys with machine binding.\nThis module is compiled to .pyd by PyArmor during build.\n
+
+[<module>]
+  BSC-OPC-License-Key-v1-2026-Production-Secure
+
+[<module>]
+  BSC-OPC-Agent
+
+[<module>]
+  license.key
+
+[<module>._get_base_dir]
+  Get the directory containing the .exe or .py.
+
+[<module>._get_base_dir]
+  frozen
+
+[<module>._get_machine_id]
+  Generate a machine fingerprint from hardware.
+
+[<module>._get_machine_id]
+  :
+
+[<module>._get_machine_id]
+  
+
+[<module>._get_machine_id]
+  SerialNumber
+
+[<module>._get_machine_id]
+  00000000
+
+[<module>._get_machine_id]
+  -
+
+[<module>._get_machine_id]
+  000000000000
+
+[<module>.__annotate__]
+  plaintext
+
+[<module>.__annotate__]
+  aad
+
+[<module>.__annotate__]
+  return
+
+[<module>._aes_gcm_encrypt]
+  AES-256-GCM encrypt. Returns nonce(12) + tag(16) + ciphertext.
+
+[<module>.__annotate__]
+  data
+
+[<module>.__annotate__]
+  aad
+
+[<module>.__annotate__]
+  return
+
+[<module>._aes_gcm_decrypt]
+  AES-256-GCM decrypt. Input: nonce(12) + ciphertext+tag(N+16).
+
+[<module>._pure_aes_ctr_keystream]
+  Generate AES-CTR keystream using SHA-256 as PRF.
+
+[<module>._pure_aes_ctr_keystream]
+  >Q
+
+[<module>.__annotate__]
+  plaintext
+
+[<module>.__annotate__]
+  return
+
+[<module>._pure_aes_encrypt]
+  Pure-Python AES-GCM-like encrypt using SHA-256 based CTR + HMAC.
+
+[<module>.__annotate__]
+  data
+
+[<module>.__annotate__]
+  return
+
+[<module>._pure_aes_decrypt]
+  Pure-Python AES-GCM-like decrypt.
+
+[<module>._pure_aes_decrypt]
+  License integrity check failed
+
+[<module>.__annotate__]
+  machine_id
+
+[<module>.__annotate__]
+  days
+
+[<module>.__annotate__]
+  return
+
+[<module>.generate_license_key]
+  Generate a compact encrypted license key.
+
+[<module>.generate_license_key]
+  BSC-OPC-Agent
+
+[<module>.generate_license_key]
+  >QI
+
+[<module>.generate_license_key]
+  =
+
+[<module>.generate_license_key]
+  -
+
+[<module>.__annotate__]
+  key_input
+
+[<module>.__annotate__]
+  return
+
+[<module>.verify_and_save_license]
+  Verify a license key. Returns {valid, exp_date, days_left, mid} or raises.
+
+[<module>.verify_and_save_license]
+  -
+
+[<module>.verify_and_save_license]
+  
+
+[<module>.verify_and_save_license]
+   
+
+[<module>.verify_and_save_license]
+  密钥格式无效
+
+[<module>.verify_and_save_license]
+  =
+
+[<module>.verify_and_save_license]
+  密钥解码失败
+
+[<module>.verify_and_save_license]
+  密钥验证失败
+
+[<module>.verify_and_save_license]
+  密钥数据损坏
+
+[<module>.verify_and_save_license]
+  BSC-OPC-Agent
+
+[<module>.verify_and_save_license]
+  密钥不适用于本软件
+
+[<module>.verify_and_save_license]
+  密钥未绑定本机 (机器码: 
+
+[<module>.verify_and_save_license]
+  )
+
+[<module>.verify_and_save_license]
+  >QI
+
+[<module>.verify_and_save_license]
+  密钥已过期，请联系客服续期
+
+[<module>.verify_and_save_license]
+  valid
+
+[<module>.verify_and_save_license]
+  exp_date
+
+[<module>.verify_and_save_license]
+  days_left
+
+[<module>.verify_and_save_license]
+  mid
+
+[<module>.verify_and_save_license]
+  grace
+
+[<module>.__annotate__]
+  key_input
+
+[<module>.__annotate__]
+  return
+
+[<module>.save_license]
+  Verify and save license to file.
+
+[<module>.save_license]
+  key_hash
+
+[<module>.save_license]
+  mid
+
+[<module>.save_license]
+  
+
+[<module>.save_license]
+  exp_date
+
+[<module>.save_license]
+  days_left
+
+[<module>.save_license]
+  saved_at
+
+[<module>.__annotate__]
+  return
+
+[<module>.check_license]
+  Check if a valid license exists. Returns {valid, exp_date, days_left} or raises.
+
+[<module>.check_license]
+  未找到激活文件
+
+[<module>.check_license]
+  激活文件损坏，请重新激活
+
+[<module>.check_license]
+  激活文件损坏
+
+[<module>.check_license]
+  mid
+
+[<module>.check_license]
+  机器环境变更，请重新激活
+
+[<module>.check_license]
+  valid
+
+[<module>.check_license]
+  message
+
+[<module>.check_license]
+  License OK
+
+[<module>._trial_file]
+  trial_start.key
+
+[<module>.start_trial]
+  Record trial start time. Returns remaining trial days.
+
+[<module>.trial_days_left]
+  Get remaining trial days. -1 = expired, 0 = last day.
+
+[<module>.has_trial_expired]
+  True if trial has expired (no file = never started = not expired).
+
+[<module>.__annotate__]
+  return
+
+[<module>.get_license_info]
+  Get full license info for display. Returns {status, exp_date, days_left, mid}.
+
+[<module>.get_license_info]
+  active
+
+[<module>.get_license_info]
+  exp_date
+
+[<module>.get_license_info]
+  
+
+[<module>.get_license_info]
+  days_left
+
+[<module>.get_license_info]
+  status
+
+[<module>.get_license_info]
+  mid
+
+[<module>.get_license_info]
+  —
+
+[<module>.get_license_info]
+  trial
+
+[<module>.get_license_info]
+  expired
+
+[<module>.get_license_info]
+  none
+
+[<module>.check_and_activate]
+  Full license flow. Returns: 'active' | 'trial' | 'expired'
+
+[<module>.check_and_activate]
+  active
+
+[<module>.check_and_activate]
+  none
+
+[<module>.check_and_activate]
+  trial
+
+[<module>.check_and_activate]
+  expired
+
+[<module>._fmt_date]
+  Format timestamp to date string.
+
+[<module>._fmt_date]
+  %Y-%m-%d
+
+[<module>.get_machine_id]
+  Public accessor for machine ID.
+
+[<module>.__annotate__]
+  plaintext
+
+[<module>.__annotate__]
+  return
+
+[<module>.encrypt_config_value]
+  Encrypt a sensitive config value. Returns base64-encoded string.
+
+[<module>.encrypt_config_value]
+  
+
+[<module>.encrypt_config_value]
+  CONFIG
+
+[<module>.__annotate__]
+  encoded
+
+[<module>.__annotate__]
+  return
+
+[<module>.decrypt_config_value]
+  Decrypt a sensitive config value. Returns plaintext string.
+
+[<module>.decrypt_config_value]
+  
+
+[<module>.decrypt_config_value]
+  CONFIG
+

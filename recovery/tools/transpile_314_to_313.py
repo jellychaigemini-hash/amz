@@ -209,9 +209,12 @@ NAME_MAP_SIMPLE = {
 # 3.14 LOAD_COMMON_CONSTANT index -> Python object
 # From CPython 3.14 source (Python/bytecodes.c): index 0 -> AssertionError,
 # 1 -> NotImplementedError. We intercept these specially.
+# NOTE: class objects can't be marshalled. We use string sentinels and
+# the emitted LOAD_CONST will reference them; decompile output will show the
+# name instead of the actual class, which is usually what you want anyway.
 COMMON_CONSTANTS = {
-    0: AssertionError,
-    1: NotImplementedError,
+    0: "__AssertionError__",
+    1: "__NotImplementedError__",
 }
 
 
@@ -555,15 +558,20 @@ def transpile_code(code: types.CodeType) -> types.CodeType:
 
     new_bytes, new_consts = transpile_code_bytes(code.co_code, new_consts)
 
-    # Build a replacement code object. Python 3.14's code.replace() will create
-    # a new 3.14 code object, but when we marshal.dumps() with version=4 and
-    # stamp the pyc header as 3.13, pycdc will read it as 3.13. The code object
-    # attributes we care about (co_code, co_consts, co_names, co_varnames,
-    # co_freevars, co_cellvars, co_filename, co_name, co_qualname,
-    # co_firstlineno, co_linetable, co_exceptiontable, argcount, etc.) are the
-    # same shape in 3.13 and 3.14.
+    # The exception table references byte offsets in co_code. After we've
+    # changed co_code length, those offsets are stale and using them can
+    # cause heap corruption in CPython's code object handling. Blank it out.
+    # pycdc doesn't need it to decompile (it reconstructs try/except from
+    # the bytecode directly).
+    # Similarly co_linetable references instruction offsets; pycdc tolerates
+    # incorrect line numbers so we leave it (or blank it if it proves problematic).
     try:
-        return code.replace(co_code=new_bytes, co_consts=tuple(new_consts))
+        return code.replace(
+            co_code=new_bytes,
+            co_consts=tuple(new_consts),
+            co_exceptiontable=b"",
+            co_linetable=b"",
+        )
     except Exception as e:
         print(f"[!] replace failed for {code.co_name}: {e}", file=sys.stderr)
         return code

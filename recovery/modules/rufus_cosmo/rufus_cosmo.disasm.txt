@@ -1,0 +1,1628 @@
+# Reconstructed from: /projects/sandbox/decompile/pyz_contents/rufus_cosmo.pyc
+# Python magic: 2b0e0d0a
+
+# === CODE: <module>  (file=rufus_cosmo.py, line=1) ===
+# argcount=0, posonly=0, kwonly=0, stacksize=13
+# varnames=()
+# freevars=(), cellvars=()
+# names=('__doc__', 'json', 're', 'pathlib', 'Path', '__file__', 'resolve', 'parent', 'BASE', 'KNOWLEDGE_DIR', 'COSMO_RELATIONS', 'GEO_FACTORS', 'RUFUS_DATA_SOURCES', 'LISTING_RULES', 'RufusCosmoEngine', '_engine', 'get_engine')
+# constants:
+#   [0] '\nRufus & COSMO Algorithm Integration Module\n============================================\nIntegrates Rufus/COSMO/GEO algorithmic principles into the GPT Image-2 prompt generation pipeline.\nLoad...
+#   [1] None
+#   [2] ('Path',)
+#   [3] 'Wiki'
+#   [4] '06-Rufus-Cosmo'
+#   [5] 'used_for'
+#   [6] 'zh'
+#   [7] '用途/使用场景'
+#   [8] 'prompt_guide'
+#   [9] 'Describe what scenario/purpose the product serves — naturally, not as a label.'
+#   [10] 'capable_of'
+#   [11] '功能/能力'
+#   [12] 'Describe what the product can do — show capability through scene, not list.'
+#   [13] 'isA'
+#   [14] '属性/类别归属'
+#   [15] 'Ensure the product category and key attributes are clear from context.'
+#   [16] 'cause'
+#   [17] '因果/优势'
+#   [18] 'Show cause-and-effect: this material/design choice → this benefit for the user.'
+#   [19] 'statistics'
+#   [20] 'weight'
+#   [21] 0.41
+#   [22] 'guide'
+#   [23] 'Include specific quantitative data rather than qualitative descriptions.'
+#   [24] 'citations'
+#   [25] 0.28
+#   [26] 'Reference trusted sources, certifications, or authority endorsements.'
+#   [27] 'source_quoting'
+#   [28] 0.3
+#   [29] "Cite reliable sources for claims. E.g., 'As tested by...' or 'Certified by...'"
+#   [30] 'fluency'
+#   [31] 0.358
+#   [32] 'Ensure natural, fluent language — avoid keyword stuffing.'
+#   [33] 'authority'
+#   [34] 'baseline'
+#   [35] 'Establish brand authority through consistent professional presentation.'
+#   [36] 'product_catalog'
+#   [37] '商品目录信息'
+#   [38] 'title'
+#   [39] 'bullets'
+#   [40] 'description'
+#   [41] 'reviews'
+#   [42] '买家评论'
+#   [43] 'qa'
+#   [44] '社区问答'
+#   [45] 'aplus'
+#   [46] 'A+内容/品牌故事'
+#   [47] 'external'
+#   [48] '外部网络信息'
+#   [49] 'formula'
+#   [50] '[品牌] + [ABA核心大词] + [针对竞品痛点改进] + [COSMO场景] + [属性]'
+#   [51] 'rule'
+#   [52] '前50字符必须包含最高权重关键词，硬条件前置'
+#   [53] '痛点 → 机制/原理 → 结果 → 边界条件'
+#   [54] 'structure'
+#   [55] 'must_have'
+#   [56] 'backend_attributes'
+#   [57] '全部填满，数据一致性（所有地方数字统一）'
+#   [58] 'images'
+#   [60] 'RufusCosmoEngine'
+#   [62] ('title', 'bullets', 'description', 'attributes')
+#   [63] ('scenarios', 'parameters', 'experience')
+#   [64] ('questions', 'answers', 'keywords')
+#   [65] ('scenes', 'faq', 'comparison_tables')
+#   [66] ('media_reviews', 'blog_mentions', 'social_media')
+#   [67] ('痛点狙击', '场景沉浸', '硬核参数', '目标人群/礼品', '售后信任')
+#   [68] ('3-5个具体场景段落', 'FAQ模块', '竞品对比表')
+#   [69] ('Alt Text填写', '场景化图片', '竞品对比图', '信息图含文字')
+# --- bytecode ---
+#   0           RESUME                   0
+# 
+#   1           LOAD_CONST               0 ('\nRufus & COSMO Algorithm Integration Module\n============================================\nIntegrates Rufus/COSMO/GEO algorithmic principles into the GPT Image-2 prompt generation pipeline.\nLoaded from local Wiki/06-Rufus-Cosmo/ — no external F: drive dependency.\n\nUsage:\n    from rufus_cosmo import RufusCosmoEngine\n    engine = RufusCosmoEngine()\n    context = engine.enrich_context(base_context)\n    prompt_hints = engine.get_prompt_hints(category, style)\n')
+#               STORE_NAME               0 (__doc__)
+# 
+#  14           LOAD_SMALL_INT           0
+#               LOAD_CONST               1 (None)
+#               IMPORT_NAME              1 (json)
+#               STORE_NAME               1 (json)
+# 
+#  15           LOAD_SMALL_INT           0
+#               LOAD_CONST               1 (None)
+#               IMPORT_NAME              2 (re)
+#               STORE_NAME               2 (re)
+# 
+#  16           LOAD_SMALL_INT           0
+#               LOAD_CONST               2 (('Path',))
+#               IMPORT_NAME              3 (pathlib)
+#               IMPORT_FROM              4 (Path)
+#               STORE_NAME               4 (Path)
+#               POP_TOP
+# 
+#  18           LOAD_NAME                4 (Path)
+#               PUSH_NULL
+#               LOAD_NAME                5 (__file__)
+#               CALL                     1
+#               LOAD_ATTR               13 (resolve + NULL|self)
+#               CALL                     0
+#               LOAD_ATTR               14 (parent)
+#               STORE_NAME               8 (BASE)
+# 
+#  19           LOAD_NAME                8 (BASE)
+#               LOAD_CONST               3 ('Wiki')
+#               BINARY_OP               11 (/)
+#               LOAD_CONST               4 ('06-Rufus-Cosmo')
+#               BINARY_OP               11 (/)
+#               STORE_NAME               9 (KNOWLEDGE_DIR)
+# 
+#  27           LOAD_CONST               5 ('used_for')
+# 
+#  28           LOAD_CONST               6 ('zh')
+#               LOAD_CONST               7 ('用途/使用场景')
+# 
+#  29           LOAD_CONST               8 ('prompt_guide')
+#               LOAD_CONST               9 ('Describe what scenario/purpose the product serves — naturally, not as a label.')
+# 
+#  27           BUILD_MAP                2
+# 
+#  31           LOAD_CONST              10 ('capable_of')
+# 
+#  32           LOAD_CONST               6 ('zh')
+#               LOAD_CONST              11 ('功能/能力')
+# 
+#  33           LOAD_CONST               8 ('prompt_guide')
+#               LOAD_CONST              12 ('Describe what the product can do — show capability through scene, not list.')
+# 
+#  31           BUILD_MAP                2
+# 
+#  35           LOAD_CONST              13 ('isA')
+# 
+#  36           LOAD_CONST               6 ('zh')
+#               LOAD_CONST              14 ('属性/类别归属')
+# 
+#  37           LOAD_CONST               8 ('prompt_guide')
+#               LOAD_CONST              15 ('Ensure the product category and key attributes are clear from context.')
+# 
+#  35           BUILD_MAP                2
+# 
+#  39           LOAD_CONST              16 ('cause')
+# 
+#  40           LOAD_CONST               6 ('zh')
+#               LOAD_CONST              17 ('因果/优势')
+# 
+#  41           LOAD_CONST               8 ('prompt_guide')
+#               LOAD_CONST              18 ('Show cause-and-effect: this material/design choice → this benefit for the user.')
+# 
+#  39           BUILD_MAP                2
+# 
+#  26           BUILD_MAP                4
+#               STORE_NAME              10 (COSMO_RELATIONS)
+# 
+#  49           LOAD_CONST              19 ('statistics')
+# 
+#  50           LOAD_CONST              20 ('weight')
+#               LOAD_CONST              21 (0.41)
+# 
+#  51           LOAD_CONST              22 ('guide')
+#               LOAD_CONST              23 ('Include specific quantitative data rather than qualitative descriptions.')
+# 
+#  49           BUILD_MAP                2
+# 
+#  53           LOAD_CONST              24 ('citations')
+# 
+#  54           LOAD_CONST              20 ('weight')
+#               LOAD_CONST              25 (0.28)
+# 
+#  55           LOAD_CONST              22 ('guide')
+#               LOAD_CONST              26 ('Reference trusted sources, certifications, or authority endorsements.')
+# 
+#  53           BUILD_MAP                2
+# 
+#  57           LOAD_CONST              27 ('source_quoting')
+# 
+#  58           LOAD_CONST              20 ('weight')
+#               LOAD_CONST              28 (0.3)
+# 
+#  59           LOAD_CONST              22 ('guide')
+#               LOAD_CONST              29 ("Cite reliable sources for claims. E.g., 'As tested by...' or 'Certified by...'")
+# 
+#  57           BUILD_MAP                2
+# 
+#  61           LOAD_CONST              30 ('fluency')
+# 
+#  62           LOAD_CONST              20 ('weight')
+#               LOAD_CONST              31 (0.358)
+# 
+#  63           LOAD_CONST              22 ('guide')
+#               LOAD_CONST              32 ('Ensure natural, fluent language — avoid keyword stuffing.')
+# 
+#  61           BUILD_MAP                2
+# 
+#  65           LOAD_CONST              33 ('authority')
+# 
+#  66           LOAD_CONST              20 ('weight')
+#               LOAD_CONST              34 ('baseline')
+# 
+#  67           LOAD_CONST              22 ('guide')
+#               LOAD_CONST              35 ('Establish brand authority through consistent professional presentation.')
+# 
+#  65           BUILD_MAP                2
+# 
+#  48           BUILD_MAP                5
+#               STORE_NAME              11 (GEO_FACTORS)
+# 
+#  76           LOAD_CONST              36 ('product_catalog')
+#               LOAD_CONST              37 ('商品目录信息')
+#               BUILD_LIST               0
+#               LOAD_CONST              62 (('title', 'bullets', 'description', 'attributes'))
+#               LIST_EXTEND              1
+#               BUILD_TUPLE              3
+# 
+#  77           LOAD_CONST              41 ('reviews')
+#               LOAD_CONST              42 ('买家评论')
+#               BUILD_LIST               0
+#               LOAD_CONST              63 (('scenarios', 'parameters', 'experience'))
+#               LIST_EXTEND              1
+#               BUILD_TUPLE              3
+# 
+#  78           LOAD_CONST              43 ('qa')
+#               LOAD_CONST              44 ('社区问答')
+#               BUILD_LIST               0
+#               LOAD_CONST              64 (('questions', 'answers', 'keywords'))
+#               LIST_EXTEND              1
+#               BUILD_TUPLE              3
+# 
+#  79           LOAD_CONST              45 ('aplus')
+#               LOAD_CONST              46 ('A+内容/品牌故事')
+#               BUILD_LIST               0
+#               LOAD_CONST              65 (('scenes', 'faq', 'comparison_tables'))
+#               LIST_EXTEND              1
+#               BUILD_TUPLE              3
+# 
+#  80           LOAD_CONST              47 ('external')
+#               LOAD_CONST              48 ('外部网络信息')
+#               BUILD_LIST               0
+#               LOAD_CONST              66 (('media_reviews', 'blog_mentions', 'social_media'))
+#               LIST_EXTEND              1
+#               BUILD_TUPLE              3
+# 
+#  75           BUILD_LIST               5
+#               STORE_NAME              12 (RUFUS_DATA_SOURCES)
+# 
+#  87           LOAD_CONST              38 ('title')
+# 
+#  88           LOAD_CONST              49 ('formula')
+#               LOAD_CONST              50 ('[品牌] + [ABA核心大词] + [针对竞品痛点改进] + [COSMO场景] + [属性]')
+# 
+#  89           LOAD_CONST              51 ('rule')
+#               LOAD_CONST              52 ('前50字符必须包含最高权重关键词，硬条件前置')
+# 
+#  87           BUILD_MAP                2
+# 
+#  91           LOAD_CONST              39 ('bullets')
+# 
+#  92           LOAD_CONST              49 ('formula')
+#               LOAD_CONST              53 ('痛点 → 机制/原理 → 结果 → 边界条件')
+# 
+#  93           LOAD_CONST              54 ('structure')
+#               BUILD_LIST               0
+#               LOAD_CONST              67 (('痛点狙击', '场景沉浸', '硬核参数', '目标人群/礼品', '售后信任'))
+#               LIST_EXTEND              1
+# 
+#  91           BUILD_MAP                2
+# 
+#  95           LOAD_CONST              40 ('description')
+# 
+#  96           LOAD_CONST              55 ('must_have')
+#               BUILD_LIST               0
+#               LOAD_CONST              68 (('3-5个具体场景段落', 'FAQ模块', '竞品对比表'))
+#               LIST_EXTEND              1
+# 
+#  95           BUILD_MAP                1
+# 
+#  98           LOAD_CONST              56 ('backend_attributes')
+# 
+#  99           LOAD_CONST              51 ('rule')
+#               LOAD_CONST              57 ('全部填满，数据一致性（所有地方数字统一）')
+# 
+#  98           BUILD_MAP                1
+# 
+# 101           LOAD_CONST              58 ('images')
+# 
+# 102           LOAD_CONST              55 ('must_have')
+#               BUILD_LIST               0
+#               LOAD_CONST              69 (('Alt Text填写', '场景化图片', '竞品对比图', '信息图含文字'))
+#               LIST_EXTEND              1
+# 
+# 101           BUILD_MAP                1
+# 
+#  86           BUILD_MAP                5
+#               STORE_NAME              13 (LISTING_RULES)
+# 
+# 107           LOAD_BUILD_CLASS
+#               PUSH_NULL
+#               LOAD_CONST              59 (<code object RufusCosmoEngine at 0x7f39f1803870, file "rufus_cosmo.py", line 107>)
+#               MAKE_FUNCTION
+#               LOAD_CONST              60 ('RufusCosmoEngine')
+#               CALL                     2
+#               STORE_NAME              14 (RufusCosmoEngine)
+# 
+# 355           LOAD_CONST               1 (None)
+#               STORE_GLOBAL            15 (_engine)
+# 
+# 357           LOAD_CONST              61 (<code object get_engine at 0x7f39f1615ac0, file "rufus_cosmo.py", line 357>)
+#               MAKE_FUNCTION
+#               STORE_NAME              16 (get_engine)
+#               LOAD_CONST               1 (None)
+#               RETURN_VALUE
+# --- end bytecode ---
+
+    # === CODE: <module>.RufusCosmoEngine  (file=rufus_cosmo.py, line=107) ===
+    # argcount=0, posonly=0, kwonly=0, stacksize=2
+    # varnames=()
+    # freevars=(), cellvars=('__classdict__',)
+    # names=('__name__', '__module__', '__qualname__', '__firstlineno__', '__doc__', '__init__', 'load_algorithms', 'load_methodology', 'enrich_context', 'get_prompt_hints', 'enhance_prompt', '_infer_visual_features', '_generate_cosmo_intents', '_generate_geo_hints', '_generate_rufus_qa', '__static_attributes__', '__classdictcell__')
+    # constants:
+    #   [0] 'RufusCosmoEngine'
+    #   [1] 'Engine that enriches product context and prompt generation with Rufus/COSMO algorithms.'
+    #   [2] None
+    #   [13] ('_algorithms', '_methodology', 'kb_dir')
+    #   [14] (None,)
+    #   [15] ('', 'main')
+    # --- bytecode ---
+    #   --           MAKE_CELL                0 (__classdict__)
+    # 
+    #  107           RESUME                   0
+    #                LOAD_NAME                0 (__name__)
+    #                STORE_NAME               1 (__module__)
+    #                LOAD_CONST               0 ('RufusCosmoEngine')
+    #                STORE_NAME               2 (__qualname__)
+    #                LOAD_SMALL_INT         107
+    #                STORE_NAME               3 (__firstlineno__)
+    #                LOAD_LOCALS
+    #                STORE_DEREF              0 (__classdict__)
+    # 
+    #  108           LOAD_CONST               1 ('Engine that enriches product context and prompt generation with Rufus/COSMO algorithms.')
+    #                STORE_NAME               4 (__doc__)
+    # 
+    #  110           LOAD_CONST              14 ((None,))
+    #                LOAD_CONST               3 (<code object __init__ at 0x7f39f160db80, file "rufus_cosmo.py", line 110>)
+    #                MAKE_FUNCTION
+    #                SET_FUNCTION_ATTRIBUTE   1 (defaults)
+    #                STORE_NAME               5 (__init__)
+    # 
+    #  117           LOAD_CONST               4 (<code object load_algorithms at 0x7f39f17be120, file "rufus_cosmo.py", line 117>)
+    #                MAKE_FUNCTION
+    #                STORE_NAME               6 (load_algorithms)
+    # 
+    #  128           LOAD_CONST               5 (<code object load_methodology at 0x7f39f17be310, file "rufus_cosmo.py", line 128>)
+    #                MAKE_FUNCTION
+    #                STORE_NAME               7 (load_methodology)
+    # 
+    #  141           LOAD_CONST               6 (<code object enrich_context at 0x7f39f1668200, file "rufus_cosmo.py", line 141>)
+    #                MAKE_FUNCTION
+    #                STORE_NAME               8 (enrich_context)
+    # 
+    #  167           LOAD_CONST              15 (('', 'main'))
+    #                LOAD_CONST               7 (<code object get_prompt_hints at 0x2af12e60, file "rufus_cosmo.py", line 167>)
+    #                MAKE_FUNCTION
+    #                SET_FUNCTION_ATTRIBUTE   1 (defaults)
+    #                STORE_NAME               9 (get_prompt_hints)
+    # 
+    #  232           LOAD_CONST              15 (('', 'main'))
+    #                LOAD_CONST               8 (<code object enhance_prompt at 0x2aef7020, file "rufus_cosmo.py", line 232>)
+    #                MAKE_FUNCTION
+    #                SET_FUNCTION_ATTRIBUTE   1 (defaults)
+    #                STORE_NAME              10 (enhance_prompt)
+    # 
+    #  257           LOAD_CONST               9 (<code object _infer_visual_features at 0x2ad56fc0, file "rufus_cosmo.py", line 257>)
+    #                MAKE_FUNCTION
+    #                STORE_NAME              11 (_infer_visual_features)
+    # 
+    #  292           LOAD_CONST              10 (<code object _generate_cosmo_intents at 0x2af11650, file "rufus_cosmo.py", line 292>)
+    #                MAKE_FUNCTION
+    #                STORE_NAME              12 (_generate_cosmo_intents)
+    # 
+    #  317           LOAD_CONST              11 (<code object _generate_geo_hints at 0x7f39f175b630, file "rufus_cosmo.py", line 317>)
+    #                MAKE_FUNCTION
+    #                STORE_NAME              13 (_generate_geo_hints)
+    # 
+    #  331           LOAD_CONST              12 (<code object _generate_rufus_qa at 0x2af11970, file "rufus_cosmo.py", line 331>)
+    #                MAKE_FUNCTION
+    #                STORE_NAME              14 (_generate_rufus_qa)
+    #                LOAD_CONST              13 (('_algorithms', '_methodology', 'kb_dir'))
+    #                STORE_NAME              15 (__static_attributes__)
+    #                LOAD_FAST_BORROW         0 (__classdict__)
+    #                STORE_NAME              16 (__classdictcell__)
+    #                LOAD_CONST               2 (None)
+    #                RETURN_VALUE
+    # --- end bytecode ---
+
+        # === CODE: <module>.RufusCosmoEngine.__init__  (file=rufus_cosmo.py, line=110) ===
+        # argcount=2, posonly=0, kwonly=0, stacksize=3
+        # varnames=('self', 'knowledge_dir')
+        # freevars=(), cellvars=()
+        # names=('Path', 'KNOWLEDGE_DIR', 'kb_dir', '_algorithms', '_methodology')
+        # constants:
+        #   [0] None
+        # --- bytecode ---
+        # 110           RESUME                   0
+        # 
+        # 111           LOAD_FAST_BORROW         1 (knowledge_dir)
+        #               TO_BOOL
+        #               POP_JUMP_IF_FALSE       12 (to L1)
+        #               NOT_TAKEN
+        #               LOAD_GLOBAL              1 (Path + NULL)
+        #               LOAD_FAST_BORROW         1 (knowledge_dir)
+        #               CALL                     1
+        #               JUMP_FORWARD             5 (to L2)
+        #       L1:     LOAD_GLOBAL              2 (KNOWLEDGE_DIR)
+        #       L2:     LOAD_FAST_BORROW         0 (self)
+        #               STORE_ATTR               2 (kb_dir)
+        # 
+        # 112           LOAD_CONST               0 (None)
+        #               LOAD_FAST_BORROW         0 (self)
+        #               STORE_ATTR               3 (_algorithms)
+        # 
+        # 113           LOAD_CONST               0 (None)
+        #               LOAD_FAST_BORROW         0 (self)
+        #               STORE_ATTR               4 (_methodology)
+        #               LOAD_CONST               0 (None)
+        #               RETURN_VALUE
+        # --- end bytecode ---
+
+        # === CODE: <module>.RufusCosmoEngine.load_algorithms  (file=rufus_cosmo.py, line=117) ===
+        # argcount=1, posonly=0, kwonly=0, stacksize=5
+        # varnames=('self', 'wiki_read', 'f')
+        # freevars=(), cellvars=()
+        # names=('_algorithms', 'wiki_crypto', 'wiki_read', 'ImportError', 'kb_dir', 'exists', 'read_text')
+        # constants:
+        #   [0] None
+        #   [1] ('wiki_read',)
+        #   [2] '06-Rufus-Cosmo/algorithms.md'
+        #   [3] 'algorithms.md'
+        #   [4] 'utf-8'
+        #   [5] ('encoding',)
+        #   [6] ''
+        # --- bytecode ---
+        #  117           RESUME                   0
+        # 
+        #  118           LOAD_FAST_BORROW         0 (self)
+        #                LOAD_ATTR                0 (_algorithms)
+        #                POP_JUMP_IF_NOT_NONE    21 (to L2)
+        #                NOT_TAKEN
+        # 
+        #  119           NOP
+        # 
+        #  120   L1:     LOAD_SMALL_INT           0
+        #                LOAD_CONST               1 (('wiki_read',))
+        #                IMPORT_NAME              1 (wiki_crypto)
+        #                IMPORT_FROM              2 (wiki_read)
+        #                STORE_FAST               1 (wiki_read)
+        #                POP_TOP
+        # 
+        #  121           LOAD_FAST_BORROW         1 (wiki_read)
+        #                PUSH_NULL
+        #                LOAD_CONST               2 ('06-Rufus-Cosmo/algorithms.md')
+        #                CALL                     1
+        #                LOAD_FAST_BORROW         0 (self)
+        #                STORE_ATTR               0 (_algorithms)
+        # 
+        #  126   L2:     LOAD_FAST_BORROW         0 (self)
+        #                LOAD_ATTR                0 (_algorithms)
+        #                COPY                     1
+        #                TO_BOOL
+        #                POP_JUMP_IF_TRUE         3 (to L3)
+        #                NOT_TAKEN
+        #                POP_TOP
+        #                LOAD_CONST               6 ('')
+        #        L3:     RETURN_VALUE
+        # 
+        #   --   L4:     PUSH_EXC_INFO
+        # 
+        #  122           LOAD_GLOBAL              6 (ImportError)
+        #                CHECK_EXC_MATCH
+        #                POP_JUMP_IF_FALSE       68 (to L8)
+        #                NOT_TAKEN
+        #                POP_TOP
+        # 
+        #  123           LOAD_FAST                0 (self)
+        #                LOAD_ATTR                8 (kb_dir)
+        #                LOAD_CONST               3 ('algorithms.md')
+        #                BINARY_OP               11 (/)
+        #                STORE_FAST               2 (f)
+        # 
+        #  124           LOAD_FAST                2 (f)
+        #                LOAD_ATTR               11 (exists + NULL|self)
+        #                CALL                     0
+        #                TO_BOOL
+        #                POP_JUMP_IF_FALSE       24 (to L7)
+        #        L5:     NOT_TAKEN
+        # 
+        #  125   L6:     LOAD_FAST                2 (f)
+        #                LOAD_ATTR               13 (read_text + NULL|self)
+        #                LOAD_CONST               4 ('utf-8')
+        #                LOAD_CONST               5 (('encoding',))
+        #                CALL_KW                  1
+        #                LOAD_FAST                0 (self)
+        #                STORE_ATTR               0 (_algorithms)
+        # 
+        #   --   L7:     POP_EXCEPT
+        #                JUMP_BACKWARD_NO_INTERRUPT 99 (to L2)
+        # 
+        #  122   L8:     RERAISE                  0
+        # 
+        #   --   L9:     COPY                     3
+        #                POP_EXCEPT
+        #                RERAISE                  1
+        # ExceptionTable:
+        #   L1 to L2 -> L4 [0]
+        #   L4 to L5 -> L9 [1] lasti
+        #   L6 to L7 -> L9 [1] lasti
+        #   L8 to L9 -> L9 [1] lasti
+        # --- end bytecode ---
+
+        # === CODE: <module>.RufusCosmoEngine.load_methodology  (file=rufus_cosmo.py, line=128) ===
+        # argcount=1, posonly=0, kwonly=0, stacksize=5
+        # varnames=('self', 'wiki_read', 'f')
+        # freevars=(), cellvars=()
+        # names=('_methodology', 'wiki_crypto', 'wiki_read', 'ImportError', 'kb_dir', 'exists', 'read_text')
+        # constants:
+        #   [0] None
+        #   [1] ('wiki_read',)
+        #   [2] '06-Rufus-Cosmo/methodology.md'
+        #   [3] 'methodology.md'
+        #   [4] 'utf-8'
+        #   [5] ('encoding',)
+        #   [6] ''
+        # --- bytecode ---
+        #  128           RESUME                   0
+        # 
+        #  129           LOAD_FAST_BORROW         0 (self)
+        #                LOAD_ATTR                0 (_methodology)
+        #                POP_JUMP_IF_NOT_NONE    21 (to L2)
+        #                NOT_TAKEN
+        # 
+        #  130           NOP
+        # 
+        #  131   L1:     LOAD_SMALL_INT           0
+        #                LOAD_CONST               1 (('wiki_read',))
+        #                IMPORT_NAME              1 (wiki_crypto)
+        #                IMPORT_FROM              2 (wiki_read)
+        #                STORE_FAST               1 (wiki_read)
+        #                POP_TOP
+        # 
+        #  132           LOAD_FAST_BORROW         1 (wiki_read)
+        #                PUSH_NULL
+        #                LOAD_CONST               2 ('06-Rufus-Cosmo/methodology.md')
+        #                CALL                     1
+        #                LOAD_FAST_BORROW         0 (self)
+        #                STORE_ATTR               0 (_methodology)
+        # 
+        #  137   L2:     LOAD_FAST_BORROW         0 (self)
+        #                LOAD_ATTR                0 (_methodology)
+        #                COPY                     1
+        #                TO_BOOL
+        #                POP_JUMP_IF_TRUE         3 (to L3)
+        #                NOT_TAKEN
+        #                POP_TOP
+        #                LOAD_CONST               6 ('')
+        #        L3:     RETURN_VALUE
+        # 
+        #   --   L4:     PUSH_EXC_INFO
+        # 
+        #  133           LOAD_GLOBAL              6 (ImportError)
+        #                CHECK_EXC_MATCH
+        #                POP_JUMP_IF_FALSE       68 (to L8)
+        #                NOT_TAKEN
+        #                POP_TOP
+        # 
+        #  134           LOAD_FAST                0 (self)
+        #                LOAD_ATTR                8 (kb_dir)
+        #                LOAD_CONST               3 ('methodology.md')
+        #                BINARY_OP               11 (/)
+        #                STORE_FAST               2 (f)
+        # 
+        #  135           LOAD_FAST                2 (f)
+        #                LOAD_ATTR               11 (exists + NULL|self)
+        #                CALL                     0
+        #                TO_BOOL
+        #                POP_JUMP_IF_FALSE       24 (to L7)
+        #        L5:     NOT_TAKEN
+        # 
+        #  136   L6:     LOAD_FAST                2 (f)
+        #                LOAD_ATTR               13 (read_text + NULL|self)
+        #                LOAD_CONST               4 ('utf-8')
+        #                LOAD_CONST               5 (('encoding',))
+        #                CALL_KW                  1
+        #                LOAD_FAST                0 (self)
+        #                STORE_ATTR               0 (_methodology)
+        # 
+        #   --   L7:     POP_EXCEPT
+        #                JUMP_BACKWARD_NO_INTERRUPT 99 (to L2)
+        # 
+        #  133   L8:     RERAISE                  0
+        # 
+        #   --   L9:     COPY                     3
+        #                POP_EXCEPT
+        #                RERAISE                  1
+        # ExceptionTable:
+        #   L1 to L2 -> L4 [0]
+        #   L4 to L5 -> L9 [1] lasti
+        #   L6 to L7 -> L9 [1] lasti
+        #   L8 to L9 -> L9 [1] lasti
+        # --- end bytecode ---
+
+        # === CODE: <module>.RufusCosmoEngine.enrich_context  (file=rufus_cosmo.py, line=141) ===
+        # argcount=2, posonly=0, kwonly=0, stacksize=3
+        # varnames=('self', 'context', 'enriched')
+        # freevars=(), cellvars=()
+        # names=('dict', 'get', '_infer_visual_features', '_generate_cosmo_intents', '_generate_geo_hints', '_generate_rufus_qa')
+        # constants:
+        #   [0] 'Enrich a product context dict with Rufus/COSMO algorithmic insights.\nThis fills gaps that MCP services leave empty.\n'
+        #   [1] 'visual_features'
+        #   [2] 'cosmo_intents'
+        #   [3] 'geo_hints'
+        #   [4] 'rufus_qa_suggestions'
+        #   [5] True
+        #   [6] 'rufus_cosmo_enriched'
+        # --- bytecode ---
+        # 141           RESUME                   0
+        # 
+        # 145           LOAD_GLOBAL              1 (dict + NULL)
+        #               LOAD_FAST_BORROW         1 (context)
+        #               CALL                     1
+        #               STORE_FAST               2 (enriched)
+        # 
+        # 148           LOAD_FAST_BORROW         2 (enriched)
+        #               LOAD_ATTR                3 (get + NULL|self)
+        #               LOAD_CONST               1 ('visual_features')
+        #               CALL                     1
+        #               TO_BOOL
+        #               POP_JUMP_IF_TRUE        21 (to L1)
+        #               NOT_TAKEN
+        # 
+        # 149           LOAD_FAST_BORROW         0 (self)
+        #               LOAD_ATTR                5 (_infer_visual_features + NULL|self)
+        #               LOAD_FAST_BORROW         2 (enriched)
+        #               CALL                     1
+        #               LOAD_FAST_BORROW         2 (enriched)
+        #               LOAD_CONST               1 ('visual_features')
+        #               STORE_SUBSCR
+        # 
+        # 152   L1:     LOAD_FAST_BORROW         0 (self)
+        #               LOAD_ATTR                7 (_generate_cosmo_intents + NULL|self)
+        #               LOAD_FAST_BORROW         2 (enriched)
+        #               CALL                     1
+        #               LOAD_FAST_BORROW         2 (enriched)
+        #               LOAD_CONST               2 ('cosmo_intents')
+        #               STORE_SUBSCR
+        # 
+        # 155           LOAD_FAST_BORROW         0 (self)
+        #               LOAD_ATTR                9 (_generate_geo_hints + NULL|self)
+        #               LOAD_FAST_BORROW         2 (enriched)
+        #               CALL                     1
+        #               LOAD_FAST_BORROW         2 (enriched)
+        #               LOAD_CONST               3 ('geo_hints')
+        #               STORE_SUBSCR
+        # 
+        # 158           LOAD_FAST_BORROW         0 (self)
+        #               LOAD_ATTR               11 (_generate_rufus_qa + NULL|self)
+        #               LOAD_FAST_BORROW         2 (enriched)
+        #               CALL                     1
+        #               LOAD_FAST_BORROW         2 (enriched)
+        #               LOAD_CONST               4 ('rufus_qa_suggestions')
+        #               STORE_SUBSCR
+        # 
+        # 161           LOAD_CONST               5 (True)
+        #               LOAD_FAST_BORROW         2 (enriched)
+        #               LOAD_CONST               6 ('rufus_cosmo_enriched')
+        #               STORE_SUBSCR
+        # 
+        # 163           LOAD_FAST_BORROW         2 (enriched)
+        #               RETURN_VALUE
+        # --- end bytecode ---
+
+        # === CODE: <module>.RufusCosmoEngine.get_prompt_hints  (file=rufus_cosmo.py, line=167) ===
+        # argcount=3, posonly=0, kwonly=0, stacksize=15
+        # varnames=('self', 'category', 'style', 'hints', 'scenes', 'cat_lower', 'k', 'v')
+        # freevars=(), cellvars=()
+        # names=('lower', 'items', 'get')
+        # constants:
+        #   [0] 'Get algorithm-driven prompt enhancement hints for a given category and style.\n\nReturns a dict with:\n- cosmo_relations: which COSMO relations to naturally embed\n- geo_additions: GEO factors to ...
+        #   [1] 'cosmo_relations'
+        #   [2] 'geo_additions'
+        #   [3] 'scene_suggestions'
+        #   [4] 'constraint_reminders'
+        #   [5] 'main'
+        #   [6] 'isA: clearly establish product category and type'
+        #   [7] 'capable_of: show key features/functionality visually'
+        #   [8] 'used_for: show the product in its natural use context'
+        #   [9] 'cause: demonstrate how product features create user benefits'
+        #   [10] 'detail'
+        #   [11] 'capable_of: highlight material quality and build precision'
+        #   [12] 'isA: reinforce premium/quality attributes'
+        #   [13] 'health'
+        #   [14] 'home'
+        #   [15] 'tech'
+        #   [16] 'fashion'
+        #   [17] 'beauty'
+        #   [18] 'food'
+        #   [19] 'sports'
+        #   [20] ''
+        #   [21] ('NO text, NO watermark, NO logo', 'Natural language — avoid keyword stuffing', 'Include specific, quantifiable details (GEO statistics factor)', 'Show the product in context — not just isolated (C...
+        #   [22] ('lifestyle', 'editorial')
+        #   [23] ("Include specific numerical details where possible (e.g., '28 compartments', '4-button interface')", 'Reference quality certifications or standards if applicable', 'Maintain fluent, natural descri...
+        #   [24] ('morning routine', 'bedside table', 'travel kit', 'caregiver context')
+        #   [25] ('modern kitchen', 'cozy living room', 'home office', 'bedroom')
+        #   [26] ('professional workspace', 'modern desk setup', 'on-the-go', 'gaming setup')
+        #   [27] ('street style', 'office wear', 'evening occasion', 'casual weekend')
+        #   [28] ('vanity table', 'bathroom spa', 'morning routine', 'professional salon')
+        #   [29] ('kitchen prep', 'dining table', 'outdoor picnic', 'morning coffee')
+        #   [30] ('gym session', 'outdoor adventure', 'morning run', 'training setup')
+        # --- bytecode ---
+        # 167           RESUME                   0
+        # 
+        # 177           LOAD_CONST               1 ('cosmo_relations')
+        #               BUILD_LIST               0
+        # 
+        # 178           LOAD_CONST               2 ('geo_additions')
+        #               BUILD_LIST               0
+        # 
+        # 179           LOAD_CONST               3 ('scene_suggestions')
+        #               BUILD_LIST               0
+        # 
+        # 180           LOAD_CONST               4 ('constraint_reminders')
+        #               BUILD_LIST               0
+        #               LOAD_CONST              21 (('NO text, NO watermark, NO logo', 'Natural language — avoid keyword stuffing', 'Include specific, quantifiable details (GEO statistics factor)', 'Show the product in context — not just isolated (COSMO scene matching)'))
+        #               LIST_EXTEND              1
+        # 
+        # 176           BUILD_MAP                4
+        #               STORE_FAST               3 (hints)
+        # 
+        # 189           LOAD_FAST_BORROW         2 (style)
+        #               LOAD_CONST               5 ('main')
+        #               COMPARE_OP              88 (bool(==))
+        #               POP_JUMP_IF_FALSE        9 (to L1)
+        #               NOT_TAKEN
+        # 
+        # 191           LOAD_CONST               6 ('isA: clearly establish product category and type')
+        # 
+        # 192           LOAD_CONST               7 ('capable_of: show key features/functionality visually')
+        # 
+        # 190           BUILD_LIST               2
+        #               LOAD_FAST_BORROW         3 (hints)
+        #               LOAD_CONST               1 ('cosmo_relations')
+        #               STORE_SUBSCR
+        #               JUMP_FORWARD            29 (to L3)
+        # 
+        # 194   L1:     LOAD_FAST_BORROW         2 (style)
+        #               LOAD_CONST              22 (('lifestyle', 'editorial'))
+        #               CONTAINS_OP              0 (in)
+        #               POP_JUMP_IF_FALSE        9 (to L2)
+        #               NOT_TAKEN
+        # 
+        # 196           LOAD_CONST               8 ('used_for: show the product in its natural use context')
+        # 
+        # 197           LOAD_CONST               9 ('cause: demonstrate how product features create user benefits')
+        # 
+        # 195           BUILD_LIST               2
+        #               LOAD_FAST_BORROW         3 (hints)
+        #               LOAD_CONST               1 ('cosmo_relations')
+        #               STORE_SUBSCR
+        #               JUMP_FORWARD            14 (to L3)
+        # 
+        # 199   L2:     LOAD_FAST_BORROW         2 (style)
+        #               LOAD_CONST              10 ('detail')
+        #               COMPARE_OP              88 (bool(==))
+        #               POP_JUMP_IF_FALSE        8 (to L3)
+        #               NOT_TAKEN
+        # 
+        # 201           LOAD_CONST              11 ('capable_of: highlight material quality and build precision')
+        # 
+        # 202           LOAD_CONST              12 ('isA: reinforce premium/quality attributes')
+        # 
+        # 200           BUILD_LIST               2
+        #               LOAD_FAST_BORROW         3 (hints)
+        #               LOAD_CONST               1 ('cosmo_relations')
+        #               STORE_SUBSCR
+        # 
+        # 206   L3:     BUILD_LIST               0
+        #               LOAD_CONST              23 (("Include specific numerical details where possible (e.g., '28 compartments', '4-button interface')", 'Reference quality certifications or standards if applicable', 'Maintain fluent, natural description — never keyword-stuff'))
+        #               LIST_EXTEND              1
+        #               LOAD_FAST_BORROW         3 (hints)
+        #               LOAD_CONST               2 ('geo_additions')
+        #               STORE_SUBSCR
+        # 
+        # 214           LOAD_CONST              13 ('health')
+        #               BUILD_LIST               0
+        #               LOAD_CONST              24 (('morning routine', 'bedside table', 'travel kit', 'caregiver context'))
+        #               LIST_EXTEND              1
+        # 
+        # 215           LOAD_CONST              14 ('home')
+        #               BUILD_LIST               0
+        #               LOAD_CONST              25 (('modern kitchen', 'cozy living room', 'home office', 'bedroom'))
+        #               LIST_EXTEND              1
+        # 
+        # 216           LOAD_CONST              15 ('tech')
+        #               BUILD_LIST               0
+        #               LOAD_CONST              26 (('professional workspace', 'modern desk setup', 'on-the-go', 'gaming setup'))
+        #               LIST_EXTEND              1
+        # 
+        # 217           LOAD_CONST              16 ('fashion')
+        #               BUILD_LIST               0
+        #               LOAD_CONST              27 (('street style', 'office wear', 'evening occasion', 'casual weekend'))
+        #               LIST_EXTEND              1
+        # 
+        # 218           LOAD_CONST              17 ('beauty')
+        #               BUILD_LIST               0
+        #               LOAD_CONST              28 (('vanity table', 'bathroom spa', 'morning routine', 'professional salon'))
+        #               LIST_EXTEND              1
+        # 
+        # 219           LOAD_CONST              18 ('food')
+        #               BUILD_LIST               0
+        #               LOAD_CONST              29 (('kitchen prep', 'dining table', 'outdoor picnic', 'morning coffee'))
+        #               LIST_EXTEND              1
+        # 
+        # 220           LOAD_CONST              19 ('sports')
+        #               BUILD_LIST               0
+        #               LOAD_CONST              30 (('gym session', 'outdoor adventure', 'morning run', 'training setup'))
+        #               LIST_EXTEND              1
+        # 
+        # 213           BUILD_MAP                7
+        #               STORE_FAST               4 (scenes)
+        # 
+        # 222           LOAD_FAST                1 (category)
+        #               COPY                     1
+        #               TO_BOOL
+        #               POP_JUMP_IF_TRUE         3 (to L4)
+        #               NOT_TAKEN
+        #               POP_TOP
+        #               LOAD_CONST              20 ('')
+        #       L4:     LOAD_ATTR                1 (lower + NULL|self)
+        #               CALL                     0
+        #               STORE_FAST               5 (cat_lower)
+        # 
+        # 223           LOAD_FAST_BORROW         4 (scenes)
+        #               LOAD_ATTR                3 (items + NULL|self)
+        #               CALL                     0
+        #               GET_ITER
+        #       L5:     FOR_ITER                17 (to L7)
+        #               UNPACK_SEQUENCE          2
+        #               STORE_FAST_STORE_FAST  103 (k, v)
+        # 
+        # 224           LOAD_FAST_BORROW_LOAD_FAST_BORROW 101 (k, cat_lower)
+        #               CONTAINS_OP              0 (in)
+        #               POP_JUMP_IF_TRUE         3 (to L6)
+        #               NOT_TAKEN
+        #               JUMP_BACKWARD           13 (to L5)
+        # 
+        # 225   L6:     LOAD_FAST_BORROW_LOAD_FAST_BORROW 115 (v, hints)
+        #               LOAD_CONST               3 ('scene_suggestions')
+        #               STORE_SUBSCR
+        # 
+        # 226           POP_TOP
+        #               JUMP_FORWARD             2 (to L8)
+        # 
+        # 223   L7:     END_FOR
+        #               POP_ITER
+        # 
+        # 227   L8:     LOAD_FAST_BORROW         3 (hints)
+        #               LOAD_CONST               3 ('scene_suggestions')
+        #               BINARY_OP               26 ([])
+        #               TO_BOOL
+        #               POP_JUMP_IF_TRUE        22 (to L9)
+        #               NOT_TAKEN
+        # 
+        # 228           LOAD_FAST_BORROW         4 (scenes)
+        #               LOAD_ATTR                5 (get + NULL|self)
+        #               LOAD_CONST              14 ('home')
+        #               BUILD_LIST               0
+        #               CALL                     2
+        #               LOAD_FAST_BORROW         3 (hints)
+        #               LOAD_CONST               3 ('scene_suggestions')
+        #               STORE_SUBSCR
+        # 
+        # 230   L9:     LOAD_FAST_BORROW         3 (hints)
+        #               RETURN_VALUE
+        # --- end bytecode ---
+
+        # === CODE: <module>.RufusCosmoEngine.enhance_prompt  (file=rufus_cosmo.py, line=232) ===
+        # argcount=4, posonly=0, kwonly=0, stacksize=7
+        # varnames=('self', 'prompt_text', 'category', 'style', 'hints', 'lines')
+        # freevars=(), cellvars=()
+        # names=('get_prompt_hints', 'strip', 'append', 'join', 'lower')
+        # constants:
+        #   [0] 'Add algorithmic enhancement notes to an existing prompt.\n\nThese are appended as natural language hints that guide the image generation\ntoward COSMO/Rufus-optimized visual content.\n'
+        #   [1] 'cosmo_relations'
+        #   [2] 'Visual storytelling should convey: '
+        #   [3] '; '
+        #   [4] 'scene_suggestions'
+        #   [5] 'scene'
+        #   [6] 'The product should feel at home in contexts like: '
+        #   [7] ', '
+        #   [8] slice(None, 3, None)
+        #   [9] 'Include specific, quantifiable product details visible in the image.'
+        #   [10] '\n'
+        # --- bytecode ---
+        # 232           RESUME                   0
+        # 
+        # 238           LOAD_FAST_BORROW         0 (self)
+        #               LOAD_ATTR                1 (get_prompt_hints + NULL|self)
+        #               LOAD_FAST_BORROW_LOAD_FAST_BORROW 35 (category, style)
+        #               CALL                     2
+        #               STORE_FAST               4 (hints)
+        # 
+        # 240           LOAD_FAST_BORROW         1 (prompt_text)
+        #               LOAD_ATTR                3 (strip + NULL|self)
+        #               CALL                     0
+        #               BUILD_LIST               1
+        #               STORE_FAST               5 (lines)
+        # 
+        # 243           LOAD_FAST_BORROW         4 (hints)
+        #               LOAD_CONST               1 ('cosmo_relations')
+        #               BINARY_OP               26 ([])
+        #               TO_BOOL
+        #               POP_JUMP_IF_FALSE       47 (to L1)
+        #               NOT_TAKEN
+        # 
+        # 244           LOAD_FAST_BORROW         5 (lines)
+        #               LOAD_ATTR                5 (append + NULL|self)
+        #               LOAD_CONST               2 ('Visual storytelling should convey: ')
+        #               LOAD_CONST               3 ('; ')
+        #               LOAD_ATTR                7 (join + NULL|self)
+        #               LOAD_FAST_BORROW         4 (hints)
+        #               LOAD_CONST               1 ('cosmo_relations')
+        #               BINARY_OP               26 ([])
+        #               CALL                     1
+        #               BINARY_OP                0 (+)
+        #               CALL                     1
+        #               POP_TOP
+        # 
+        # 247   L1:     LOAD_FAST_BORROW         4 (hints)
+        #               LOAD_CONST               4 ('scene_suggestions')
+        #               BINARY_OP               26 ([])
+        #               TO_BOOL
+        #               POP_JUMP_IF_FALSE       71 (to L2)
+        #               NOT_TAKEN
+        #               LOAD_CONST               5 ('scene')
+        #               LOAD_FAST_BORROW         1 (prompt_text)
+        #               LOAD_ATTR                9 (lower + NULL|self)
+        #               CALL                     0
+        #               CONTAINS_OP              1 (not in)
+        #               POP_JUMP_IF_FALSE       50 (to L2)
+        #               NOT_TAKEN
+        # 
+        # 248           LOAD_FAST_BORROW         5 (lines)
+        #               LOAD_ATTR                5 (append + NULL|self)
+        #               LOAD_CONST               6 ('The product should feel at home in contexts like: ')
+        #               LOAD_CONST               7 (', ')
+        #               LOAD_ATTR                7 (join + NULL|self)
+        #               LOAD_FAST_BORROW         4 (hints)
+        #               LOAD_CONST               4 ('scene_suggestions')
+        #               BINARY_OP               26 ([])
+        #               LOAD_CONST               8 (slice(None, 3, None))
+        #               BINARY_OP               26 ([])
+        #               CALL                     1
+        #               FORMAT_SIMPLE
+        #               BUILD_STRING             2
+        #               CALL                     1
+        #               POP_TOP
+        # 
+        # 251   L2:     LOAD_FAST_BORROW         5 (lines)
+        #               LOAD_ATTR                5 (append + NULL|self)
+        #               LOAD_CONST               9 ('Include specific, quantifiable product details visible in the image.')
+        #               CALL                     1
+        #               POP_TOP
+        # 
+        # 253           LOAD_CONST              10 ('\n')
+        #               LOAD_ATTR                7 (join + NULL|self)
+        #               LOAD_FAST_BORROW         5 (lines)
+        #               CALL                     1
+        #               RETURN_VALUE
+        # --- end bytecode ---
+
+        # === CODE: <module>.RufusCosmoEngine._infer_visual_features  (file=rufus_cosmo.py, line=257) ===
+        # argcount=2, posonly=0, kwonly=0, stacksize=30
+        # varnames=('self', 'context', 'vf', 'title', 'bullets', 'category', 'combined', 'materials_map', 'keyword', 'material', 'colors', 'c')
+        # freevars=(), cellvars=()
+        # names=('get', 'lower', 'join', 'items', 'append')
+        # constants:
+        #   [0] 'Infer basic visual features from available context data.'
+        #   [1] 'product_shape'
+        #   [2] ''
+        #   [3] 'primary_colors'
+        #   [4] 'accent_colors'
+        #   [5] 'materials'
+        #   [6] 'key_visual_elements'
+        #   [7] 'title'
+        #   [8] ' '
+        #   [9] 'bullets'
+        #   [10] 'category'
+        #   [11] 'stainless steel'
+        #   [12] 'wood'
+        #   [13] 'bamboo'
+        #   [14] 'glass'
+        #   [15] 'ceramic'
+        #   [16] 'silicone'
+        #   [17] 'plastic'
+        #   [18] 'aluminum'
+        #   [19] 'cotton'
+        #   [20] 'leather'
+        #   [21] 'metal'
+        #   [22] 'rubber'
+        #   [23] 'memory foam'
+        #   [24] 'fabric'
+        #   [25] 'mesh'
+        #   [26] ('white', 'black', 'silver', 'gold', 'rose gold', 'blue', 'green', 'red', 'pink', 'grey', 'gray', 'beige', 'brown', 'navy', 'cream')
+        # --- bytecode ---
+        # 257            RESUME                   0
+        # 
+        # 260            LOAD_CONST               1 ('product_shape')
+        #                LOAD_CONST               2 ('')
+        # 
+        # 261            LOAD_CONST               3 ('primary_colors')
+        #                BUILD_LIST               0
+        # 
+        # 262            LOAD_CONST               4 ('accent_colors')
+        #                BUILD_LIST               0
+        # 
+        # 263            LOAD_CONST               5 ('materials')
+        #                BUILD_LIST               0
+        # 
+        # 264            LOAD_CONST               6 ('key_visual_elements')
+        #                BUILD_LIST               0
+        # 
+        # 259            BUILD_MAP                5
+        #                STORE_FAST               2 (vf)
+        # 
+        # 266            LOAD_FAST_BORROW         1 (context)
+        #                LOAD_ATTR                1 (get + NULL|self)
+        #                LOAD_CONST               7 ('title')
+        #                CALL                     1
+        #                COPY                     1
+        #                TO_BOOL
+        #                POP_JUMP_IF_TRUE         3 (to L1)
+        #                NOT_TAKEN
+        #                POP_TOP
+        #                LOAD_CONST               2 ('')
+        #        L1:     LOAD_ATTR                3 (lower + NULL|self)
+        #                CALL                     0
+        #                STORE_FAST               3 (title)
+        # 
+        # 267            LOAD_CONST               8 (' ')
+        #                LOAD_ATTR                5 (join + NULL|self)
+        #                LOAD_FAST_BORROW         1 (context)
+        #                LOAD_ATTR                1 (get + NULL|self)
+        #                LOAD_CONST               9 ('bullets')
+        #                BUILD_LIST               0
+        #                CALL                     2
+        #                CALL                     1
+        #                LOAD_ATTR                3 (lower + NULL|self)
+        #                CALL                     0
+        #                STORE_FAST               4 (bullets)
+        # 
+        # 268            LOAD_FAST_BORROW         1 (context)
+        #                LOAD_ATTR                1 (get + NULL|self)
+        #                LOAD_CONST              10 ('category')
+        #                CALL                     1
+        #                COPY                     1
+        #                TO_BOOL
+        #                POP_JUMP_IF_TRUE         3 (to L2)
+        #                NOT_TAKEN
+        #                POP_TOP
+        #                LOAD_CONST               2 ('')
+        #        L2:     LOAD_ATTR                3 (lower + NULL|self)
+        #                CALL                     0
+        #                STORE_FAST               5 (category)
+        # 
+        # 269            LOAD_FAST_BORROW         3 (title)
+        #                FORMAT_SIMPLE
+        #                LOAD_CONST               8 (' ')
+        #                LOAD_FAST_BORROW         4 (bullets)
+        #                FORMAT_SIMPLE
+        #                LOAD_CONST               8 (' ')
+        #                LOAD_FAST_BORROW         5 (category)
+        #                FORMAT_SIMPLE
+        #                BUILD_STRING             5
+        #                STORE_FAST               6 (combined)
+        # 
+        # 273            LOAD_CONST              11 ('stainless steel')
+        #                LOAD_CONST              11 ('stainless steel')
+        #                LOAD_CONST              12 ('wood')
+        #                LOAD_CONST              12 ('wood')
+        #                LOAD_CONST              13 ('bamboo')
+        #                LOAD_CONST              13 ('bamboo')
+        # 
+        # 274            LOAD_CONST              14 ('glass')
+        #                LOAD_CONST              14 ('glass')
+        #                LOAD_CONST              15 ('ceramic')
+        #                LOAD_CONST              15 ('ceramic')
+        #                LOAD_CONST              16 ('silicone')
+        #                LOAD_CONST              16 ('silicone')
+        # 
+        # 275            LOAD_CONST              17 ('plastic')
+        #                LOAD_CONST              17 ('plastic')
+        #                LOAD_CONST              18 ('aluminum')
+        #                LOAD_CONST              18 ('aluminum')
+        #                LOAD_CONST              19 ('cotton')
+        #                LOAD_CONST              19 ('cotton')
+        # 
+        # 276            LOAD_CONST              20 ('leather')
+        #                LOAD_CONST              20 ('leather')
+        #                LOAD_CONST              21 ('metal')
+        #                LOAD_CONST              21 ('metal')
+        #                LOAD_CONST              22 ('rubber')
+        #                LOAD_CONST              22 ('rubber')
+        # 
+        # 277            LOAD_CONST              23 ('memory foam')
+        #                LOAD_CONST              23 ('memory foam')
+        #                LOAD_CONST              24 ('fabric')
+        #                LOAD_CONST              24 ('fabric')
+        #                LOAD_CONST              25 ('mesh')
+        #                LOAD_CONST              25 ('mesh')
+        # 
+        # 272            BUILD_MAP               15
+        #                STORE_FAST               7 (materials_map)
+        # 
+        # 279            LOAD_FAST_BORROW         7 (materials_map)
+        #                LOAD_ATTR                7 (items + NULL|self)
+        #                CALL                     0
+        #                GET_ITER
+        #        L3:     FOR_ITER                52 (to L6)
+        #                UNPACK_SEQUENCE          2
+        #                STORE_FAST_STORE_FAST  137 (keyword, material)
+        # 
+        # 280            LOAD_FAST_BORROW_LOAD_FAST_BORROW 134 (keyword, combined)
+        #                CONTAINS_OP              0 (in)
+        #                POP_JUMP_IF_TRUE         3 (to L4)
+        #                NOT_TAKEN
+        #                JUMP_BACKWARD           13 (to L3)
+        #        L4:     LOAD_FAST_BORROW_LOAD_FAST_BORROW 146 (material, vf)
+        #                LOAD_CONST               5 ('materials')
+        #                BINARY_OP               26 ([])
+        #                CONTAINS_OP              1 (not in)
+        #                POP_JUMP_IF_TRUE         3 (to L5)
+        #                NOT_TAKEN
+        #                JUMP_BACKWARD           28 (to L3)
+        # 
+        # 281    L5:     LOAD_FAST_BORROW         2 (vf)
+        #                LOAD_CONST               5 ('materials')
+        #                BINARY_OP               26 ([])
+        #                LOAD_ATTR                9 (append + NULL|self)
+        #                LOAD_FAST_BORROW         9 (material)
+        #                CALL                     1
+        #                POP_TOP
+        #                JUMP_BACKWARD           54 (to L3)
+        # 
+        # 279    L6:     END_FOR
+        #                POP_ITER
+        # 
+        # 284            BUILD_LIST               0
+        #                LOAD_CONST              26 (('white', 'black', 'silver', 'gold', 'rose gold', 'blue', 'green', 'red', 'pink', 'grey', 'gray', 'beige', 'brown', 'navy', 'cream'))
+        #                LIST_EXTEND              1
+        #                STORE_FAST              10 (colors)
+        # 
+        # 286            LOAD_FAST_BORROW        10 (colors)
+        #                GET_ITER
+        #        L7:     FOR_ITER                50 (to L10)
+        #                STORE_FAST              11 (c)
+        # 
+        # 287            LOAD_FAST_BORROW_LOAD_FAST_BORROW 182 (c, combined)
+        #                CONTAINS_OP              0 (in)
+        #                POP_JUMP_IF_TRUE         3 (to L8)
+        #                NOT_TAKEN
+        #                JUMP_BACKWARD           11 (to L7)
+        #        L8:     LOAD_FAST_BORROW_LOAD_FAST_BORROW 178 (c, vf)
+        #                LOAD_CONST               3 ('primary_colors')
+        #                BINARY_OP               26 ([])
+        #                CONTAINS_OP              1 (not in)
+        #                POP_JUMP_IF_TRUE         3 (to L9)
+        #                NOT_TAKEN
+        #                JUMP_BACKWARD           26 (to L7)
+        # 
+        # 288    L9:     LOAD_FAST_BORROW         2 (vf)
+        #                LOAD_CONST               3 ('primary_colors')
+        #                BINARY_OP               26 ([])
+        #                LOAD_ATTR                9 (append + NULL|self)
+        #                LOAD_FAST_BORROW        11 (c)
+        #                CALL                     1
+        #                POP_TOP
+        #                JUMP_BACKWARD           52 (to L7)
+        # 
+        # 286   L10:     END_FOR
+        #                POP_ITER
+        # 
+        # 290            LOAD_FAST_BORROW         2 (vf)
+        #                RETURN_VALUE
+        # --- end bytecode ---
+
+        # === CODE: <module>.RufusCosmoEngine._generate_cosmo_intents  (file=rufus_cosmo.py, line=292) ===
+        # argcount=2, posonly=0, kwonly=0, stacksize=17
+        # varnames=('self', 'context', 'intents', 'title', 'bullets', 'category', 'intent_map', 'intent', 'keywords')
+        # freevars=(), cellvars=('combined',)
+        # names=('get', 'lower', 'join', 'items', 'any', 'append')
+        # constants:
+        #   [0] 'Generate COSMO intent tags from product context.'
+        #   [1] 'title'
+        #   [2] ''
+        #   [3] ' '
+        #   [4] 'bullets'
+        #   [5] 'category'
+        #   [6] 'portable'
+        #   [7] 'durable'
+        #   [8] 'easy_use'
+        #   [9] 'safe'
+        #   [10] 'gift'
+        #   [11] 'professional'
+        #   [12] 'eco'
+        #   [13] 'space_saving'
+        #   [15] True
+        #   [16] False
+        #   [17] ('travel', 'compact', 'portable', 'lightweight', 'carry', 'on-the-go', 'bag')
+        #   [18] ('durable', 'sturdy', 'heavy-duty', 'long-lasting', 'premium', 'quality', 'built')
+        #   [19] ('easy', 'simple', 'quick', 'effortless', 'intuitive', 'one-touch', 'automatic')
+        #   [20] ('safe', 'bpa-free', 'non-toxic', 'child-proof', 'secure', 'food-grade')
+        #   [21] ('gift', 'present', 'holiday', 'birthday', 'christmas', 'valentine', "mother's day")
+        #   [22] ('professional', 'commercial', 'studio', 'heavy-duty', 'industrial')
+        #   [23] ('eco-friendly', 'sustainable', 'recycl', 'bamboo', 'natural', 'organic', 'green')
+        #   [24] ('space', 'compact', 'foldable', 'stackable', 'small', 'apartment')
+        # --- bytecode ---
+        #   --            MAKE_CELL                9 (combined)
+        # 
+        #  292            RESUME                   0
+        # 
+        #  294            BUILD_LIST               0
+        #                 STORE_FAST               2 (intents)
+        # 
+        #  295            LOAD_FAST_BORROW         1 (context)
+        #                 LOAD_ATTR                1 (get + NULL|self)
+        #                 LOAD_CONST               1 ('title')
+        #                 CALL                     1
+        #                 COPY                     1
+        #                 TO_BOOL
+        #                 POP_JUMP_IF_TRUE         3 (to L1)
+        #                 NOT_TAKEN
+        #                 POP_TOP
+        #                 LOAD_CONST               2 ('')
+        #         L1:     LOAD_ATTR                3 (lower + NULL|self)
+        #                 CALL                     0
+        #                 STORE_FAST               3 (title)
+        # 
+        #  296            LOAD_CONST               3 (' ')
+        #                 LOAD_ATTR                5 (join + NULL|self)
+        #                 LOAD_FAST_BORROW         1 (context)
+        #                 LOAD_ATTR                1 (get + NULL|self)
+        #                 LOAD_CONST               4 ('bullets')
+        #                 BUILD_LIST               0
+        #                 CALL                     2
+        #                 CALL                     1
+        #                 LOAD_ATTR                3 (lower + NULL|self)
+        #                 CALL                     0
+        #                 STORE_FAST               4 (bullets)
+        # 
+        #  297            LOAD_FAST_BORROW         1 (context)
+        #                 LOAD_ATTR                1 (get + NULL|self)
+        #                 LOAD_CONST               5 ('category')
+        #                 CALL                     1
+        #                 COPY                     1
+        #                 TO_BOOL
+        #                 POP_JUMP_IF_TRUE         3 (to L2)
+        #                 NOT_TAKEN
+        #                 POP_TOP
+        #                 LOAD_CONST               2 ('')
+        #         L2:     LOAD_ATTR                3 (lower + NULL|self)
+        #                 CALL                     0
+        #                 STORE_FAST               5 (category)
+        # 
+        #  298            LOAD_FAST_BORROW         3 (title)
+        #                 FORMAT_SIMPLE
+        #                 LOAD_CONST               3 (' ')
+        #                 LOAD_FAST_BORROW         4 (bullets)
+        #                 FORMAT_SIMPLE
+        #                 LOAD_CONST               3 (' ')
+        #                 LOAD_FAST_BORROW         5 (category)
+        #                 FORMAT_SIMPLE
+        #                 BUILD_STRING             5
+        #                 STORE_DEREF              9 (combined)
+        # 
+        #  301            LOAD_CONST               6 ('portable')
+        #                 BUILD_LIST               0
+        #                 LOAD_CONST              17 (('travel', 'compact', 'portable', 'lightweight', 'carry', 'on-the-go', 'bag'))
+        #                 LIST_EXTEND              1
+        # 
+        #  302            LOAD_CONST               7 ('durable')
+        #                 BUILD_LIST               0
+        #                 LOAD_CONST              18 (('durable', 'sturdy', 'heavy-duty', 'long-lasting', 'premium', 'quality', 'built'))
+        #                 LIST_EXTEND              1
+        # 
+        #  303            LOAD_CONST               8 ('easy_use')
+        #                 BUILD_LIST               0
+        #                 LOAD_CONST              19 (('easy', 'simple', 'quick', 'effortless', 'intuitive', 'one-touch', 'automatic'))
+        #                 LIST_EXTEND              1
+        # 
+        #  304            LOAD_CONST               9 ('safe')
+        #                 BUILD_LIST               0
+        #                 LOAD_CONST              20 (('safe', 'bpa-free', 'non-toxic', 'child-proof', 'secure', 'food-grade'))
+        #                 LIST_EXTEND              1
+        # 
+        #  305            LOAD_CONST              10 ('gift')
+        #                 BUILD_LIST               0
+        #                 LOAD_CONST              21 (('gift', 'present', 'holiday', 'birthday', 'christmas', 'valentine', "mother's day"))
+        #                 LIST_EXTEND              1
+        # 
+        #  306            LOAD_CONST              11 ('professional')
+        #                 BUILD_LIST               0
+        #                 LOAD_CONST              22 (('professional', 'commercial', 'studio', 'heavy-duty', 'industrial'))
+        #                 LIST_EXTEND              1
+        # 
+        #  307            LOAD_CONST              12 ('eco')
+        #                 BUILD_LIST               0
+        #                 LOAD_CONST              23 (('eco-friendly', 'sustainable', 'recycl', 'bamboo', 'natural', 'organic', 'green'))
+        #                 LIST_EXTEND              1
+        # 
+        #  308            LOAD_CONST              13 ('space_saving')
+        #                 BUILD_LIST               0
+        #                 LOAD_CONST              24 (('space', 'compact', 'foldable', 'stackable', 'small', 'apartment'))
+        #                 LIST_EXTEND              1
+        # 
+        #  300            BUILD_MAP                8
+        #                 STORE_FAST               6 (intent_map)
+        # 
+        #  311            LOAD_FAST_BORROW         6 (intent_map)
+        #                 LOAD_ATTR                7 (items + NULL|self)
+        #                 CALL                     0
+        #                 GET_ITER
+        #         L3:     FOR_ITER                88 (to L10)
+        #                 UNPACK_SEQUENCE          2
+        #                 STORE_FAST_STORE_FAST  120 (intent, keywords)
+        # 
+        #  312            LOAD_GLOBAL              8 (any)
+        #                 COPY                     1
+        #                 LOAD_COMMON_CONSTANT     4 (<built-in function any>)
+        #                 IS_OP                    0 (is)
+        #                 POP_JUMP_IF_FALSE       31 (to L7)
+        #                 NOT_TAKEN
+        #                 POP_TOP
+        #                 LOAD_FAST_BORROW         9 (combined)
+        #                 BUILD_TUPLE              1
+        #                 LOAD_CONST              14 (<code object <genexpr> at 0x7f39f1658830, file "rufus_cosmo.py", line 312>)
+        #                 MAKE_FUNCTION
+        #                 SET_FUNCTION_ATTRIBUTE   8 (closure)
+        #                 LOAD_FAST_BORROW         8 (keywords)
+        #                 GET_ITER
+        #                 CALL                     0
+        #         L4:     FOR_ITER                12 (to L6)
+        #                 TO_BOOL
+        #                 POP_JUMP_IF_TRUE         3 (to L5)
+        #                 NOT_TAKEN
+        #                 JUMP_BACKWARD           11 (to L4)
+        #         L5:     POP_ITER
+        #                 LOAD_CONST              15 (True)
+        #                 JUMP_FORWARD            20 (to L8)
+        #         L6:     END_FOR
+        #                 POP_ITER
+        #                 LOAD_CONST              16 (False)
+        #                 JUMP_FORWARD            16 (to L8)
+        #         L7:     PUSH_NULL
+        #                 LOAD_FAST_BORROW         9 (combined)
+        #                 BUILD_TUPLE              1
+        #                 LOAD_CONST              14 (<code object <genexpr> at 0x7f39f1658830, file "rufus_cosmo.py", line 312>)
+        #                 MAKE_FUNCTION
+        #                 SET_FUNCTION_ATTRIBUTE   8 (closure)
+        #                 LOAD_FAST_BORROW         8 (keywords)
+        #                 GET_ITER
+        #                 CALL                     0
+        #                 CALL                     1
+        #         L8:     TO_BOOL
+        #                 POP_JUMP_IF_TRUE         3 (to L9)
+        #                 NOT_TAKEN
+        #                 JUMP_BACKWARD           71 (to L3)
+        # 
+        #  313    L9:     LOAD_FAST_BORROW         2 (intents)
+        #                 LOAD_ATTR               11 (append + NULL|self)
+        #                 LOAD_FAST_BORROW         7 (intent)
+        #                 CALL                     1
+        #                 POP_TOP
+        #                 JUMP_BACKWARD           90 (to L3)
+        # 
+        #  311   L10:     END_FOR
+        #                 POP_ITER
+        # 
+        #  315            LOAD_FAST_BORROW         2 (intents)
+        #                 RETURN_VALUE
+        # --- end bytecode ---
+
+            # === CODE: <module>.RufusCosmoEngine._generate_cosmo_intents.<genexpr>  (file=rufus_cosmo.py, line=312) ===
+            # argcount=1, posonly=0, kwonly=0, stacksize=3
+            # varnames=('.0', 'kw')
+            # freevars=('combined',), cellvars=()
+            # names=()
+            # constants:
+            #   [0] None
+            # --- bytecode ---
+            #   --           COPY_FREE_VARS           1
+            # 
+            #  312           RETURN_GENERATOR
+            #                POP_TOP
+            #        L1:     RESUME                   0
+            #                LOAD_FAST                0 (.0)
+            #        L2:     FOR_ITER                 9 (to L3)
+            #                STORE_FAST_LOAD_FAST    17 (kw, kw)
+            #                LOAD_DEREF               2 (combined)
+            #                CONTAINS_OP              0 (in)
+            #                YIELD_VALUE              0
+            #                RESUME                   5
+            #                POP_TOP
+            #                JUMP_BACKWARD           11 (to L2)
+            #        L3:     END_FOR
+            #                POP_ITER
+            #                LOAD_CONST               0 (None)
+            #                RETURN_VALUE
+            # 
+            #   --   L4:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+            #                RERAISE                  1
+            # ExceptionTable:
+            #   L1 to L4 -> L4 [0] lasti
+            # --- end bytecode ---
+
+        # === CODE: <module>.RufusCosmoEngine._generate_geo_hints  (file=rufus_cosmo.py, line=317) ===
+        # argcount=2, posonly=0, kwonly=0, stacksize=4
+        # varnames=('self', 'context', 'hints', 'bullets')
+        # freevars=(), cellvars=()
+        # names=('get', 'len', 'append')
+        # constants:
+        #   [0] 'Generate GEO optimization hints based on available data.'
+        #   [1] 'bullets'
+        #   [2] 'Include specific quantitative data in visual presentation (GEO statistics factor)'
+        #   [3] 'review_summary'
+        #   [4] 'positive'
+        #   [5] 'Visualize user-validated benefits (GEO citations factor)'
+        #   [6] 'keywords'
+        #   [7] 'Ensure visual elements reflect key product attributes naturally (not keyword-stuffed)'
+        # --- bytecode ---
+        # 317           RESUME                   0
+        # 
+        # 319           BUILD_LIST               0
+        #               STORE_FAST               2 (hints)
+        # 
+        # 320           LOAD_FAST_BORROW         1 (context)
+        #               LOAD_ATTR                1 (get + NULL|self)
+        #               LOAD_CONST               1 ('bullets')
+        #               BUILD_LIST               0
+        #               CALL                     2
+        #               STORE_FAST               3 (bullets)
+        # 
+        # 322           LOAD_GLOBAL              3 (len + NULL)
+        #               LOAD_FAST_BORROW         3 (bullets)
+        #               CALL                     1
+        #               LOAD_SMALL_INT           3
+        #               COMPARE_OP             188 (bool(>=))
+        #               POP_JUMP_IF_FALSE       18 (to L1)
+        #               NOT_TAKEN
+        # 
+        # 323           LOAD_FAST_BORROW         2 (hints)
+        #               LOAD_ATTR                5 (append + NULL|self)
+        #               LOAD_CONST               2 ('Include specific quantitative data in visual presentation (GEO statistics factor)')
+        #               CALL                     1
+        #               POP_TOP
+        # 
+        # 324   L1:     LOAD_FAST_BORROW         1 (context)
+        #               LOAD_ATTR                1 (get + NULL|self)
+        #               LOAD_CONST               3 ('review_summary')
+        #               BUILD_MAP                0
+        #               CALL                     2
+        #               LOAD_ATTR                1 (get + NULL|self)
+        #               LOAD_CONST               4 ('positive')
+        #               CALL                     1
+        #               TO_BOOL
+        #               POP_JUMP_IF_FALSE       18 (to L2)
+        #               NOT_TAKEN
+        # 
+        # 325           LOAD_FAST_BORROW         2 (hints)
+        #               LOAD_ATTR                5 (append + NULL|self)
+        #               LOAD_CONST               5 ('Visualize user-validated benefits (GEO citations factor)')
+        #               CALL                     1
+        #               POP_TOP
+        # 
+        # 326   L2:     LOAD_FAST_BORROW         1 (context)
+        #               LOAD_ATTR                1 (get + NULL|self)
+        #               LOAD_CONST               6 ('keywords')
+        #               CALL                     1
+        #               TO_BOOL
+        #               POP_JUMP_IF_FALSE       18 (to L3)
+        #               NOT_TAKEN
+        # 
+        # 327           LOAD_FAST_BORROW         2 (hints)
+        #               LOAD_ATTR                5 (append + NULL|self)
+        #               LOAD_CONST               7 ('Ensure visual elements reflect key product attributes naturally (not keyword-stuffed)')
+        #               CALL                     1
+        #               POP_TOP
+        # 
+        # 329   L3:     LOAD_FAST_BORROW         2 (hints)
+        #               RETURN_VALUE
+        # --- end bytecode ---
+
+        # === CODE: <module>.RufusCosmoEngine._generate_rufus_qa  (file=rufus_cosmo.py, line=331) ===
+        # argcount=2, posonly=0, kwonly=0, stacksize=6
+        # varnames=('self', 'context', 'qa_pairs', 'title', 'bullets', 'category')
+        # freevars=(), cellvars=()
+        # names=('get', 'append', 'str', 'lower')
+        # constants:
+        #   [0] 'Generate suggested Rufus Q&A pairs based on product context.'
+        #   [1] 'title'
+        #   [2] ''
+        #   [3] 'bullets'
+        #   [4] 'category'
+        #   [5] 'q'
+        #   [6] 'Is this '
+        #   [7] ' suitable for daily use?'
+        #   [8] 'a'
+        #   [9] 'Yes, designed with practical daily use in mind — built with quality materials for everyday reliability.'
+        #   [10] 'gift'
+        #   [11] 'Would this make a good gift?'
+        #   [12] 'Absolutely — the elegant presentation and practical functionality make it an excellent gift choice.'
+        # --- bytecode ---
+        # 331           RESUME                   0
+        # 
+        # 333           BUILD_LIST               0
+        #               STORE_FAST               2 (qa_pairs)
+        # 
+        # 334           LOAD_FAST_BORROW         1 (context)
+        #               LOAD_ATTR                1 (get + NULL|self)
+        #               LOAD_CONST               1 ('title')
+        #               LOAD_CONST               2 ('')
+        #               CALL                     2
+        #               STORE_FAST               3 (title)
+        # 
+        # 335           LOAD_FAST_BORROW         1 (context)
+        #               LOAD_ATTR                1 (get + NULL|self)
+        #               LOAD_CONST               3 ('bullets')
+        #               BUILD_LIST               0
+        #               CALL                     2
+        #               STORE_FAST               4 (bullets)
+        # 
+        # 336           LOAD_FAST_BORROW         1 (context)
+        #               LOAD_ATTR                1 (get + NULL|self)
+        #               LOAD_CONST               4 ('category')
+        #               LOAD_CONST               2 ('')
+        #               CALL                     2
+        #               STORE_FAST               5 (category)
+        # 
+        # 339           LOAD_FAST_BORROW         3 (title)
+        #               TO_BOOL
+        #               POP_JUMP_IF_FALSE       26 (to L1)
+        #               NOT_TAKEN
+        # 
+        # 340           LOAD_FAST_BORROW         2 (qa_pairs)
+        #               LOAD_ATTR                3 (append + NULL|self)
+        # 
+        # 341           LOAD_CONST               5 ('q')
+        #               LOAD_CONST               6 ('Is this ')
+        #               LOAD_FAST_BORROW         3 (title)
+        #               FORMAT_SIMPLE
+        #               LOAD_CONST               7 (' suitable for daily use?')
+        #               BUILD_STRING             3
+        # 
+        # 342           LOAD_CONST               8 ('a')
+        #               LOAD_CONST               9 ('Yes, designed with practical daily use in mind — built with quality materials for everyday reliability.')
+        # 
+        # 340           BUILD_MAP                2
+        #               CALL                     1
+        #               POP_TOP
+        # 
+        # 344   L1:     LOAD_CONST              10 ('gift')
+        #               LOAD_GLOBAL              5 (str + NULL)
+        #               LOAD_FAST_BORROW         4 (bullets)
+        #               CALL                     1
+        #               LOAD_ATTR                7 (lower + NULL|self)
+        #               CALL                     0
+        #               CONTAINS_OP              0 (in)
+        #               POP_JUMP_IF_TRUE        22 (to L2)
+        #               NOT_TAKEN
+        #               LOAD_CONST              10 ('gift')
+        #               LOAD_FAST_BORROW         3 (title)
+        #               LOAD_ATTR                7 (lower + NULL|self)
+        #               CALL                     0
+        #               CONTAINS_OP              0 (in)
+        #               POP_JUMP_IF_FALSE       22 (to L3)
+        #               NOT_TAKEN
+        # 
+        # 345   L2:     LOAD_FAST_BORROW         2 (qa_pairs)
+        #               LOAD_ATTR                3 (append + NULL|self)
+        # 
+        # 346           LOAD_CONST               5 ('q')
+        #               LOAD_CONST              11 ('Would this make a good gift?')
+        # 
+        # 347           LOAD_CONST               8 ('a')
+        #               LOAD_CONST              12 ('Absolutely — the elegant presentation and practical functionality make it an excellent gift choice.')
+        # 
+        # 345           BUILD_MAP                2
+        #               CALL                     1
+        #               POP_TOP
+        # 
+        # 350   L3:     LOAD_FAST_BORROW         2 (qa_pairs)
+        #               RETURN_VALUE
+        # --- end bytecode ---
+
+    # === CODE: <module>.get_engine  (file=rufus_cosmo.py, line=357) ===
+    # argcount=0, posonly=0, kwonly=0, stacksize=2
+    # varnames=()
+    # freevars=(), cellvars=()
+    # names=('_engine', 'RufusCosmoEngine')
+    # constants:
+    #   [0] 'Get or create the singleton RufusCosmoEngine.'
+    # --- bytecode ---
+    # 357           RESUME                   0
+    # 
+    # 360           LOAD_GLOBAL              0 (_engine)
+    #               POP_JUMP_IF_NOT_NONE    11 (to L1)
+    #               NOT_TAKEN
+    # 
+    # 361           LOAD_GLOBAL              3 (RufusCosmoEngine + NULL)
+    #               CALL                     0
+    #               STORE_GLOBAL             0 (_engine)
+    # 
+    # 362   L1:     LOAD_GLOBAL              0 (_engine)
+    #               RETURN_VALUE
+    # --- end bytecode ---
+

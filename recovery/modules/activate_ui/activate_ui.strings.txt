@@ -1,0 +1,276 @@
+[<module>]
+  \nBSC OPC Agent OS — Activation Dialog\n=====================================\nShows on first run / trial expired. User can start trial or enter license key.\n
+
+[<module>.ActivateDialog]
+  ActivateDialog
+
+[<module>.ActivateDialog.__annotate__]
+  machine_id
+
+[<module>.ActivateDialog.__annotate__]
+  return
+
+[<module>.ActivateDialog.show]
+  BSC OPC Agent OS — 激活
+
+[<module>.ActivateDialog.show]
+  480x400
+
+[<module>.ActivateDialog.show]
+  #1a1d27
+
+[<module>.ActivateDialog.show]
+  +
+
+[<module>.ActivateDialog.show]
+  #e2e8f0
+
+[<module>.ActivateDialog.show]
+  #8892a4
+
+[<module>.ActivateDialog.show]
+  #1677ff
+
+[<module>.ActivateDialog.show]
+  #f59e0b
+
+[<module>.ActivateDialog.show]
+  #22c55e
+
+[<module>.ActivateDialog.show]
+  #2d3348
+
+[<module>.ActivateDialog.show._on_trial]
+  trial
+
+[<module>.ActivateDialog.show._on_activate]
+  请输入激活密钥
+
+[<module>.ActivateDialog.show._on_activate]
+  #ef4444
+
+[<module>.ActivateDialog.show._on_activate]
+  days_left
+
+[<module>.ActivateDialog.show._on_activate]
+  exp_date
+
+[<module>.ActivateDialog.show._on_activate]
+  ?
+
+[<module>.ActivateDialog.show._on_activate]
+  激活成功
+
+[<module>.ActivateDialog.show._on_activate]
+  ✅ 激活成功！\n到期日期: 
+
+[<module>.ActivateDialog.show._on_activate]
+  \n剩余: 
+
+[<module>.ActivateDialog.show._on_activate]
+   天
+
+[<module>.ActivateDialog.show._on_activate]
+  active
+
+[<module>.ActivateDialog.show._on_quit]
+  quit
+
+[<module>.ActivateDialog.show]
+  x
+
+[<module>.ActivateDialog.show]
+  BSC OPC Agent OS
+
+[<module>.ActivateDialog.show]
+  欢迎使用 — 请选择激活方式
+
+[<module>.ActivateDialog.show]
+  #22263a
+
+[<module>.ActivateDialog.show]
+  机器码 (提供给客服获取密钥)
+
+[<module>.ActivateDialog.show]
+  left
+
+[<module>.ActivateDialog.show]
+  📋 复制
+
+[<module>.ActivateDialog.show]
+  flat
+
+[<module>.ActivateDialog.show]
+  hand2
+
+[<module>.ActivateDialog.show]
+  免费试用 3 天
+
+[<module>.ActivateDialog.show]
+  white
+
+[<module>.ActivateDialog.show]
+  #16a34a
+
+[<module>.ActivateDialog.show]
+  或输入激活密钥
+
+[<module>.ActivateDialog.show]
+  center
+
+[<module>.ActivateDialog.show]
+  
+
+[<module>.ActivateDialog.show]
+  #ef4444
+
+[<module>.ActivateDialog.show]
+  激活
+
+[<module>.ActivateDialog.show]
+  #1d4ed8
+
+[<module>.ActivateDialog.show]
+  退出
+
+[<module>.ActivateDialog.show]
+  WM_DELETE_WINDOW
+
+[<module>]
+  ActivateDialog
+
+[<module>.__annotate__]
+  status
+
+[<module>.__annotate__]
+  return
+
+[<module>.show_activation_dialog]
+  Show appropriate dialog based on license status.\nstatus: 'none' | 'trial' | 'expired'\nReturns: 'active' | 'trial' | 'quit'\n
+
+[<module>.show_activation_dialog]
+  none
+
+[<module>.show_activation_dialog]
+  trial
+
+[<module>.show_activation_dialog]
+  expired
+
+[<module>.show_activation_dialog]
+  BSC OPC Agent OS — 试用已到期
+
+[<module>.show_activation_dialog]
+  460x350
+
+[<module>.show_activation_dialog]
+  #1a1d27
+
+[<module>.show_activation_dialog]
+  +
+
+[<module>.show_activation_dialog]
+  #e2e8f0
+
+[<module>.show_activation_dialog]
+  #8892a4
+
+[<module>.show_activation_dialog]
+  #1677ff
+
+[<module>.show_activation_dialog]
+  
+
+[<module>.show_activation_dialog._activate]
+  请输入激活密钥
+
+[<module>.show_activation_dialog._activate]
+  #ef4444
+
+[<module>.show_activation_dialog._activate]
+  激活成功
+
+[<module>.show_activation_dialog._activate]
+  ✅ 激活成功！\n到期: 
+
+[<module>.show_activation_dialog._activate]
+  exp_date
+
+[<module>.show_activation_dialog._activate]
+  \n剩余: 
+
+[<module>.show_activation_dialog._activate]
+  days_left
+
+[<module>.show_activation_dialog._activate]
+   天
+
+[<module>.show_activation_dialog._activate]
+  active
+
+[<module>.show_activation_dialog._quit]
+  quit
+
+[<module>.show_activation_dialog]
+  试用期已到期
+
+[<module>.show_activation_dialog]
+  #ef4444
+
+[<module>.show_activation_dialog]
+  请输入激活密钥以继续使用
+
+[<module>.show_activation_dialog]
+  机器码: 
+
+[<module>.show_activation_dialog]
+  #f59e0b
+
+[<module>.show_activation_dialog]
+  left
+
+[<module>.show_activation_dialog]
+  📋 复制
+
+[<module>.show_activation_dialog]
+  #2d3348
+
+[<module>.show_activation_dialog]
+  flat
+
+[<module>.show_activation_dialog]
+  hand2
+
+[<module>.show_activation_dialog]
+  #22263a
+
+[<module>.show_activation_dialog]
+  center
+
+[<module>.show_activation_dialog]
+  x
+
+[<module>.show_activation_dialog]
+  激活
+
+[<module>.show_activation_dialog]
+  white
+
+[<module>.show_activation_dialog]
+  退出
+
+[<module>.show_activation_dialog]
+  WM_DELETE_WINDOW
+
+[<module>.show_activation_dialog]
+  quit
+
+[<module>]
+  __main__
+
+[<module>]
+  none
+
+[<module>]
+  Result: 
+

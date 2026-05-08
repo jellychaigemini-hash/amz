@@ -104,26 +104,37 @@ def save_config(cfg: dict) -> None:
 
 def _encrypt_dict(d: dict) -> None:
     """Recursively encrypt sensitive string values in a dict."""
-    # The original uses a simple reversible encoding (likely base64 of XOR
-    # with a built-in key). Exact details are in _internal helpers that were
-    # not reached in this reconstruction — leaving as pass-through keeps
-    # config.json readable across versions.
+    from license_crypto import encrypt_config_value
     for k, v in list(d.items()):
         if isinstance(v, dict):
             _encrypt_dict(v)
         elif isinstance(v, str) and k in _SENSITIVE_KEYS and v:
-            # Mark as already-encrypted-looking so _decrypt_dict stays idempotent.
-            if not v.startswith("enc::"):
-                d[k] = "enc::" + v  # placeholder for original XOR/base64 scheme
+            # Skip if already encrypted (base64-ish blob, long and no spaces)
+            if len(v) > 40 and "=" in v and not v.startswith(("sk-", "http")):
+                continue
+            try:
+                d[k] = encrypt_config_value(v)
+            except Exception:
+                # Fall through: keep plaintext rather than corrupt config
+                pass
 
 
 def _decrypt_dict(d: dict) -> None:
     """Recursively decrypt sensitive string values in a dict."""
+    from license_crypto import decrypt_config_value
     for k, v in list(d.items()):
         if isinstance(v, dict):
             _decrypt_dict(v)
-        elif isinstance(v, str) and k in _SENSITIVE_KEYS and v.startswith("enc::"):
-            d[k] = v[5:]
+        elif isinstance(v, str) and k in _SENSITIVE_KEYS and v:
+            # Only try to decrypt if it looks like an encoded blob
+            if len(v) < 20 or not v.replace("=", "").replace("+", "").replace("/", "").isalnum():
+                continue
+            try:
+                plain = decrypt_config_value(v)
+                if plain:
+                    d[k] = plain
+            except Exception:
+                pass
 
 
 # ---------------------------------------------------------------------------
