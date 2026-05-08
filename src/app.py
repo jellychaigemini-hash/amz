@@ -295,7 +295,7 @@ def build_context(job_id: str, asin: str, marketplace: str) -> dict:
     # ------------------------------------------------------------------
     try:
         overview = _call_sif_tool(
-            "mcp_sif_ops_get_listing_traffic_overview",
+            "ops_get_listing_traffic_overview",
             {"asin": asin, "marketplace": marketplace},
         )
         if overview and isinstance(overview, dict):
@@ -311,7 +311,7 @@ def build_context(job_id: str, asin: str, marketplace: str) -> dict:
     # ------------------------------------------------------------------
     try:
         sales = _call_sif_tool(
-            "mcp_sif_ops_get_asin_sales_list",
+            "ops_get_asin_sales_list",
             {"asin": asin, "marketplace": marketplace},
         )
         if sales and isinstance(sales, dict):
@@ -330,7 +330,7 @@ def build_context(job_id: str, asin: str, marketplace: str) -> dict:
         start = (today - _td(days=30)).isoformat()
         end = today.isoformat()
         kw = _call_sif_tool(
-            "mcp_sif_market_get_asin_keyword_signals",
+            "market_get_asin_keyword_signals",
             {
                 "asin": asin,
                 "marketplace": marketplace,
@@ -351,7 +351,7 @@ def build_context(job_id: str, asin: str, marketplace: str) -> dict:
     # ------------------------------------------------------------------
     try:
         detail = _call_sorftime_tool(
-            "mcp_sorftime_product_detail",
+            "product_detail",
             {"asin": asin, "marketplace": marketplace},
         )
         if detail and isinstance(detail, dict):
@@ -367,7 +367,7 @@ def build_context(job_id: str, asin: str, marketplace: str) -> dict:
     # ------------------------------------------------------------------
     try:
         traffic = _call_sorftime_tool(
-            "mcp_sorftime_product_traffic_terms",
+            "product_traffic_terms",
             {"asin": asin, "marketplace": marketplace},
         )
         if traffic and isinstance(traffic, (dict, list)):
@@ -735,12 +735,16 @@ def _mcp_handshake(endpoint: str, api_key: str, timeout: int) -> str | None:
         if cached and cached.get("initialized"):
             return cached.get("session_id")
 
+    # Advertise the latest spec version we support. If the server talks an
+    # older or newer one, MCP's handshake rules say it echoes whatever it
+    # actually implements in result.protocolVersion — we just log that and
+    # move on; tools/call works regardless.
     init_payload = {
         "jsonrpc": "2.0",
         "id": str(uuid.uuid4()),
         "method": "initialize",
         "params": {
-            "protocolVersion": "2025-03-26",
+            "protocolVersion": "2025-06-18",
             "capabilities": {},
             "clientInfo": {
                 "name": "BSC-OPC-Agent",
@@ -752,6 +756,9 @@ def _mcp_handshake(endpoint: str, api_key: str, timeout: int) -> str | None:
     if body.get("error"):
         raise RuntimeError(f"initialize failed: {body['error']}")
     session_id = headers.get("mcp-session-id")
+    server_version = (body.get("result") or {}).get("protocolVersion")
+    if server_version:
+        logging.debug(f"MCP server negotiated protocolVersion={server_version}")
 
     # Second step: notifications/initialized (fire-and-forget, no response body)
     notif = {"jsonrpc": "2.0",
