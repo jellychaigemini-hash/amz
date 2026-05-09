@@ -51,11 +51,12 @@ else:
 
 INPUT_DIR = BASE_DIR / "input"
 OUTPUT_DIR = BASE_DIR / "output"
+SQP_DIR = BASE_DIR / "output" / "sqp"
 PROMPTS_DIR = BASE_DIR / "prompts"
 LOGS_DIR = BASE_DIR / "logs"
 WIKI_DIR = BASE_DIR / "Wiki"
 
-for d in (INPUT_DIR, OUTPUT_DIR, PROMPTS_DIR, LOGS_DIR):
+for d in (INPUT_DIR, OUTPUT_DIR, PROMPTS_DIR, LOGS_DIR, SQP_DIR):
     d.mkdir(parents=True, exist_ok=True)
 
 
@@ -352,13 +353,14 @@ def build_context(job_id: str, asin: str, marketplace: str) -> dict:
 
     # ------------------------------------------------------------------
     # Sorftime — product detail
+    # Sorftime 使用 `amzSite`（不是 `marketplace`）区分站点。
     # ------------------------------------------------------------------
     try:
         detail = _call_sorftime_tool(
             "product_detail",
-            {"asin": asin, "marketplace": marketplace},
+            {"asin": asin, "amzSite": marketplace},
         )
-        if detail and isinstance(detail, dict):
+        if detail and isinstance(detail, (dict, str)):
             _apply_sorftime_detail(context, detail)
             dq["sorftime_ok"].append("product_detail")
         else:
@@ -372,9 +374,9 @@ def build_context(job_id: str, asin: str, marketplace: str) -> dict:
     try:
         traffic = _call_sorftime_tool(
             "product_traffic_terms",
-            {"asin": asin, "marketplace": marketplace},
+            {"asin": asin, "amzSite": marketplace},
         )
-        if traffic and isinstance(traffic, (dict, list)):
+        if traffic and isinstance(traffic, (dict, list, str)):
             _apply_sorftime_traffic(context, traffic)
             dq["sorftime_ok"].append("product_traffic_terms")
         else:
@@ -424,142 +426,323 @@ def _first_nonempty(d: dict, *keys):
 
 
 def _apply_sif_overview(ctx: dict, data: dict) -> None:
-    """Map a SIF listing_traffic_overview payload into context."""
-    # Unwrap common envelopes
+    """Map a SIF listing_traffic_overview payload into context.
+
+    实测返回结构：
+        {"overview":{"ad":{"name":"广告流量","ratio":0.049,"score":411.6},
+                     "nf":{"name":"自然流量","ratio":0.950,"score":7961.4}},
+         "ad":{"sbv":{...}}, "recommend":{...}, "total":8373.1}
+    本接口不包含 title / brand / bullets —— 这些来自 Sorftime。
+    """
     d = data.get("data") if isinstance(data.get("data"), dict) else data
     if not isinstance(d, dict):
         return
 
-    title = _first_nonempty(d, "title", "listing_title", "asin_title")
-    if title and not ctx.get("title"):
-        ctx["title"] = title.strip()
-
-    brand = _first_nonempty(d, "brand", "brand_name")
-    if brand and not ctx.get("brand"):
-        ctx["brand"] = brand.strip()
-
-    category = _first_nonempty(d, "category", "category_path", "bsr_category")
-    if category and not ctx.get("category"):
-        ctx["category"] = str(category)
-
-    price = _first_nonempty(d, "price", "current_price", "list_price")
-    if price and not ctx.get("price"):
-        ctx["price"] = str(price)
-
-    rating = _first_nonempty(d, "rating", "average_rating", "star_rating")
-    if rating and not ctx.get("rating"):
-        ctx["rating"] = str(rating)
-
-    reviews = _first_nonempty(d, "review_count", "reviews_count", "total_reviews")
-    if reviews and not ctx.get("review_count"):
-        ctx["review_count"] = str(reviews)
-
-    # Bullets might live under "bullets" or "feature_bullets"
-    bullets = _first_nonempty(d, "bullets", "feature_bullets", "bullet_points")
-    if isinstance(bullets, list) and bullets and not ctx.get("bullets"):
-        ctx["bullets"] = [str(b).strip() for b in bullets if b]
-
-    # Images
-    imgs = _first_nonempty(d, "image_urls", "images", "main_images")
-    if isinstance(imgs, list) and imgs and not ctx.get("image_urls"):
-        ctx["image_urls"] = [str(i) for i in imgs if i]
-
-    # Traffic breakdown (natural/ads split) is gold for data_insights
-    traffic = d.get("traffic_breakdown") or d.get("traffic_sources")
-    if traffic:
-        ctx["traffic_breakdown"] = traffic
+    overview = d.get("overview") or {}
+    breakdown: dict = {}
+    if isinstance(overview, dict):
+        nf = overview.get("nf") or {}
+        ad = overview.get("ad") or {}
+        if isinstance(nf, dict) and nf.get("ratio") is not None:
+            breakdown["natural_ratio"] = nf.get("ratio")
+            breakdown["natural_score"] = nf.get("score")
+        if isinstance(ad, dict) and ad.get("ratio") is not None:
+            breakdown["ad_ratio"] = ad.get("ratio")
+            breakdown["ad_score"] = ad.get("score")
+    total = d.get("total")
+    if total is not None:
+        breakdown["total_score"] = total
+    ad_detail = d.get("ad") or {}
+    if isinstance(ad_detail, dict) and ad_detail:
+        breakdown["ad_types"] = {
+            k: (v.get("ratio") if isinstance(v, dict) else None)
+            for k, v in ad_detail.items()
+        }
+    if breakdown:
+        ctx["traffic_breakdown"] = breakdown
 
 
 def _apply_sif_sales(ctx: dict, data: dict) -> None:
-    """Pull monthly sales / trend from the SIF sales list tool."""
-    d = data.get("data") if isinstance(data.get("data"), dict) else data
-    if not isinstance(d, dict):
+    """Pull title / price / rating / monthly sales from SIF ops_get_asin_sales_list.
+
+    实测返回结构：
+        {"total":1,"asins":[{"asin":"B0...","title":"...","img":"...",
+          "price":18.59,"score":4.1,"ratingNum":170,"boughtInPastMonth":"300+",
+          "boughtHistoryDates":[...],"boughtHistory":[...]}], ...}
+    """
+    d = data if isinstance(data, dict) else {}
+    asins = d.get("asins")
+    if not isinstance(asins, list) or not asins:
         return
-    for k in ("monthly_sales", "sales_trend", "bsr_rank", "units_sold"):
-        if d.get(k) is not None and ctx.get(k) is None:
-            ctx[k] = d[k]
+    first = asins[0] if isinstance(asins[0], dict) else {}
+
+    if not ctx.get("title") and first.get("title"):
+        ctx["title"] = str(first["title"]).strip()
+    if not ctx.get("price") and first.get("price") is not None:
+        ctx["price"] = str(first["price"])
+    if not ctx.get("rating") and first.get("score") is not None:
+        ctx["rating"] = str(first["score"])
+    if not ctx.get("review_count") and first.get("ratingNum") is not None:
+        ctx["review_count"] = str(first["ratingNum"])
+
+    # Monthly sales / bought-in-past-month
+    bpm = first.get("boughtInPastMonth")
+    if bpm and not ctx.get("monthly_sales"):
+        ctx["monthly_sales"] = str(bpm)
+
+    # Trend: last 12 months of bought history
+    hist = first.get("boughtHistory") or []
+    dates = first.get("boughtHistoryDates") or []
+    if hist and dates and not ctx.get("sales_trend"):
+        ctx["sales_trend"] = [
+            {"month": m, "units": n} for m, n in zip(dates, hist)
+        ]
+
+    # Image fallback (Sorftime 主图如缺失时使用)
+    if first.get("img") and not ctx.get("image_urls"):
+        ctx["image_urls"] = [first["img"]]
 
 
 def _apply_sif_keywords(ctx: dict, data) -> None:
-    """Normalise SIF keyword-signal output to ctx.keywords (list of {keyword, volume, ...})."""
-    items = data
-    if isinstance(data, dict):
-        items = data.get("data") or data.get("keywords") or data.get("items") or []
+    """Normalise SIF market_get_asin_keyword_signals output.
 
-    if not isinstance(items, list):
-        return
+    实测返回结构：
+        {"query_context":{...}, "summary":{...},
+         "primary_signals":{"declining":[{keyword,traffic_share,...}],
+                            "gaining":[...], "rank_gaps":[...]},
+         "secondary_signals":{...},
+         "top_keywords":[...]}  # 如果 topN 请求了，会在这里
+    """
+    d = data if isinstance(data, dict) else {}
 
     out: list[dict] = []
-    for item in items:
+    seen: set = set()
+
+    def _add(item, bucket: str):
+        if not isinstance(item, dict):
+            return
+        kw = item.get("keyword") or item.get("query") or item.get("term")
+        if not kw or kw in seen:
+            return
+        seen.add(kw)
+        entry = {
+            "keyword": str(kw),
+            "source": "sif",
+            "signal": bucket,
+        }
+        if item.get("traffic_share") is not None:
+            entry["traffic_share"] = item["traffic_share"]
+        if item.get("contri_change") is not None:
+            entry["contri_change"] = item["contri_change"]
+        if item.get("contri_severity"):
+            entry["severity"] = item["contri_severity"]
+        if item.get("organic_rank"):
+            entry["organic_rank"] = item["organic_rank"]
+        if item.get("volume") is not None or item.get("search_volume") is not None:
+            entry["volume"] = item.get("volume") or item.get("search_volume")
+        out.append(entry)
+
+    primary = d.get("primary_signals") or {}
+    if isinstance(primary, dict):
+        for bucket in ("declining", "gaining", "rank_gaps"):
+            for item in primary.get(bucket) or []:
+                _add(item, bucket)
+
+    secondary = d.get("secondary_signals") or {}
+    if isinstance(secondary, dict):
+        for bucket, items in secondary.items():
+            if isinstance(items, list):
+                for item in items:
+                    _add(item, f"secondary_{bucket}")
+
+    for item in d.get("top_keywords") or []:
         if isinstance(item, dict):
-            kw = _first_nonempty(item, "keyword", "query", "term", "word")
-            if not kw:
-                continue
-            out.append({
-                "keyword": str(kw),
-                "volume": item.get("volume") or item.get("search_volume") or 0,
-                "rank": item.get("rank") or item.get("organic_rank"),
-                "source": "sif",
-            })
+            _add(item, "top")
         elif isinstance(item, str):
-            out.append({"keyword": item, "source": "sif"})
+            if item not in seen:
+                seen.add(item)
+                out.append({"keyword": item, "source": "sif", "signal": "top"})
 
     if out:
-        existing = ctx.get("keywords", []) or []
+        existing = ctx.get("keywords") or []
         ctx["keywords"] = existing + out
-        if not ctx.get("sif_keywords"):
-            ctx["sif_keywords"] = out
+        ctx["sif_keywords"] = out
+
+    # Keep raw signals for data_insights
+    if primary or secondary:
+        ctx["keyword_signals"] = {
+            "primary": primary,
+            "secondary": secondary,
+            "summary": d.get("summary"),
+        }
 
 
-def _apply_sorftime_detail(ctx: dict, data: dict) -> None:
-    """Sorftime product_detail fills in anything SIF overview missed."""
-    d = data.get("data") if isinstance(data.get("data"), dict) else data
-    if not isinstance(d, dict):
+def _apply_sorftime_detail(ctx: dict, data) -> None:
+    """Sorftime product_detail 返回的是中文标签文本（不是结构化 dict）。
+
+    真实返回示例：
+        "产品ASIN码：B0F7QJC249\n标题：CTIME 80\"...\n主图：https://...\n
+         价格：18.59\n优惠券：2.79\n星级：4.10\n评论数：170\n品牌：CTIME\n
+         所属nodeid：2245500011\n卖家名称：CTIMEDY\n卖家来源：CN\n
+         分类：SQUEEGEE\n属性：{\"Brand\":\"CTIME\",...}；\n
+         上架时间：2025-05-15\n已上架天数：359\n子体数：1\nFBA费用：6.23\n
+         所属大类：Health & Household（排名:47213）\n所属细分类目：Squeegees（排名:93）\n
+         月销量：月销量：340\n月销额：月销额：6320.60\n
+         产品描述：【3-in-1 ...】This multi-functional ...<br>[Adjustable ...]..."
+    """
+    text = data if isinstance(data, str) else ""
+    if isinstance(data, dict):
+        # fallback: 若服务端某天返回结构化 dict，这里也兼容
+        for field, keys in [
+            ("title", ("title", "product_title")),
+            ("brand", ("brand", "brand_name")),
+            ("price", ("price", "sale_price")),
+            ("rating", ("rating", "star_rating")),
+            ("review_count", ("review_count", "reviews")),
+            ("category", ("category", "category_path")),
+        ]:
+            if not ctx.get(field):
+                v = _first_nonempty(data, *keys)
+                if v:
+                    ctx[field] = str(v)
+        if not text:
+            return
+
+    if not text:
         return
 
-    for field, keys in [
-        ("title", ("title", "product_title")),
-        ("brand", ("brand", "brand_name")),
-        ("price", ("price", "sale_price")),
-        ("rating", ("rating", "star_rating")),
-        ("review_count", ("review_count", "reviews")),
-        ("category", ("category", "category_path")),
-    ]:
-        if not ctx.get(field):
-            v = _first_nonempty(d, *keys)
-            if v:
-                ctx[field] = str(v)
+    def _grab(label: str) -> str:
+        """匹配 `label：value`（中英文冒号都支持），直到下一行或换行。"""
+        import re as _re
+        m = _re.search(rf"{_re.escape(label)}\s*[：:]\s*(.+?)(?=\n|$)", text)
+        return m.group(1).strip() if m else ""
 
-    bullets = _first_nonempty(d, "bullets", "feature_bullets", "bullet_points")
-    if isinstance(bullets, list) and bullets and not ctx.get("bullets"):
-        ctx["bullets"] = [str(b).strip() for b in bullets if b]
+    title = _grab("标题")
+    if title and not ctx.get("title"):
+        ctx["title"] = title
+    brand = _grab("品牌")
+    if brand and not ctx.get("brand"):
+        ctx["brand"] = brand
+    category = _grab("所属细分类目") or _grab("分类")
+    if category and not ctx.get("category"):
+        ctx["category"] = category
+    price = _grab("价格")
+    if price and not ctx.get("price"):
+        ctx["price"] = price
+    rating = _grab("星级")
+    if rating and not ctx.get("rating"):
+        ctx["rating"] = rating
+    review_count = _grab("评论数")
+    if review_count and not ctx.get("review_count"):
+        ctx["review_count"] = review_count
+    main_img = _grab("主图")
+    if main_img and not ctx.get("image_urls"):
+        ctx["image_urls"] = [main_img]
+    seller = _grab("卖家名称")
+    if seller:
+        ctx["seller"] = seller
+    bsr = _grab("所属细分类目")  # 含「排名」
+    if bsr:
+        ctx["bsr"] = bsr
+    fba = _grab("FBA费用")
+    if fba:
+        ctx["fba_fee"] = fba
+    launch = _grab("上架时间")
+    if launch:
+        ctx["launch_date"] = launch
+
+    # 月销量字段值本身可能含冒号（原文：「月销量：月销量：340」）—— 取最后一段
+    for lbl in ("月销量", "月销额"):
+        raw = _grab(lbl)
+        if raw:
+            # 清掉重复前缀
+            val = raw.split("：")[-1].split(":")[-1].strip()
+            ctx_key = "monthly_sales" if lbl == "月销量" else "monthly_revenue"
+            if not ctx.get(ctx_key):
+                ctx[ctx_key] = val
+
+    # 产品描述 -> bullets
+    import re as _re
+    desc = _grab("产品描述")
+    if not desc:
+        m = _re.search(r"产品描述\s*[：:]\s*(.+)$", text, flags=_re.DOTALL)
+        if m:
+            desc = m.group(1).strip()
+    if desc and not ctx.get("bullets"):
+        # 亚马逊 bullet 在原文里用 [xxx] 或【xxx】标题开头，<br> 作为分隔
+        parts = [p.strip() for p in _re.split(r"<br\s*/?>\s*", desc) if p.strip()]
+        # 只保留长度足够的正文段
+        bullets = [p for p in parts if len(p) > 40]
+        if bullets:
+            ctx["bullets"] = bullets[:10]
+
+    # 属性 dict
+    attrs_raw = _grab("属性")
+    if attrs_raw:
+        try:
+            attrs_raw = attrs_raw.rstrip("；;").strip()
+            ctx["attributes"] = json.loads(attrs_raw)
+        except Exception:
+            ctx["attributes_raw"] = attrs_raw
 
 
 def _apply_sorftime_traffic(ctx: dict, data) -> None:
-    """Sorftime traffic_terms -> append to ctx.keywords."""
-    items = data
-    if isinstance(data, dict):
+    """Sorftime product_traffic_terms -> append to ctx.keywords.
+
+    真实返回样例（字符串，前面带一段中文引导语，后面跟 JSON 数组，中文 key）：
+        "直接罗列数据，然后依据这些数据进行总结，...\n
+         [{\"关键词\":\"window cleaner\",\"月搜索量\":161842,\"推荐竞价\":\"2.20\",...}]"
+    """
+    items = None
+    if isinstance(data, str):
+        # 抽取第一个 JSON 数组
+        import re as _re
+        m = _re.search(r"\[\s*\{.*\}\s*\]", data, flags=_re.DOTALL)
+        if m:
+            try:
+                items = json.loads(m.group(0))
+            except Exception:
+                items = None
+    elif isinstance(data, list):
+        items = data
+    elif isinstance(data, dict):
         items = data.get("data") or data.get("terms") or data.get("items") or []
 
     if not isinstance(items, list):
         return
 
     out: list[dict] = []
+    seen = {(k.get("keyword") if isinstance(k, dict) else None)
+            for k in (ctx.get("keywords") or [])}
     for item in items:
         if not isinstance(item, dict):
             continue
-        kw = _first_nonempty(item, "keyword", "term", "query", "search_term")
-        if not kw:
+        kw = item.get("关键词") or item.get("keyword") or item.get("term") or item.get("query")
+        if not kw or kw in seen:
             continue
-        out.append({
+        seen.add(kw)
+        entry = {
             "keyword": str(kw),
-            "volume": item.get("volume") or item.get("search_volume") or 0,
             "source": "sorftime",
-        })
+        }
+        volume = item.get("月搜索量") or item.get("volume") or item.get("search_volume")
+        if volume is not None:
+            entry["volume"] = volume
+        bid = item.get("推荐竞价") or item.get("cpc") or item.get("suggested_bid")
+        if bid:
+            entry["suggested_bid"] = bid
+        bid_range = item.get("推荐竞价范围")
+        if bid_range:
+            entry["bid_range"] = bid_range
+        position = item.get("最近自然曝光位置") or item.get("organic_position")
+        if position:
+            entry["organic_position"] = position
+        out.append(entry)
 
     if out:
-        existing = ctx.get("keywords", []) or []
+        existing = ctx.get("keywords") or []
         ctx["keywords"] = existing + out
+        ctx["sorftime_keywords"] = out
 
 
 def _generate_synthetic_bullets(context: dict) -> list[str]:
@@ -652,13 +835,28 @@ _mcp_sessions_lock = threading.Lock()
 
 
 def _mcp_build_url(endpoint: str, api_key: str) -> str:
-    """Attach `?secret-key=` if the endpoint doesn't already carry auth."""
+    """Return the HTTP URL to POST to.
+
+    Sorftime-style servers carry the auth key in the URL query string
+    (`?key=...` — the NEW param name; `?secret-key=` is the old one and
+    makes the server silently refuse requests). In that case we leave the
+    endpoint untouched.
+
+    SIF-style servers authenticate via `Authorization: Bearer <token>`
+    header, so the URL stays clean.
+    """
     if not endpoint:
         return ""
-    if "secret-key=" in endpoint or not api_key or "***" in api_key:
-        return endpoint
-    sep = "&" if "?" in endpoint else "?"
-    return f"{endpoint}{sep}secret-key={api_key}"
+    return endpoint
+
+
+def _is_sorftime_style(endpoint: str) -> bool:
+    """Sorftime puts the auth key directly in the URL (`?key=...`).
+    We key off the URL pattern rather than hostname so custom deploys work."""
+    if not endpoint:
+        return False
+    low = endpoint.lower()
+    return "?key=" in low or "&key=" in low or "sorftime" in low
 
 
 def _mcp_open_conn(parsed, timeout: int) -> http.client.HTTPConnection:
@@ -699,10 +897,18 @@ def _mcp_post(endpoint: str, api_key: str, payload: dict,
     """POST one JSON-RPC message to an MCP endpoint.
 
     Returns (parsed_response_body, response_headers_lowercase).
+
+    Auth strategy:
+      - Sorftime-style (key in URL): no Authorization header needed.
+      - SIF-style: send `Authorization: Bearer <api_key>`.
     """
     url = _mcp_build_url(endpoint, api_key)
     parsed = urllib.parse.urlparse(url)
-    path = parsed.path + (f"?{parsed.query}" if parsed.query else "")
+    # Path 必须以 `/` 开头，否则 nginx 会返回 400。
+    # 对 `https://mcp.sorftime.com?key=...` 这种 URL，urlparse 出来的
+    # path 是空字符串，拼出的 "?key=..." 是非法请求行。
+    raw_path = parsed.path or "/"
+    path = raw_path + (f"?{parsed.query}" if parsed.query else "")
 
     headers = {
         "Content-Type": "application/json",
@@ -710,6 +916,8 @@ def _mcp_post(endpoint: str, api_key: str, payload: dict,
     }
     if session_id:
         headers["mcp-session-id"] = session_id
+    if api_key and not _is_sorftime_style(endpoint):
+        headers["Authorization"] = f"Bearer {api_key}"
 
     conn = _mcp_open_conn(parsed, timeout)
     try:
@@ -732,7 +940,15 @@ def _mcp_handshake(endpoint: str, api_key: str, timeout: int) -> str | None:
 
     Result is cached per (endpoint, api_key) so we only pay the handshake
     cost once per process.
+
+    IMPORTANT: Sorftime-style servers (key-in-URL) reject `initialize`
+    with HTTP 400 ("not implemented") — tools/call works directly. We
+    detect that family by URL shape and skip the handshake.
     """
+    # Sorftime: no handshake, no session id.
+    if _is_sorftime_style(endpoint):
+        return None
+
     cache_key = f"{endpoint}|{api_key[-8:] if api_key else ''}"
     with _mcp_sessions_lock:
         cached = _mcp_sessions.get(cache_key)
@@ -882,8 +1098,20 @@ def _call_sorftime_tool(tool: str, arguments: dict) -> dict | None:
     try:
         return _mcp_call_tool(endpoint, api_key, tool, arguments, timeout=60)
     except Exception as e:
-        logging.warning(f"Sorftime tool call failed: {e}")
+        # Surface the last error via a module-global so caller/debugger can inspect.
+        import traceback as _tb
+        _LAST_SORFTIME_ERR["err"] = f"{type(e).__name__}: {e}"
+        _LAST_SORFTIME_ERR["trace"] = _tb.format_exc()
+        logging.warning(f"Sorftime tool '{tool}' failed: {e}")
         return None
+
+
+_LAST_SORFTIME_ERR: dict = {"err": None, "trace": None}
+
+
+@app.route('/_debug/last-sorftime-error')
+def _debug_last_sorftime_err():
+    return jsonify(_LAST_SORFTIME_ERR)
 
 
 def _extract_list(value, max_items: int = 10) -> list:
@@ -1416,9 +1644,16 @@ def api_list_models():
 
 @app.route('/api/test-connection/<service>', methods=['POST'])
 def api_test_connection(service):
-    """Test connectivity for apimart / sif / sorftime."""
+    """Test connectivity for apimart / sif / sorftime.
+
+    每个服务都发一次**真实业务调用**，而不是仅测 TCP 可达，否则随便填
+    API Key 都会通过（原实现只判断 HTTP status < 500）。
+    """
     incoming = request.get_json(silent=True) or {}
 
+    # ------------------------------------------------------------------
+    # APIMart：通过 /v1/models 或类似鉴权接口验证 key
+    # ------------------------------------------------------------------
     if service == "apimart":
         am = incoming.get("apimart", incoming) if isinstance(incoming.get("apimart"), dict) else incoming
         key = _resolve_key(am.get("api_key", ""), "apimart", "api_key")
@@ -1428,86 +1663,149 @@ def api_test_connection(service):
         try:
             import ssl
             ctx = ssl.create_default_context()
-            parsed = urllib.parse.urlparse(base + "/v1/tasks/test")
+            parsed = urllib.parse.urlparse(base.rstrip("/") + "/v1/models")
             conn = http.client.HTTPSConnection(
                 parsed.hostname, parsed.port or 443, timeout=10, context=ctx
             )
             try:
-                conn.request("GET", parsed.path,
+                conn.request("GET", parsed.path or "/v1/models",
                              headers={"Authorization": f"Bearer {key}"})
                 resp = conn.getresponse()
-                # 401/403/404 still mean the host is reachable
-                if resp.status in (401, 403, 404):
-                    return jsonify({"status": "ok", "message": "API 可达"})
-                return jsonify({"status": "ok", "message": f"Connected ({resp.status})"})
+                raw = resp.read().decode("utf-8", errors="replace")
+                if resp.status == 200:
+                    return jsonify({"status": "ok", "message": "APIMart 鉴权通过"})
+                if resp.status in (401, 403):
+                    return jsonify({"status": "error",
+                                    "message": f"API Key 无效（HTTP {resp.status}）"})
+                if resp.status == 404:
+                    # /v1/models 可能不存在；退回到提交一个假任务探测鉴权
+                    return _apimart_fallback_auth_check(base, key)
+                return jsonify({"status": "error",
+                                "message": f"HTTP {resp.status}: {raw[:200]}"})
             finally:
                 conn.close()
         except Exception as e:
             return jsonify({"status": "error", "message": str(e)})
 
+    # ------------------------------------------------------------------
+    # SIF：真调一次 tools/list（含 initialize 握手 + Bearer 鉴权）
+    # ------------------------------------------------------------------
     if service == "sif":
         sf = incoming.get("sif_mcp", incoming) if isinstance(incoming.get("sif_mcp"), dict) else incoming
-        key = _resolve_key(sf.get("api_key", ""), "sif_mcp", "api_key")
+        submitted = sf.get("api_key", "")
+        key = _resolve_key(submitted, "sif_mcp", "api_key")
         ep = sf.get("endpoint") or load_config().get("sif_mcp", {}).get("endpoint", "")
+        used_saved_key = (not submitted) or ("***" in submitted)
         if not ep:
             return jsonify({"status": "error", "message": "Endpoint 未填写"})
-        try:
-            parsed = urllib.parse.urlparse(ep.rstrip("/"))
-            base = f"{parsed.scheme}://{parsed.hostname}"
-            if parsed.port:
-                base += f":{parsed.port}"
-            path = parsed.path or "/mcp"
-            if not path.endswith("/mcp"):
-                path = path.rstrip("/") + "/mcp"
-            full_url = base + path
-            if key and "***" not in key and "?" not in full_url:
-                full_url += f"?secret-key={key}"
-            import ssl
-            ctx = ssl.create_default_context()
-            parsed2 = urllib.parse.urlparse(full_url)
-            conn = http.client.HTTPSConnection(
-                parsed2.hostname, parsed2.port or 443, timeout=10, context=ctx
-            )
-            try:
-                p2 = parsed2.path + ("?" + parsed2.query if parsed2.query else "")
-                conn.request("GET", p2, headers={"Accept": "application/json"})
-                resp = conn.getresponse()
-                if resp.status < 500:
-                    return jsonify({"status": "ok", "message": "SIF MCP 可达"})
-                return jsonify({"status": "error", "message": f"HTTP {resp.status}"})
-            finally:
-                conn.close()
-        except Exception as e:
-            return jsonify({"status": "error", "message": str(e)})
-
-    if service == "sorftime":
-        st = incoming.get("sorftime_mcp", incoming) if isinstance(incoming.get("sorftime_mcp"), dict) else incoming
-        key = _resolve_key(st.get("api_key", ""), "sorftime_mcp", "api_key")
-        ep = st.get("endpoint") or load_config().get("sorftime_mcp", {}).get("endpoint", "")
-        if not ep:
-            return jsonify({"status": "error", "message": "Endpoint 未填写"})
-        if not key or "***" in key:
+        if not key:
             return jsonify({"status": "error", "message": "API Key 未填写"})
         try:
-            parsed = urllib.parse.urlparse(ep + f"?key={key}")
-            import ssl
-            ctx = ssl.create_default_context()
-            conn = http.client.HTTPSConnection(
-                parsed.hostname, parsed.port or 443, timeout=10, context=ctx
-            )
-            try:
-                p = parsed.path + ("?" + parsed.query if parsed.query else "")
-                conn.request("GET", p, headers={"Accept": "application/json"})
-                resp = conn.getresponse()
-                if resp.status < 500:
-                    return jsonify({"status": "ok", "message": "Sorftime MCP 可达"})
-                return jsonify({"status": "error", "message": f"HTTP {resp.status}"})
-            finally:
-                conn.close()
+            # 强制走新 MCP 握手；握手成功才算 key 有效
+            sid = _mcp_handshake(ep, key, timeout=10)
+            body, _ = _mcp_post(ep, key,
+                {"jsonrpc": "2.0", "id": "probe", "method": "tools/list"},
+                sid, timeout=10)
+            if body.get("error"):
+                err = body["error"]
+                msg = err.get("message") if isinstance(err, dict) else str(err)
+                return jsonify({"status": "error",
+                                "message": f"SIF 拒绝: {msg}"})
+            tools = (body.get("result") or {}).get("tools") or []
+            if not tools:
+                return jsonify({"status": "error",
+                                "message": "SIF 返回空工具列表，API Key 可能受限"})
+            msg = f"SIF MCP 鉴权通过（{len(tools)} 个工具可用）"
+            if used_saved_key:
+                msg += " · 使用已保存的 Key"
+            return jsonify({"status": "ok", "message": msg})
         except Exception as e:
-            return jsonify({"status": "error", "message": str(e)})
+            msg = str(e)
+            # HTTP 4xx / 401 通常是 key 错误；区分一下
+            if "401" in msg or "403" in msg or "unauthori" in msg.lower():
+                return jsonify({"status": "error", "message": "API Key 无效"})
+            return jsonify({"status": "error", "message": f"连接失败: {msg[:200]}"})
+
+    # ------------------------------------------------------------------
+    # Sorftime：真调一次 tools/list（URL 带 key，无握手）
+    # ------------------------------------------------------------------
+    if service == "sorftime":
+        st = incoming.get("sorftime_mcp", incoming) if isinstance(incoming.get("sorftime_mcp"), dict) else incoming
+        submitted = st.get("api_key", "")
+        key = _resolve_key(submitted, "sorftime_mcp", "api_key")
+        ep = st.get("endpoint") or load_config().get("sorftime_mcp", {}).get("endpoint", "")
+        used_saved_key = (not submitted) or ("***" in submitted)
+        if not ep:
+            return jsonify({"status": "error", "message": "Endpoint 未填写"})
+        # endpoint 里没带 ?key= 时，追加上
+        if ("?key=" not in ep and "&key=" not in ep
+                and key and "***" not in key):
+            ep = ep + ("&" if "?" in ep else "?") + "key=" + key
+        try:
+            body, _ = _mcp_post(ep, key,
+                {"jsonrpc": "2.0", "id": "probe", "method": "tools/list"},
+                None, timeout=10)
+            if body.get("error"):
+                err = body["error"]
+                msg = err.get("message") if isinstance(err, dict) else str(err)
+                return jsonify({"status": "error",
+                                "message": f"Sorftime 拒绝: {msg}"})
+            tools = (body.get("result") or {}).get("tools") or []
+            if not tools:
+                return jsonify({"status": "error",
+                                "message": "Sorftime 返回空工具列表，Key 可能受限"})
+            # 若只返回 1 个 "NotAuthorization" 假工具，就判 key 无效
+            names = [t.get("name", "") for t in tools if isinstance(t, dict)]
+            if len(names) == 1 and "NotAuthorization" in names[0]:
+                return jsonify({"status": "error",
+                                "message": "API Key 无效（服务端仅返回 NotAuthorization 占位工具）"})
+            msg = f"Sorftime MCP 鉴权通过（{len(tools)} 个工具可用）"
+            if used_saved_key:
+                msg += " · 使用已保存的 Key"
+            return jsonify({"status": "ok", "message": msg})
+        except Exception as e:
+            msg = str(e)
+            if "401" in msg or "403" in msg:
+                return jsonify({"status": "error", "message": "API Key 无效"})
+            return jsonify({"status": "error", "message": f"连接失败: {msg[:200]}"})
 
     return jsonify({"status": "error", "message": f"Unknown service: {service}"}), 400
+
+
+def _apimart_fallback_auth_check(base: str, key: str):
+    """当 /v1/models 不存在时，通过一次最小化的 /v1/images/generations 探测鉴权。
+    错 key -> 401/403，正确 key -> 400（参数不完整）或 200。
+    """
+    import ssl
+    try:
+        ctx = ssl.create_default_context()
+        parsed = urllib.parse.urlparse(base.rstrip("/") + "/v1/images/generations")
+        conn = http.client.HTTPSConnection(
+            parsed.hostname, parsed.port or 443, timeout=10, context=ctx
+        )
+        try:
+            conn.request("POST", parsed.path, body=b"{}",
+                         headers={
+                             "Authorization": f"Bearer {key}",
+                             "Content-Type": "application/json",
+                         })
+            resp = conn.getresponse()
+            raw = resp.read().decode("utf-8", errors="replace")
+            if resp.status in (401, 403):
+                return jsonify({"status": "error",
+                                "message": f"API Key 无效（HTTP {resp.status}）"})
+            if resp.status == 400:
+                # 参数错但鉴权通过了
+                return jsonify({"status": "ok",
+                                "message": "APIMart 鉴权通过（参数验证返回 400 是预期）"})
+            if resp.status == 200:
+                return jsonify({"status": "ok", "message": "APIMart 鉴权通过"})
+            return jsonify({"status": "error",
+                            "message": f"HTTP {resp.status}: {raw[:200]}"})
+        finally:
+            conn.close()
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)})
 
 
 # ---------------------------------------------------------------------------
@@ -1585,6 +1883,462 @@ def api_clear_cache():
 def _license_bootstrap(code: str, email: str) -> dict:
     from license_crypto import verify_and_save_license
     return verify_and_save_license(code)
+
+
+# ---------------------------------------------------------------------------
+# SQP Brand Analysis (独立功能)
+# 接收 Amazon Search Query Performance 周度 CSV，输出结构化分析报告。
+# ---------------------------------------------------------------------------
+
+@app.route('/api/sqp/upload', methods=['POST'])
+def api_sqp_upload():
+    """
+    上传一批 SQP CSV 文件（至少 1 个；≥ 2 周才出 WoW 分析）。
+    表单字段：`files` (multi-file input)
+    返回：{session_id, outputs, summary}
+    """
+    files = request.files.getlist("files")
+    files = [f for f in files if f and f.filename]
+    if not files:
+        return jsonify({"error": "未上传文件，表单字段名应为 'files'"}), 400
+
+    # Session dir：按时间戳 + 短 uuid 组织
+    session_id = datetime.now().strftime("%Y%m%d_%H%M%S") + "_" + uuid.uuid4().hex[:6]
+    sess_dir = SQP_DIR / session_id
+    sess_dir.mkdir(parents=True, exist_ok=True)
+    uploads_dir = sess_dir / "uploads"
+    uploads_dir.mkdir(parents=True, exist_ok=True)
+
+    saved: list = []
+    for f in files:
+        name = secure_filename(f.filename)
+        if not name.lower().endswith(".csv"):
+            continue
+        dest = uploads_dir / name
+        f.save(str(dest))
+        saved.append(dest)
+
+    if not saved:
+        return jsonify({"error": "没有有效的 CSV 文件"}), 400
+
+    # 调管道
+    try:
+        from tools.sqp_report import run_sqp_pipeline
+        result = run_sqp_pipeline(saved, sess_dir, silent=True)
+    except ValueError as e:
+        return jsonify({"error": f"SQP 文件名必须包含 Week_YYYY_MM_DD：{e}"}), 400
+    except Exception as e:
+        logging.exception("SQP pipeline failed")
+        return jsonify({"error": str(e)}), 500
+
+    result["session_id"] = session_id
+    # 给前端更友好的下载地址
+    result["outputs"] = {
+        name: f"/api/sqp/download/{session_id}/{name}"
+        for name in result["outputs"].keys()
+    }
+    return jsonify(result)
+
+
+@app.route('/api/sqp/report/<session_id>', methods=['GET'])
+def api_sqp_report(session_id: str):
+    """返回指定 session 的 Markdown 报告原文（text/plain；前端自己渲染）。"""
+    sess_dir = SQP_DIR / secure_filename(session_id)
+    md = sess_dir / "sqp_report.md"
+    if not md.exists():
+        return jsonify({"error": "报告未找到或已过期"}), 404
+    return Response(md.read_text(encoding="utf-8"),
+                    mimetype="text/markdown; charset=utf-8")
+
+
+@app.route('/api/sqp/download/<session_id>/<path:filename>', methods=['GET'])
+def api_sqp_download(session_id: str, filename: str):
+    """下载 SQP 产出（CSV / PNG / MD）。"""
+    sess_dir = SQP_DIR / secure_filename(session_id)
+    if not sess_dir.exists():
+        return jsonify({"error": "session 不存在"}), 404
+    # 防越权
+    safe_name = Path(filename).name
+    target = sess_dir / safe_name
+    if not target.exists():
+        return jsonify({"error": "文件不存在"}), 404
+    return send_from_directory(str(sess_dir), safe_name, as_attachment=False)
+
+
+@app.route('/api/sqp/sessions', methods=['GET'])
+def api_sqp_sessions():
+    """列出最近的 SQP 分析 session（最多 20 个）。"""
+    if not SQP_DIR.exists():
+        return jsonify({"sessions": []})
+    sessions = []
+    for d in sorted(SQP_DIR.iterdir(), reverse=True)[:20]:
+        if not d.is_dir():
+            continue
+        md = d / "sqp_report.md"
+        uploads = d / "uploads"
+        sessions.append({
+            "session_id": d.name,
+            "created_at": datetime.fromtimestamp(d.stat().st_mtime).isoformat(),
+            "has_report": md.exists(),
+            "upload_count": sum(1 for _ in uploads.glob("*.csv")) if uploads.exists() else 0,
+        })
+    return jsonify({"sessions": sessions})
+
+
+# ---------------------------------------------------------------------------
+# Rufus Research（自动 / 手动 双模式）
+#
+# 流程：
+#   1) POST /api/rufus/probe-questions  →  生成 10 个探针问题
+#   2) GET  /api/rufus/chrome-check     →  检测 9222 端口是否可用
+#   3) POST /api/rufus/auto-run         →  自动模式（CDP 接管已登录的 Chrome）
+#   4) POST /api/rufus/paste-submit     →  手动粘贴模式（auto 失败时兜底）
+#   5) GET  /api/rufus/report/<asin>    →  下载最终 Markdown 报告
+# ---------------------------------------------------------------------------
+
+@app.route('/api/rufus/probe-questions', methods=['POST'])
+def api_rufus_probe_questions():
+    """从已运行过的 job 或直接传入的 context 生成 10 个 Rufus 探针问题。"""
+    data = request.get_json(silent=True) or {}
+    job_id = data.get("job_id")
+    asin   = data.get("asin")
+
+    ctx = None
+    # 1) 优先从 job 读 context
+    if job_id:
+        with job_lock:
+            j = jobs.get(job_id)
+        if j and j.get("asin"):
+            p = PROMPTS_DIR / f"{j['asin']}_context.json"
+            if p.exists():
+                ctx = json.loads(p.read_text("utf-8"))
+    # 2) 退回到 asin
+    if not ctx and asin:
+        p = PROMPTS_DIR / f"{asin}_context.json"
+        if p.exists():
+            ctx = json.loads(p.read_text("utf-8"))
+
+    if not ctx:
+        return jsonify({"error": "找不到 context，请先提交 ASIN 并等分析完成"}), 404
+
+    from expert_suggestions import _build_rufus_probe_strategy
+    probe = _build_rufus_probe_strategy(ctx)
+
+    # 扁平成 1 维问题列表，方便前端渲染 + 后端调用
+    flat: list = []
+    for qtype, qs in (probe.get("questions") or {}).items():
+        for q in qs:
+            flat.append({"type": qtype, "q": q.get("q"), "purpose": q.get("purpose")})
+
+    return jsonify({
+        "asin":      ctx.get("asin"),
+        "category":  ctx.get("category"),
+        "brand":     ctx.get("brand"),
+        "probe":     probe,
+        "questions": flat,
+    })
+
+
+@app.route('/api/rufus/chrome-check', methods=['GET'])
+def api_rufus_chrome_check():
+    """检测用户是否启动了带调试端口的 Chrome（自动模式前置条件）。"""
+    try:
+        from tools.rufus.chrome_session import probe_chrome_debug_port
+    except Exception as e:
+        return jsonify({"available": False, "message": f"依赖未就绪: {e}"}), 200
+    port = int(request.args.get("port", 9222))
+    return jsonify(probe_chrome_debug_port(port))
+
+
+@app.route('/api/rufus/auto-run', methods=['POST'])
+def api_rufus_auto_run():
+    """自动模式：CDP 接管 Chrome 跑 10 题。
+
+    Body: {
+        "asin": "...",
+        "questions": ["...", ...],
+        "amazon_url": "https://www.amazon.com/s?k=...",  (可选)
+        "port": 9222,
+        "min_interval": 15,
+        "max_interval": 40
+    }
+    """
+    data = request.get_json(silent=True) or {}
+    asin = (data.get("asin") or "").strip()
+    questions = data.get("questions") or []
+    if not asin or not _validate_asin(asin):
+        return jsonify({"error": "ASIN 无效"}), 400
+    if not questions or len(questions) > 12:
+        return jsonify({"error": "questions 数量需在 1-12 之间"}), 400
+
+    port = int(data.get("port", 9222))
+    amazon_url = data.get("amazon_url") or f"https://www.amazon.com/dp/{asin}"
+    min_interval = int(data.get("min_interval", 15))
+    max_interval = int(data.get("max_interval", 40))
+
+    try:
+        from tools.rufus.runner import run_rufus_auto, build_rufus_report
+    except Exception as e:
+        return jsonify({"error": f"Rufus 模块加载失败: {e}"}), 500
+
+    session = run_rufus_auto(
+        asin=asin, questions=questions, port=port,
+        amazon_url=amazon_url,
+        min_interval=min_interval, max_interval=max_interval,
+    )
+
+    # 拉对应 context 用于 GEO 审计
+    ctx_path = PROMPTS_DIR / f"{asin}_context.json"
+    ctx = json.loads(ctx_path.read_text("utf-8")) if ctx_path.exists() else None
+
+    report_path = PROMPTS_DIR / f"{asin}_rufus_report.md"
+    report = build_rufus_report(
+        session=session,
+        listing_context=ctx,
+        save_to=report_path,
+    )
+
+    return jsonify({
+        "mode": session["mode"],
+        "success": session["success"],
+        "captured_count": session["captured_count"],
+        "total_questions": session["total_questions"],
+        "should_fallback_to_manual": session["should_fallback_to_manual"],
+        "captcha_detected": session["captcha_detected"],
+        "reason": session["reason"],
+        "aborted_at": session.get("aborted_at"),
+        "abort_reason": session.get("abort_reason"),
+        "report_url": f"/api/rufus/report/{asin}",
+        "geo_audit": report["geo_audit"],
+        "summary": report["summary"],
+        "raw_results": session["raw_results"],
+    })
+
+
+@app.route('/api/rufus/paste-submit', methods=['POST'])
+def api_rufus_paste_submit():
+    """手动模式：用户粘贴 Rufus 答案。
+
+    Body: {
+        "asin": "...",
+        "questions": [...],
+        "answers":   [...]     # 和 questions 一一对应；空串视为未回答
+    }
+    """
+    data = request.get_json(silent=True) or {}
+    asin = (data.get("asin") or "").strip()
+    questions = data.get("questions") or []
+    answers   = data.get("answers")   or []
+
+    if not asin or not _validate_asin(asin):
+        return jsonify({"error": "ASIN 无效"}), 400
+    if len(questions) == 0 or len(questions) != len(answers):
+        return jsonify({"error": "questions / answers 长度不一致或为空"}), 400
+
+    try:
+        from tools.rufus.runner import accept_manual_answers, build_rufus_report
+    except Exception as e:
+        return jsonify({"error": f"Rufus 模块加载失败: {e}"}), 500
+
+    session = accept_manual_answers(asin, questions, answers)
+
+    ctx_path = PROMPTS_DIR / f"{asin}_context.json"
+    ctx = json.loads(ctx_path.read_text("utf-8")) if ctx_path.exists() else None
+
+    report_path = PROMPTS_DIR / f"{asin}_rufus_report.md"
+    report = build_rufus_report(
+        session=session, listing_context=ctx, save_to=report_path,
+    )
+
+    return jsonify({
+        "mode": session["mode"],
+        "success": session["success"],
+        "captured_count": session["captured_count"],
+        "total_questions": session["total_questions"],
+        "report_url": f"/api/rufus/report/{asin}",
+        "geo_audit": report["geo_audit"],
+        "summary": report["summary"],
+    })
+
+
+@app.route('/api/rufus/report/<asin>', methods=['GET'])
+def api_rufus_report(asin: str):
+    """拉 Rufus 报告 Markdown。"""
+    asin = secure_filename(asin)
+    md = PROMPTS_DIR / f"{asin}_rufus_report.md"
+    if not md.exists():
+        return jsonify({"error": "报告不存在，请先跑 auto-run 或 paste-submit"}), 404
+    return Response(md.read_text(encoding="utf-8"),
+                    mimetype="text/markdown; charset=utf-8")
+
+
+@app.route('/api/rufus/report-json/<asin>', methods=['GET'])
+def api_rufus_report_json(asin: str):
+    """拉 Rufus 报告的结构化 JSON（前端渲染用）。"""
+    asin = secure_filename(asin)
+    j = PROMPTS_DIR / f"{asin}_rufus_report.json"
+    if not j.exists():
+        return jsonify({"error": "JSON 报告不存在"}), 404
+    return jsonify(json.loads(j.read_text(encoding="utf-8")))
+
+
+# ---------------------------------------------------------------------------
+# Agent Layer
+# Multi-Provider LLM 接入 + Skill Tool Registry + ReAct Runtime
+# ---------------------------------------------------------------------------
+
+@app.route('/api/agent/providers', methods=['GET'])
+def api_agent_providers():
+    """列出已配置的 LLM Provider（掩码 key）"""
+    from agent import list_providers
+    ps = [p.to_public_dict() for p in list_providers()]
+    return jsonify({"providers": ps})
+
+
+@app.route('/api/agent/providers', methods=['POST'])
+def api_agent_save_providers():
+    """保存完整的 llm_providers 列表。前端传 [{name, type, base_url, api_key, ...}]
+    加密落盘（api_key 会走现有的 _encrypt_dict）。空 api_key 或含 *** 的会保留原值。
+    """
+    data = request.get_json(silent=True) or {}
+    incoming = data.get("providers")
+    if not isinstance(incoming, list):
+        return jsonify({"error": "providers 必须是数组"}), 400
+
+    cfg = load_config()
+    existing = cfg.get("llm_providers") or []
+    # 用 name 对齐，处理 key 掩码
+    existing_by_name = {p.get("name"): p for p in existing if isinstance(p, dict)}
+
+    sanitized: list[dict] = []
+    seen_names: set = set()
+    for item in incoming:
+        if not isinstance(item, dict):
+            continue
+        name = (item.get("name") or "").strip()
+        if not name or name in seen_names:
+            continue
+        seen_names.add(name)
+
+        # 如果提交的 api_key 含 ***（掩码），用已保存的真值
+        submitted_key = item.get("api_key") or ""
+        if "***" in submitted_key:
+            existing_key = (existing_by_name.get(name) or {}).get("api_key", "")
+            submitted_key = existing_key
+
+        sanitized.append({
+            "name":        name,
+            "type":        (item.get("type") or "openai_compatible").lower(),
+            "base_url":    (item.get("base_url") or "").rstrip("/"),
+            "api_key":     submitted_key,
+            "model":       item.get("model") or "",
+            "is_default":  bool(item.get("is_default")),
+            "enabled":     bool(item.get("enabled", True)),
+            "temperature": float(item.get("temperature", 0.2)),
+            "timeout":     int(item.get("timeout", 90)),
+            "extra_headers": item.get("extra_headers") or {},
+            "max_iterations": int(item.get("max_iterations", 6)),
+        })
+
+    # 保证最多 1 个 is_default（如果有多个都是 true，只保留第一个）
+    seen_default = False
+    for p in sanitized:
+        if p["is_default"]:
+            if seen_default:
+                p["is_default"] = False
+            else:
+                seen_default = True
+
+    cfg["llm_providers"] = sanitized
+    save_config(cfg)
+    return jsonify({"ok": True, "count": len(sanitized)})
+
+
+@app.route('/api/agent/test-provider', methods=['POST'])
+def api_agent_test_provider():
+    """测单个 Provider 的连通性 + key 有效性。
+    Body: {provider: {name, type, base_url, api_key, model, ...}}
+          或 {name: "existing-name"}
+    """
+    from agent import LLMProvider, get_provider, probe_provider
+    data = request.get_json(silent=True) or {}
+    p: LLMProvider
+    if data.get("name") and not data.get("provider"):
+        p = get_provider(data["name"])
+        if p is None:
+            return jsonify({"ok": False, "message": "未找到已保存的 Provider"}), 404
+    else:
+        raw = data.get("provider") or {}
+        # 若 api_key 掩码，取真值
+        if "***" in (raw.get("api_key") or ""):
+            existing = get_provider(raw.get("name", ""))
+            if existing:
+                raw["api_key"] = existing.api_key
+        p = LLMProvider.from_dict(raw)
+
+    result = probe_provider(p)
+    return jsonify(result)
+
+
+@app.route('/api/agent/tools', methods=['GET'])
+def api_agent_tools():
+    """列出所有已注册的 Skill 工具及 schema（前端可预览给用户看 agent 能调哪些）。"""
+    from agent import get_tool_schemas
+    return jsonify({"tools": get_tool_schemas()})
+
+
+@app.route('/api/agent/chat', methods=['POST'])
+def api_agent_chat():
+    """单轮 agent 对话（内部可能跑多次 ReAct 循环直到 LLM 不再调工具）。
+
+    Body:
+      {
+        "message": "分析 B0F7QJC249 的 listing，并告诉我哪些 bullet 最差",
+        "provider_name": "openai-main",  // 可选
+        "history": [{role, content}],    // 可选 - 多轮上下文
+      }
+    """
+    data = request.get_json(silent=True) or {}
+    msg = (data.get("message") or "").strip()
+    if not msg:
+        return jsonify({"error": "message 不能为空"}), 400
+
+    from agent import run_agent_turn
+    try:
+        result = run_agent_turn(
+            user_message=msg,
+            provider_name=data.get("provider_name"),
+            history=data.get("history") or [],
+            system_prompt=data.get("system_prompt"),
+        )
+    except Exception as e:
+        logging.exception("Agent chat failed")
+        return jsonify({"error": str(e)}), 500
+
+    # 裁剪一下返回内容，不把完整 tool results 再塞回去（前端不需要）
+    if "messages" in result:
+        compact = []
+        for m in result["messages"]:
+            if m.get("role") == "tool":
+                compact.append({
+                    "role": "tool",
+                    "name": m.get("name"),
+                    "content": (m.get("content") or "")[:500],
+                })
+            else:
+                mm = {"role": m.get("role"),
+                      "content": (m.get("content") or "")[:2000]}
+                if m.get("tool_calls"):
+                    mm["tool_calls"] = [
+                        {"name": tc["function"]["name"],
+                         "arguments_preview": tc["function"]["arguments"][:300]}
+                        for tc in m["tool_calls"]
+                    ]
+                compact.append(mm)
+        result["messages_compact"] = compact
+        del result["messages"]
+
+    return jsonify(result)
 
 
 # ---------------------------------------------------------------------------

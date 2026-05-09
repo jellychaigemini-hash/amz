@@ -17,6 +17,7 @@ Based on the Rufus Audit demo model and COSMO/Rufus algorithm playbook.
 from __future__ import annotations
 
 import re
+import json
 from pathlib import Path
 
 
@@ -195,6 +196,18 @@ def build_cosmo_title(context: dict) -> dict:
         else "基于关键词合成的参考分析"
     )
 
+    # ─────────────────────────────────────────────────────────────────
+    # GEO 6 维度审计（追加字段，不破坏现有返回结构）
+    # 参考 skills/geo-listing-auditor 的 6 维度 100 分制：
+    # 1) Scenario coverage    20 分
+    # 2) Audience match       15 分
+    # 3) Decision drivers     20 分
+    # 4) Positioning / differentiation 15 分
+    # 5) User language / GEO semantics 15 分
+    # 6) AI-readable structure clarity 15 分
+    # ─────────────────────────────────────────────────────────────────
+    geo_audit = _build_geo_audit(context, title, bullets, keywords, brand)
+
     return {
         "original": title,
         "optimized": optimized_zh,
@@ -214,6 +227,7 @@ def build_cosmo_title(context: dict) -> dict:
                 f"基于关键词合成的参考分析 — 专业级"
             ),
         },
+        "geo_audit": geo_audit,                       # ← 新增：6 维度评分
         "mcp_validated": not synthetic,
         "mcp_sources": "SIF MCP 关键词信号",
         "mcp_top_keywords": [
@@ -221,6 +235,406 @@ def build_cosmo_title(context: dict) -> dict:
             for k in keywords[:10]
         ],
         "data_note": data_note,
+    }
+
+
+# =============================================================================
+# GEO 6-dimension audit
+# =============================================================================
+
+# 每维度的 Expected 点来源：
+#   - 来自 Sorftime/SIF 的真实 keyword signals（declining / gaining / top）
+#   - 来自 bullets 的语义片段
+#   - 来自类目特征词词库
+#
+# 每维度返回：
+#   {
+#     "score": 0-20/15,
+#     "max":   20/15,
+#     "level": "excellent|adequate|weak",
+#     "expected": [...],    # 应该出现的要点
+#     "present":  [...],    # 标题 + 前置 bullets 中已出现的要点
+#     "gap":      [...],    # 缺失或未展开的要点
+#     "recommendation": "...",
+#   }
+
+def _build_geo_audit(context: dict, title: str, bullets: list,
+                     keywords: list, brand: str) -> dict:
+    title_lower = (title or "").lower()
+    bullets_text = " ".join(str(b) for b in (bullets or [])).lower()
+    merged_text  = title_lower + " | " + bullets_text
+
+    # keyword list: 统一小写化
+    kw_strs = []
+    for kw in keywords or []:
+        s = kw.get("keyword") if isinstance(kw, dict) else str(kw)
+        if s:
+            kw_strs.append(s.lower())
+
+    # —— 6 维度各自一个评估器
+    scenario    = _audit_scenario(merged_text, title_lower, kw_strs)
+    audience    = _audit_audience(merged_text, title_lower, bullets)
+    drivers     = _audit_decision_drivers(merged_text, title_lower, bullets, kw_strs)
+    positioning = _audit_positioning(merged_text, title_lower, brand)
+    user_lang   = _audit_user_language(title_lower, bullets)
+    structure   = _audit_ai_readable(title, bullets)
+
+    total_score = (scenario["score"] + audience["score"] + drivers["score"]
+                   + positioning["score"] + user_lang["score"] + structure["score"])
+
+    if total_score >= 80:
+        overall_grade = "A — 标题 & 列表在 Rufus / AI 推荐层高度适配"
+    elif total_score >= 65:
+        overall_grade = "B — 基础结构合理，若干维度待补强"
+    elif total_score >= 50:
+        overall_grade = "C — 多维度存在明显缺口，需重点优化"
+    else:
+        overall_grade = "D — 结构与语义在 AI 推荐层极弱"
+
+    # 汇总 / 排序 recommendations（按优先级）
+    all_recs = []
+    for dim_key, dim in (
+        ("scenario", scenario), ("audience", audience),
+        ("decision_drivers", drivers), ("positioning", positioning),
+        ("user_language", user_lang), ("ai_readable", structure),
+    ):
+        if dim.get("recommendation"):
+            all_recs.append({
+                "dimension": dim_key,
+                "priority": "high" if dim["level"] == "weak" else (
+                    "medium" if dim["level"] == "adequate" else "low"),
+                "where": dim.get("where", "title / bullets"),
+                "what": dim["recommendation"],
+                "why": dim.get("why", ""),
+            })
+    all_recs.sort(key=lambda r: {"high": 0, "medium": 1, "low": 2}[r["priority"]])
+
+    return {
+        "total_score": total_score,
+        "max_score": 100,
+        "overall_grade": overall_grade,
+        "dimensions": {
+            "scenario_coverage": scenario,
+            "audience_match": audience,
+            "decision_drivers": drivers,
+            "positioning": positioning,
+            "user_language": user_lang,
+            "ai_readable_structure": structure,
+        },
+        "recommendations": all_recs,
+        "audit_method": "geo-listing-auditor v1 · 6 维度 100 分制",
+    }
+
+
+def _audit_scenario(merged: str, title: str, kw_strs: list) -> dict:
+    """场景覆盖（20 分）：产品被用在什么情况 / 环境 / 场合"""
+    scenario_signals = {
+        "家庭/日常": ["home", "house", "daily", "family", "everyday", "indoor"],
+        "办公/工作": ["office", "work", "desk", "workspace", "professional use"],
+        "旅行/便携": ["travel", "portable", "on-the-go", "commute", "trip"],
+        "健身/户外": ["gym", "outdoor", "hiking", "camp", "sport"],
+        "厨房/烹饪": ["kitchen", "cooking", "meal", "dining"],
+        "浴室/清洁": ["bath", "shower", "cleaning", "laundry"],
+        "送礼":       ["gift", "present", "holiday"],
+        "车载":       ["car", "auto", "vehicle"],
+        "婴儿/儿童":  ["baby", "infant", "toddler", "kid", "children"],
+        "宠物":       ["pet", "dog", "cat"],
+    }
+
+    expected = []
+    # 结合关键词信号：keyword 里频繁出现的"场景类"词
+    for kw in kw_strs[:20]:
+        for sc, needles in scenario_signals.items():
+            if any(n in kw for n in needles):
+                expected.append(sc)
+                break
+    expected = list(dict.fromkeys(expected))  # dedup, preserve order
+    if not expected:
+        # 没有从关键词里识别出具体场景 → 给一个通用期望
+        expected = ["日常使用场景"]
+
+    present = []
+    for sc, needles in scenario_signals.items():
+        if sc in expected and any(n in merged for n in needles):
+            present.append(sc)
+
+    gap = [x for x in expected if x not in present]
+
+    ratio = len(present) / max(1, len(expected))
+    score = int(round(ratio * 20))
+    # 标题优先：场景出现在标题比出现在 bullets 权重更高
+    title_hits = sum(1 for sc in present
+                     if any(n in title for n in scenario_signals.get(sc, [])))
+    if present and title_hits == 0:
+        score = max(0, score - 3)  # 只在 bullets 里出现 → 扣 3 分
+
+    level = "excellent" if ratio >= 0.75 else ("adequate" if ratio >= 0.4 else "weak")
+    rec = ""
+    why = ""
+    if gap:
+        rec = (f"将场景「{gap[0]}」加进标题（不在标题的场景，Rufus 更难识别为推荐候选）"
+               if title_hits == 0 else
+               f"标题已有场景，bullets 可进一步展开「{gap[0]}」的具体用法")
+        why = "Rufus/COSMO 把场景视为 used_for 关系，场景缺失会让 AI 推荐系统难以将产品匹配到买家的真实 query"
+    return {
+        "score": score, "max": 20, "level": level,
+        "expected": expected, "present": present, "gap": gap,
+        "recommendation": rec, "why": why, "where": "title",
+    }
+
+
+def _audit_audience(merged: str, title: str, bullets: list) -> dict:
+    """人群匹配（15 分）：目标人群 / 场景里的买家画像"""
+    audience_map = {
+        "初学者":       ["beginner", "novice", "first-time", "easy for new"],
+        "专业人士":     ["professional", "pro", "commercial", "industrial", "studio"],
+        "预算敏感":     ["budget", "affordable", "value", "cheap", "economical"],
+        "高端 / 品质":  ["premium", "luxury", "high-end", "pro-grade"],
+        "小空间居住者": ["apartment", "small space", "dorm", "compact living"],
+        "年长者":       ["seniors", "elderly", "grandparent"],
+        "儿童家庭":     ["family", "kids", "child-safe", "children"],
+        "礼物场景":     ["gift", "present"],
+        "通用成人":     ["adults", "men", "women"],
+    }
+
+    expected = []
+    # 简单从关键词与标题推断 1-2 类画像
+    if any(w in merged for w in ["for home", "household", "daily"]):
+        expected.append("通用成人")
+    if any(w in merged for w in ["professional", "heavy-duty", "commercial"]):
+        expected.append("专业人士")
+    if any(w in merged for w in ["gift"]):
+        expected.append("礼物场景")
+    if not expected:
+        expected = ["通用成人"]
+    expected = list(dict.fromkeys(expected))
+
+    present = []
+    for p, needles in audience_map.items():
+        if p in expected and any(n in merged for n in needles):
+            present.append(p)
+
+    gap = [x for x in expected if x not in present]
+    ratio = len(present) / max(1, len(expected))
+    score = int(round(ratio * 15))
+    level = "excellent" if ratio >= 0.75 else ("adequate" if ratio >= 0.4 else "weak")
+
+    rec = ""
+    why = ""
+    if gap:
+        rec = f"在 bullet 里明确目标人群「{gap[0]}」（"\
+              f"例：Perfect for [gap] 或 Designed for [gap]）"
+        why = "Rufus 的 used_for / isA 关系会把『谁来用』当作强匹配信号"
+    return {
+        "score": score, "max": 15, "level": level,
+        "expected": expected, "present": present, "gap": gap,
+        "recommendation": rec, "why": why, "where": "bullet",
+    }
+
+
+def _audit_decision_drivers(merged: str, title: str, bullets: list,
+                            kw_strs: list) -> dict:
+    """决策因素（20 分）：买家挑产品时看的核心因素"""
+    drivers = {
+        "尺寸/规格": ["size", "inch", "cm", "length", "width", "height",
+                     "\"", "'", "dimension"],
+        "材质":     ["material", "stainless", "steel", "aluminum", "rubber",
+                     "silicone", "bamboo", "wood", "cotton", "leather"],
+        "耐用/质量": ["durable", "sturdy", "heavy-duty", "long-lasting",
+                     "built to last", "quality"],
+        "易用":     ["easy", "simple", "one-touch", "quick", "effortless",
+                     "user-friendly"],
+        "清洁/护理": ["washable", "dishwasher-safe", "easy to clean",
+                     "reusable"],
+        "功能数量":  ["3-in-1", "2-in-1", "multi", "all-in-one", "combo"],
+        "安全":     ["safe", "bpa-free", "non-toxic", "certified", "food-grade"],
+        "价格/性价比": ["value", "affordable", "budget", "cost-effective"],
+    }
+
+    # 需要覆盖的 expected：关键词里出现的 driver 类词
+    expected = []
+    for d, needles in drivers.items():
+        if any(any(n in kw for n in needles) for kw in kw_strs[:15]):
+            expected.append(d)
+        elif d in ("尺寸/规格", "材质", "耐用/质量"):  # 常识高优先
+            expected.append(d)
+    expected = list(dict.fromkeys(expected))[:6]
+
+    present = []
+    for d in expected:
+        if any(n in merged for n in drivers[d]):
+            present.append(d)
+
+    gap = [x for x in expected if x not in present]
+    ratio = len(present) / max(1, len(expected))
+    score = int(round(ratio * 20))
+    level = "excellent" if ratio >= 0.75 else ("adequate" if ratio >= 0.4 else "weak")
+
+    rec = ""
+    why = ""
+    if gap:
+        rec = (f"补上买家最关心的决策因素：{('、'.join(gap[:3]))} —— "
+               "建议在 bullets 里给出『feature → user outcome』的因果链")
+        why = "Rufus 的 cause 关系依赖『功能 → 结果』的明确连接，缺失会拿不到决策权重"
+    return {
+        "score": score, "max": 20, "level": level,
+        "expected": expected, "present": present, "gap": gap,
+        "recommendation": rec, "why": why, "where": "bullet",
+    }
+
+
+def _audit_positioning(merged: str, title: str, brand: str) -> dict:
+    """定位差异化（15 分）：在同品类里占据什么『角色』"""
+    positions = {
+        "紧凑 / 省空间":  ["compact", "space-saving", "foldable", "small"],
+        "初学者友好":     ["beginner-friendly", "easy for beginners",
+                         "simple to use"],
+        "专业级":         ["professional", "pro-grade", "heavy-duty",
+                         "commercial"],
+        "高端 / 高性价比": ["premium", "luxury", "best value", "top quality"],
+        "多功能":         ["multi-function", "3-in-1", "2-in-1", "versatile",
+                         "all-in-one"],
+        "易维护":         ["low-maintenance", "easy-clean", "reusable",
+                         "washable"],
+    }
+
+    present = []
+    for p, needles in positions.items():
+        if any(n in merged for n in needles):
+            present.append(p)
+
+    # 期望：至少 1 个明确定位
+    expected = ["至少 1 个明确的品类定位"]
+    ratio = 1.0 if present else 0.0
+    score = 15 if present else 5
+    level = "excellent" if len(present) >= 2 else ("adequate" if present else "weak")
+
+    rec = ""
+    why = ""
+    if not present:
+        rec = "标题 / bullets 缺乏明确『角色定位』—— 需要给买家一个『为什么选它』的一句话答案"
+        why = "定位模糊的产品会被 Rufus 与同类合并推荐，拿不到『推荐 slot』"
+    elif len(present) == 1:
+        rec = f"已有定位「{present[0]}」，可再强化一个辅助定位（如多功能 / 易维护）"
+        why = "双重定位能让产品在多个 Rufus 推荐候选槽里都有机会被命中"
+    return {
+        "score": score, "max": 15, "level": level,
+        "expected": expected, "present": present, "gap": [] if present else expected,
+        "recommendation": rec, "why": why, "where": "title",
+    }
+
+
+def _audit_user_language(title: str, bullets: list) -> dict:
+    """用户语言 / GEO 语义（15 分）：是否用买家自然语言表达"""
+    bullets_text = " ".join(str(b) for b in (bullets or [])).lower()
+
+    # 信号：自然语言副词 / 问句 / 口语感
+    natural_signals = [
+        "perfect for", "ideal for", "great for", "designed for",
+        "you can", "you'll", "so you", "never worry", "say goodbye",
+        "no more", "without", "makes it easy", "easy to",
+    ]
+    natural_hits = sum(1 for s in natural_signals if s in bullets_text)
+
+    # 反信号：纯参数堆砌 / 过度大写 / SEO-ish 短句
+    caps_ratio = sum(1 for c in title if c.isupper()) / max(1, len(title))
+    seo_stuffing = title.count("|") + title.count("&")
+
+    score = 0
+    if natural_hits >= 3:
+        score += 10
+    elif natural_hits >= 1:
+        score += 6
+    # 不滥用 caps 和分隔符
+    if caps_ratio < 0.35:
+        score += 3
+    if seo_stuffing <= 2:
+        score += 2
+
+    level = "excellent" if score >= 12 else ("adequate" if score >= 7 else "weak")
+
+    present = []
+    if natural_hits >= 1:
+        present.append(f"含 {natural_hits} 处自然语言表达")
+    if caps_ratio < 0.35:
+        present.append("大小写比例合理")
+    gap = []
+    rec = ""
+    why = ""
+    if natural_hits == 0:
+        gap.append("bullets 缺乏『自然口语句式』")
+        rec = "bullets 以 Perfect for… / No more… / Designed for… 开头重写 1-2 条"
+        why = "Rufus 用的是买家自然语言做 intent 匹配，过硬的参数句式会降低语义命中率"
+    elif seo_stuffing > 3:
+        gap.append("标题分隔符过多，像 SEO 堆砌")
+        rec = "标题精简到 1-2 个 | 或 : 分隔，让主信息更突出"
+        why = "过度分隔会让 Rufus 把标题解析为碎片而非完整语义"
+    return {
+        "score": min(score, 15), "max": 15, "level": level,
+        "expected": ["自然语言表达", "简洁不过度分隔"],
+        "present": present, "gap": gap,
+        "recommendation": rec, "why": why, "where": "bullet",
+    }
+
+
+def _audit_ai_readable(title: str, bullets: list) -> dict:
+    """AI 可读结构（15 分）：AI 能否快速理解这是什么"""
+    score = 0
+    present = []
+    gap = []
+
+    # 标题长度：150-200 字符是甜区
+    tlen = len(title)
+    if 100 <= tlen <= 200:
+        score += 4
+        present.append(f"标题长度 {tlen} 字符，在可读区间")
+    else:
+        gap.append(f"标题 {tlen} 字符 —— 过短难覆盖长尾，过长易被 AI 截断")
+
+    # bullets 完整性：应该有 5 条
+    bullet_count = sum(1 for b in (bullets or []) if b and len(str(b).strip()) > 20)
+    if bullet_count >= 5:
+        score += 4
+        present.append(f"bullet 数 {bullet_count}（推荐 5 条）")
+    elif bullet_count >= 3:
+        score += 2
+        gap.append(f"bullet 只有 {bullet_count} 条，建议补齐到 5 条")
+    else:
+        gap.append(f"bullet 数严重不足（仅 {bullet_count} 条）")
+
+    # bullet 开头一致性：如都用【】/ [] / 大写开头
+    open_patterns = sum(
+        1 for b in (bullets or [])
+        if re.match(r"^\s*[\[【（(]", str(b)) or (str(b).strip()[:1].isupper())
+    )
+    if bullets and open_patterns / max(1, len(bullets)) >= 0.8:
+        score += 3
+        present.append("bullet 开头统一（结构易于 AI 解析）")
+    elif bullets:
+        gap.append("bullet 开头格式不统一")
+
+    # bullet 长度：每条 150-300 字符左右最佳
+    if bullets:
+        avg = sum(len(str(b)) for b in bullets) / len(bullets)
+        if 120 <= avg <= 400:
+            score += 4
+            present.append(f"bullet 平均长度 {int(avg)} 字符，适中")
+        elif avg > 400:
+            gap.append(f"bullet 平均 {int(avg)} 字符过长，AI 摘要会抓不住重点")
+        else:
+            gap.append(f"bullet 平均 {int(avg)} 字符过短，信息密度不足")
+
+    level = "excellent" if score >= 12 else ("adequate" if score >= 8 else "weak")
+    rec = ""
+    why = ""
+    if score < 12 and gap:
+        rec = f"修正：{gap[0]}"
+        why = "AI 可读结构是 Rufus 解析的地基，结构混乱会直接压低所有其他维度"
+    return {
+        "score": min(score, 15), "max": 15, "level": level,
+        "expected": ["标题 100-200 字符", "5 条 bullet", "开头统一", "长度适中"],
+        "present": present, "gap": gap,
+        "recommendation": rec, "why": why, "where": "bullets",
     }
 
 
@@ -769,7 +1183,373 @@ def build_rufus_qa(context: dict) -> dict:
     return {
         "qa_pairs": qa_pairs,
         "total": len(qa_pairs),
+        # 新增：基于 rufus-listing-probe 方法论生成的"探针式"问题集
+        # 这些问题不是给客户回答的 Q&A，而是用来"探测 Rufus / AI 推荐逻辑"的
+        "probing_strategy": _build_rufus_probe_strategy(context),
     }
+
+
+# =============================================================================
+# Rufus Probing Strategy (rufus-listing-probe 方法论落地)
+# =============================================================================
+#
+# 不做"8 个通用 FAQ 问答"的老套路，而是：
+#   1) 先判断当前 listing 在 5 大问题类型（scenario / decision-drivers /
+#      comparison / user-feedback / shopper-language）上最弱的 3 个；
+#   2) 按 3/3/2/2 的比例分配问题，最多 10 条；
+#   3) 每条问题都带 purpose（这个问题能帮 listing 做什么）；
+#   4) 不生成通用废题（is this good / who is this for 这类被明令禁止）。
+
+def _build_rufus_probe_strategy(context: dict) -> dict:
+    title    = context.get("title", "") or ""
+    bullets  = context.get("bullets", []) or []
+    category = context.get("category", "") or ""
+    brand    = context.get("brand", "") or ""
+    keywords = context.get("keywords", []) or []
+
+    # ── Step 1：识别 listing 的 5 类弱点分数（分数越低越弱，越优先做）
+    weakness = _assess_probe_weakness(title, bullets, category, keywords)
+
+    # 按弱度升序 → 最弱的在前
+    sorted_types = sorted(weakness.items(), key=lambda kv: kv[1]["score"])
+    top3 = [t for t, _ in sorted_types[:3]]
+
+    # ── Step 2：按 3/3/2/2 分配（共 10 问）
+    #   type[0]: 3, type[1]: 3, type[2]: 2, type[3]: 2
+    order = [t for t, _ in sorted_types]
+    alloc = {
+        order[0]: 3,
+        order[1]: 3,
+        order[2]: 2,
+        order[3]: 2 if len(order) > 3 else 0,
+    }
+
+    # ── Step 3：逐类型生成问题
+    questions_by_type: dict = {}
+    for qtype, count in alloc.items():
+        if count <= 0:
+            continue
+        qs = _generate_probe_questions(qtype, count, context)
+        if qs:
+            questions_by_type[qtype] = qs
+
+    total = sum(len(q) for q in questions_by_type.values())
+
+    # ── 可选：LLM 重写问题为更口语化、更贴近买家自然语气 ──
+    # 如果用户在 config.json 里配了 llm_providers（默认/enabled 的那个），
+    # 调它一次把 10 题重写；失败或未配置时保留原模板。
+    try:
+        refined = _llm_refine_probe_questions(
+            questions_by_type,
+            category=_clean_category(context.get("category", "")),
+            brand=(context.get("brand") or ""),
+            keywords_top=[k.get("keyword") if isinstance(k, dict) else str(k)
+                          for k in (context.get("keywords") or [])][:5],
+        )
+        if refined:
+            questions_by_type = refined
+            llm_refined = True
+        else:
+            llm_refined = False
+    except Exception:
+        llm_refined = False
+
+    reason_bits = []
+    for t in top3:
+        info = weakness[t]
+        reason_bits.append(f"{_TYPE_LABELS[t]}（弱点：{info['reason']}）")
+
+    return {
+        "priority": {
+            "primary":    top3[0] if len(top3) > 0 else None,
+            "secondary":  top3[1] if len(top3) > 1 else None,
+            "tertiary":   top3[2] if len(top3) > 2 else None,
+            "reason":     " / ".join(reason_bits),
+        },
+        "weakness_scores": {
+            t: {"score": info["score"], "reason": info["reason"],
+                "label": _TYPE_LABELS[t]}
+            for t, info in weakness.items()
+        },
+        "allocation":  {t: c for t, c in alloc.items() if c > 0},
+        "questions":   questions_by_type,
+        "total":       total,
+        "framework":   "rufus-listing-probe · 5 类型自适应分配（最多 10 题）",
+        "llm_refined": llm_refined,
+    }
+
+
+# ── LLM 重写（可选增强）────────────────────────────────────────
+# 只要用户在 config.json 里的 llm_providers 有一个 enabled/default 项，
+# 这个函数就会自动启用。失败、超时、未配置都静默降级到原模板。
+def _llm_refine_probe_questions(questions_by_type: dict, category: str,
+                                 brand: str, keywords_top: list) -> dict | None:
+    """用 LLM 把探针问题改写成更自然的 Amazon 买家口吻。返回新的 questions_by_type 或 None。"""
+    try:
+        from agent.providers import get_default_provider, chat_completion
+    except Exception:
+        return None
+
+    provider = get_default_provider()
+    if provider is None or not provider.api_key or "***" in provider.api_key:
+        return None
+
+    # 扁平化原问题 + 给每题一个 id
+    flat: list = []
+    for qtype, qs in questions_by_type.items():
+        for q in qs:
+            flat.append({
+                "id": len(flat) + 1,
+                "type": qtype,
+                "q": q.get("q", ""),
+                "purpose": q.get("purpose", ""),
+            })
+    if not flat:
+        return None
+
+    system = (
+        "You are an Amazon shopper-voice copywriter. Rewrite probe questions to sound "
+        "like a real Amazon shopper asking Rufus — concise, conversational, no analyst jargon. "
+        "Keep each question under 25 words. Preserve the original intent & the *category* "
+        "mentioned. Do NOT add a question mark unless the original had one. "
+        "Never change 'purpose' text — only rewrite 'q'."
+    )
+    user_ctx = {
+        "category": category or "",
+        "brand": brand or "",
+        "top_keywords": keywords_top,
+        "questions": [{"id": x["id"], "q": x["q"]} for x in flat],
+    }
+    user = (
+        "Context (for reference, not to repeat):\n"
+        + json.dumps(user_ctx, ensure_ascii=False, indent=2)
+        + "\n\nReturn ONLY a JSON array like:\n"
+          '[{"id":1,"q":"..."}, {"id":2,"q":"..."}]\n'
+          "Same id list, same length. No prose, no markdown fences."
+    )
+
+    try:
+        resp = chat_completion(
+            provider,
+            messages=[
+                {"role": "system", "content": system},
+                {"role": "user",   "content": user},
+            ],
+            temperature_override=0.4,
+            max_tokens=1200,
+        )
+    except Exception:
+        return None
+
+    raw = (resp.get("content") or "").strip()
+    # 清掉可能的 ```json 包裹
+    raw = re.sub(r"^```(?:json)?\s*", "", raw)
+    raw = re.sub(r"\s*```$", "", raw)
+
+    try:
+        parsed = json.loads(raw)
+        if not isinstance(parsed, list):
+            return None
+    except Exception:
+        return None
+
+    # 建 id → 新 q 的映射
+    id_to_q = {}
+    for item in parsed:
+        if isinstance(item, dict) and "id" in item and "q" in item:
+            s = str(item["q"]).strip()
+            if s:
+                id_to_q[int(item["id"])] = s
+    if not id_to_q:
+        return None
+
+    # 回填到原结构
+    new_by_type: dict = {}
+    for qtype, qs in questions_by_type.items():
+        new_by_type[qtype] = []
+        for q in qs:
+            new_q = dict(q)
+            # 用 flat 里对应的 id 找新问题
+            for x in flat:
+                if x["type"] == qtype and x["q"] == q.get("q"):
+                    if x["id"] in id_to_q:
+                        new_q["q"] = id_to_q[x["id"]]
+                    break
+            new_by_type[qtype].append(new_q)
+    return new_by_type
+
+
+_TYPE_LABELS = {
+    "scenario_persona":        "场景与人群",
+    "decision_drivers":        "决策因素",
+    "comparison_substitution": "对比与替代",
+    "user_feedback_friction":  "用户反馈 / 摩擦",
+    "shopper_language":        "买家自然语言",
+}
+
+
+def _assess_probe_weakness(title: str, bullets: list,
+                            category: str, keywords: list) -> dict:
+    """对 5 类问题给出『当前 listing 在这里弱不弱』的分数（0-10，越高越强）。"""
+    title_l = title.lower()
+    joined  = (title_l + " " + " ".join(str(b) for b in bullets).lower())
+    bullet_count = sum(1 for b in bullets if b and len(str(b).strip()) > 20)
+
+    # 场景/人群：句子里是否有明确场景词或 for + 人群
+    scenario_hits = sum(joined.count(s) for s in
+                        ["for home", "for office", "for travel",
+                         "perfect for", "designed for", "ideal for",
+                         "bedroom", "bathroom", "kitchen"])
+    scenario_score = min(scenario_hits * 2, 10)
+    scenario_reason = ("场景词充足" if scenario_score >= 6
+                       else "场景 / 人群定位偏弱，Rufus 匹配能力有限")
+
+    # 决策因素：量化数据 + 因果连接
+    numeric_hits = len(re.findall(r"\d+\s*(?:inch|cm|mm|lb|oz|ml|l|g|mah|"
+                                  r"pcs|count|pack|rpm|w|v)", joined))
+    cause_hits   = sum(1 for w in ["because", "powered by", "with",
+                                    "featuring", "ensures", "delivers"]
+                       if w in joined)
+    drivers_score = min(numeric_hits * 2 + cause_hits, 10)
+    drivers_reason = ("量化数据 & 因果连接充分" if drivers_score >= 7
+                      else "缺少量化参数或功能→收益的因果表达")
+
+    # 对比/替代：有无 vs / compared to / better than
+    compare_hits = sum(1 for w in ["vs", "compared to", "better than",
+                                    "unlike", "alternative", "replacement for"]
+                       if w in joined)
+    compare_score = min(compare_hits * 3, 10)
+    compare_reason = ("有明显对比框架" if compare_score >= 6
+                      else "缺少『与同类产品的差异化』表述")
+
+    # 用户反馈/摩擦：是否处理了常见抱怨 / 期望管理
+    friction_signals = ["no more", "say goodbye", "never worry",
+                        "without", "streak-free", "easy to clean",
+                        "leak-proof", "break-resistant"]
+    friction_score = min(sum(2 for s in friction_signals if s in joined), 10)
+    friction_reason = ("已处理常见摩擦点" if friction_score >= 6
+                       else "未显性处理买家常见痛点 / 期望落差")
+
+    # 买家语言：自然副词 + 简洁而不 SEO 堆砌
+    natural_hits = sum(1 for s in ["you can", "you'll", "so you",
+                                    "makes it easy", "perfect for",
+                                    "easy to"] if s in joined)
+    caps_ratio = sum(1 for c in title if c.isupper()) / max(1, len(title))
+    lang_score = min(natural_hits * 2, 8) + (2 if caps_ratio < 0.35 else 0)
+    lang_reason = ("语言自然" if lang_score >= 7
+                   else "语言偏 SEO / 技术化，买家理解成本高")
+
+    return {
+        "scenario_persona":        {"score": scenario_score, "reason": scenario_reason},
+        "decision_drivers":        {"score": drivers_score,  "reason": drivers_reason},
+        "comparison_substitution": {"score": compare_score,  "reason": compare_reason},
+        "user_feedback_friction":  {"score": friction_score, "reason": friction_reason},
+        "shopper_language":        {"score": lang_score,     "reason": lang_reason},
+    }
+
+
+def _clean_category(raw: str) -> str:
+    """清掉 Sorftime 分类里的『（排名:N）』/『(rank:N)』等尾部数据标注，只保留类目名。
+
+    例：'Squeegees（排名:93）'  → 'Squeegees'
+        'Health & Household（排名:47213）' → 'Health & Household'
+        'Kitchen Tools (rank:15)'   → 'Kitchen Tools'
+    """
+    if not raw:
+        return ""
+    s = str(raw).strip()
+    # 去中英文括号及里面的排名/rank/排名:N
+    s = re.sub(r"\s*[（(][^）)]*[）)]\s*$", "", s)
+    # 多余空白 & 尾部标点
+    s = re.sub(r"\s+", " ", s).strip(" ·-,，。")
+    return s
+
+
+def _generate_probe_questions(qtype: str, count: int, context: dict) -> list:
+    """按类型 + 数量生成探针问题。每题带 purpose。"""
+    title    = context.get("title", "") or "this product"
+    category = _clean_category(context.get("category", "")) or "product"
+    brand    = context.get("brand", "") or ""
+    keywords = [k.get("keyword") if isinstance(k, dict) else str(k)
+                for k in (context.get("keywords") or [])]
+    kw_top3 = keywords[:3]
+
+    # 尝试从关键词里猜一个"典型使用场景"
+    scene_guess = ""
+    for kw in keywords[:10]:
+        for s in ["kitchen", "bathroom", "bedroom", "outdoor", "office",
+                  "home", "travel", "garage"]:
+            if s in kw.lower():
+                scene_guess = s
+                break
+        if scene_guess:
+            break
+    scene_guess = scene_guess or "home"
+
+    # 对比词：从关键词里找疑似品类别名
+    alt_guess = ""
+    for kw in keywords[:10]:
+        if " " in kw and kw.lower() != (title.lower()):
+            alt_guess = kw
+            break
+    alt_guess = alt_guess or f"standard {category}"
+
+    pool = {
+        "scenario_persona": [
+            {"q": f"In what specific situations would someone in a small {scene_guess} "
+                  f"choose a {category} like this one?",
+             "purpose": "identify the scene to emphasize in the title / first bullet"},
+            {"q": f"Why would a first-time buyer need a {category} instead of just "
+                  f"using what they already have?",
+             "purpose": "surface the shopper's underlying pain → turn into bullet 1"},
+            {"q": f"Is this {category} a good option for someone dealing with "
+                  f"{kw_top3[0] if kw_top3 else 'limited space'}?",
+             "purpose": "check whether the listing language matches niche buyer segments"},
+        ],
+        "decision_drivers": [
+            {"q": f"What matters most when choosing a {category} for "
+                  f"{kw_top3[0] if kw_top3 else 'daily use'}?",
+             "purpose": "find out which claim should be promoted in bullet 1-2"},
+            {"q": f"How important is durability vs. price when buyers pick a {category}?",
+             "purpose": "decide whether to emphasize premium materials or value"},
+            {"q": f"Which factor should buyers weigh more: ease of cleaning or "
+                  f"multi-function versatility?",
+             "purpose": "choose what to lead with in bullet ordering"},
+        ],
+        "comparison_substitution": [
+            {"q": f"For a {scene_guess} user, how does this {category} compare with "
+                  f"{alt_guess}?",
+             "purpose": "position the product relative to its most-queried alternative"},
+            {"q": f"What type of shopper should choose a {category} over a simpler "
+                  f"single-purpose tool?",
+             "purpose": "define the target recommendation slot"},
+            {"q": f"When does buying this {category} make more sense than using "
+                  f"{alt_guess}?",
+             "purpose": "extract the concrete 'switch-to' trigger messaging"},
+        ],
+        "user_feedback_friction": [
+            {"q": f"What do buyers most appreciate after using a {category} like this "
+                  f"for a few weeks?",
+             "purpose": "identify the most reinforced delight point → put in bullet 1"},
+            {"q": f"What problems do people run into most often with {category} "
+                  f"products?",
+             "purpose": "pre-empt complaints in FAQ / expectation management bullet"},
+            {"q": f"What confuses buyers right after purchase?",
+             "purpose": "create a 'quick-start' bullet or pre-empt reviews about setup"},
+        ],
+        "shopper_language": [
+            {"q": f"How would a non-expert shopper describe the need for a {category} "
+                  f"in plain English?",
+             "purpose": "rewrite the first bullet using that exact phrasing"},
+            {"q": f"What natural phrases would a beginner use when searching for "
+                  f"{kw_top3[0] if kw_top3 else 'this kind of product'}?",
+             "purpose": "inject these phrases into bullets / backend search terms"},
+            {"q": f"How do real users describe the problem this {category} solves "
+                  f"without using technical terms?",
+             "purpose": "make the title GEO-friendly for natural-language queries"},
+        ],
+    }
+    return pool.get(qtype, [])[:count]
 
 
 # =============================================================================

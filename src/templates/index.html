@@ -8,15 +8,34 @@
 /* ── Reset & Variables ── */
 *{box-sizing:border-box}
 :root{
-  --bg:#0f1117;--bg2:#1a1d27;--bg3:#22263a;--text:#e2e8f0;--muted:#8892a4;
-  --border:#2d3348;--accent:#1677ff;--accent2:#f59e0b;
-  --green:#22c55e;--red:#ef4444;
+  /* 浅色 · 象牙白 / 金 / 深青  — 高级感克制配色 */
+  --bg:#f8f5f0;              /* 页面底色 · 象牙奶白 */
+  --bg2:#ffffff;             /* 卡片 / header / sidebar */
+  --bg3:#f1ece2;             /* 次层 · 输入框 / 被动背景 */
+  --bg4:#faf6ef;             /* 轻微起伏层（hover / stripe）*/
+  --text:#1a1f2c;            /* 主字 · 墨 */
+  --text-light:#41485b;      /* 次字 */
+  --muted:#8a8070;           /* 辅文 · 暖灰 */
+  --border:#e5ddd0;          /* 主边框 · 暖米色 */
+  --border-light:#efe9dd;    /* 浅边框 */
+  --accent:#1a1f2c;          /* 深墨（CTA 主色）*/
+  --accent2:#c9a66b;         /* 金（强调 / 高亮）*/
+  --teal:#0f766e;            /* 深青（次强调 / 成功态）*/
+  --green:#15803d;
+  --red:#b91c1c;
+  --warning:#c2704b;
   --sidebar-w:260px;--header-h:52px;--tabs-h:44px;
-  --shadow:0 2px 8px rgba(0,0,0,.4);
+  --shadow:0 2px 12px rgba(26,31,44,.06);
+  --shadow-lg:0 8px 32px rgba(26,31,44,.10);
+  --radius:8px;
 }
 html,body{margin:0;padding:0;height:100%;overflow:hidden;
-  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
-  font-size:16px;color:var(--text);background:var(--bg)}
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC',
+    'Microsoft YaHei',Roboto,sans-serif;
+  font-size:16px;color:var(--text);background:var(--bg);
+  -webkit-font-smoothing:antialiased;
+  letter-spacing:.01em;
+}
 
 /* ── Header ── */
 .oa-header{
@@ -24,20 +43,21 @@ html,body{margin:0;padding:0;height:100%;overflow:hidden;
   background:var(--bg2);color:var(--text);
   display:flex;align-items:center;justify-content:space-between;
   padding:0 20px;z-index:100;border-bottom:1px solid var(--border);
-  box-shadow:0 2px 12px rgba(0,0,0,.5)
+  box-shadow:var(--shadow);
 }
 .oa-header h1{font-size:.95rem;font-weight:700;margin:0;letter-spacing:.5px}
 .oa-header h1 span{color:var(--accent2)}
 
 /* Header chip buttons — unified look */
 .header-chip{
-  font-size:.64rem;padding:4px 12px;border-radius:999px;
-  border:1px solid var(--border);background:var(--bg3);color:var(--muted);
+  font-size:.64rem;padding:5px 14px;border-radius:999px;
+  border:1px solid var(--border);background:var(--bg2);color:var(--text-light);
   cursor:pointer;font-weight:600;transition:.15s;letter-spacing:.2px;
 }
-.header-chip:hover{background:rgba(22,119,255,.08);color:var(--text);border-color:rgba(22,119,255,.3)}
-.header-chip.primary{border-color:rgba(22,119,255,.35);background:rgba(22,119,255,.1);color:var(--accent)}
-.header-chip.warn{border-color:rgba(245,158,11,.35);background:rgba(245,158,11,.12);color:var(--accent2)}
+.header-chip:hover{background:var(--bg4);color:var(--text);border-color:var(--accent2)}
+.header-chip.primary{border-color:var(--accent2);background:rgba(201,166,107,.14);color:#8c6b3c}
+.header-chip.primary:hover{background:rgba(201,166,107,.24)}
+.header-chip.warn{border-color:rgba(194,112,75,.4);background:rgba(194,112,75,.12);color:var(--warning)}
 #licenseBadge{
   font-size:.62rem;padding:4px 12px;border-radius:999px;font-weight:600;
   letter-spacing:.2px;transition:.15s;
@@ -54,7 +74,8 @@ html,body{margin:0;padding:0;height:100%;overflow:hidden;
 .sidebar-scroll{flex:1;overflow-y:auto;overflow-x:hidden}
 .sidebar-scroll::-webkit-scrollbar{width:4px}
 .sidebar-scroll::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
-.sidebar-block{padding:12px;border-bottom:1px solid var(--border)}
+.sidebar-scroll::-webkit-scrollbar-thumb:hover{background:var(--accent2)}
+.sidebar-block{padding:12px;border-bottom:1px solid var(--border-light)}
 .sidebar-section-label{
   font-size:.68rem;font-weight:700;color:var(--muted);
   padding:10px 12px 5px;text-transform:uppercase;letter-spacing:.8px
@@ -65,6 +86,7 @@ html,body{margin:0;padding:0;height:100%;overflow:hidden;
 .oa-content{flex:1;overflow-y:auto;padding:16px}
 .oa-content::-webkit-scrollbar{width:6px}
 .oa-content::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+.oa-content::-webkit-scrollbar-thumb:hover{background:var(--accent2)}
 
 /* ── Horizontal Tab Bar ── */
 .main-tabs-bar{
@@ -76,6 +98,7 @@ html,body{margin:0;padding:0;height:100%;overflow:hidden;
 }
 .main-tabs-bar::-webkit-scrollbar{height:3px}
 .main-tabs-bar::-webkit-scrollbar-thumb{background:var(--border)}
+.main-tabs-bar::-webkit-scrollbar-thumb:hover{background:var(--accent2)}
 .main-tab{
   display:inline-flex;align-items:center;gap:5px;
   padding:0 13px;height:100%;border:none;
@@ -83,8 +106,8 @@ html,body{margin:0;padding:0;height:100%;overflow:hidden;
   font-size:.74rem;cursor:pointer;transition:.15s;
   white-space:nowrap;border-bottom:2px solid transparent;flex-shrink:0;
 }
-.main-tab:hover{color:var(--text);background:rgba(255,255,255,.04)}
-.main-tab.active{color:var(--accent);border-bottom:2px solid var(--accent);background:rgba(22,119,255,.06)}
+.main-tab:hover{color:var(--text);background:var(--bg4)}
+.main-tab.active{color:var(--text);border-bottom:2px solid var(--accent2);background:transparent;font-weight:600}
 
 /* ── Main Panel ── */
 .main-tab-panel{display:none}
@@ -94,44 +117,47 @@ html,body{margin:0;padding:0;height:100%;overflow:hidden;
 .upload-zone{
   border:2px dashed var(--border);border-radius:8px;
   padding:14px 12px;text-align:center;cursor:pointer;transition:.2s;
-  background:var(--bg3);font-size:.78rem;color:var(--text)
+  background:var(--bg2);font-size:.78rem;color:var(--text)
 }
-.upload-zone.dragover{border-color:var(--accent);background:rgba(22,119,255,.08)}
-.upload-zone .icon{font-size:1.5rem;margin-bottom:4px}
+.upload-zone:hover{border-color:var(--accent2);background:var(--bg4)}
+.upload-zone.dragover{border-color:var(--accent2);background:rgba(201,166,107,.1)}
+.upload-zone .icon{font-size:1.5rem;margin-bottom:4px;color:var(--accent2)}
 .upload-zone .hint{font-size:.68rem;color:var(--muted);margin-top:4px;line-height:1.4}
 .upload-zone input[type=file]{display:none}
 .preview-thumbs{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
 .preview-thumbs img{width:48px;height:48px;object-fit:cover;border-radius:6px;
   border:2px solid transparent;cursor:pointer;transition:.2s}
-.preview-thumbs img:hover,.preview-thumbs img.selected{border-color:var(--accent)}
+.preview-thumbs img:hover,.preview-thumbs img.selected{border-color:var(--accent2)}
 
 /* ── Form ── */
 .form-row{display:flex;gap:6px;margin:8px 0}
 .form-row input{flex:1;min-width:0;padding:7px 10px;border:1px solid var(--border);
   border-radius:6px;font-size:.8rem;outline:none;
-  background:var(--bg3);color:var(--text)}
-.form-row input:focus{border-color:var(--accent)}
+  background:#fff;color:var(--text);transition:.15s}
+.form-row input:focus{border-color:var(--accent2);box-shadow:0 0 0 3px rgba(201,166,107,.15)}
 .form-row select{padding:7px 8px;border:1px solid var(--border);border-radius:6px;
-  font-size:.78rem;background:var(--bg3);color:var(--text);min-width:58px}
+  font-size:.78rem;background:#fff;color:var(--text);min-width:58px}
 .asin-divider{text-align:center;font-size:.68rem;color:var(--muted);margin:6px 0}
 .btn-start{
-  width:100%;padding:8px;border:none;border-radius:6px;
-  background:var(--accent2);color:#fff;font-size:.82rem;font-weight:600;
-  cursor:pointer;transition:.2s;margin-top:4px
+  width:100%;padding:9px;border:none;border-radius:6px;
+  background:var(--accent);color:#fff;font-size:.82rem;font-weight:600;
+  cursor:pointer;transition:.2s;margin-top:4px;letter-spacing:.3px;
 }
-.btn-start:hover{opacity:.9}
+.btn-start:hover{background:#000}
+.btn-start:disabled{background:var(--bg3);color:var(--muted);cursor:not-allowed}
 .btn{padding:7px 16px;border:none;border-radius:6px;font-size:.8rem;font-weight:600;cursor:pointer;transition:.2s}
 .btn-primary{background:var(--accent);color:#fff}
-.btn-icon{background:rgba(255,255,255,.1);color:var(--text);border:none;border-radius:6px;
-  padding:6px 10px;cursor:pointer;font-size:.9rem}
-.btn-icon:hover{background:rgba(255,255,255,.18)}
+.btn-primary:hover{background:#000}
+.btn-icon{background:var(--bg3);color:var(--text-light);border:1px solid var(--border);border-radius:6px;
+  padding:6px 10px;cursor:pointer;font-size:.9rem;transition:.15s;}
+.btn-icon:hover{background:var(--bg4);border-color:var(--accent2);color:var(--text);}
 
 /* ── Progress Panel ── */
 .step{display:flex;align-items:flex-start;gap:8px;padding:3px 0;font-size:.72rem}
 .step-dot{width:8px;height:8px;border-radius:50%;background:var(--border);flex-shrink:0;margin-top:4px}
-.step-dot.active{background:var(--accent);box-shadow:0 0 0 3px rgba(22,119,255,.25)}
+.step-dot.active{background:var(--accent2);box-shadow:0 0 0 3px rgba(201,166,107,.25)}
 .step-dot.done{background:var(--green)}
-.step-dot.error{background:var(--red);box-shadow:0 0 0 3px rgba(239,68,68,.25)}
+.step-dot.error{background:var(--red);box-shadow:0 0 0 3px rgba(185,28,28,.2)}
 .step-label{font-weight:600;font-size:.72rem;color:var(--text)}
 .step-msg{color:var(--muted);font-size:.65rem}
 .progress-bar{height:4px;background:var(--border);border-radius:2px;overflow:hidden;margin-top:6px}
@@ -164,7 +190,7 @@ html,body{margin:0;padding:0;height:100%;overflow:hidden;
   cursor:pointer;font-size:.8rem;display:flex;align-items:center;justify-content:center;
   transition:.15s;padding:0;margin-top:2px;
 }
-.copy-btn:hover{border-color:var(--accent);color:var(--accent);background:rgba(22,119,255,.1)}
+.copy-btn:hover{border-color:var(--accent2);color:var(--accent2);background:rgba(201,166,107,.12)}
 .ptext{
   flex:1;min-height:120px;padding:8px 10px;
   background:var(--bg3);color:var(--text);
@@ -174,7 +200,7 @@ html,body{margin:0;padding:0;height:100%;overflow:hidden;
   white-space:pre-wrap;word-break:break-word;overflow-wrap:break-word;
   overflow-x:hidden;
 }
-.ptext:focus{outline:none;border-color:var(--accent)}
+.ptext:focus{outline:none;border-color:var(--accent2);box-shadow:0 0 0 3px rgba(201,166,107,.15)}
 .pmeta{font-size:.65rem;color:var(--muted);margin-top:6px}
 .pactions{margin-top:8px}
 .btn-send-chatgpt{
@@ -195,15 +221,15 @@ html,body{margin:0;padding:0;height:100%;overflow:hidden;
   background:var(--bg3);transition:.2s;
 }
 .ref-image-card:hover{border-color:var(--accent)}
-.ref-image-card.selected{border-color:var(--accent2);box-shadow:0 0 0 2px rgba(245,158,11,.3)}
+.ref-image-card.selected{border-color:var(--accent2);box-shadow:0 0 0 2px rgba(201,166,107,.3)}
 .ref-image-card img{width:100%;aspect-ratio:1;object-fit:cover;display:block}
 .img-type{
   position:absolute;top:4px;left:4px;
   font-size:.58rem;font-weight:700;padding:2px 6px;border-radius:4px;
-  background:rgba(22,119,255,.85);color:#fff;pointer-events:none;
+  background:var(--teal);color:#fff;pointer-events:none;
 }
-.img-type.main{background:rgba(22,119,255,.85)}
-.img-type.aplus,.img-type.a+{background:rgba(245,158,11,.85);color:#fff}
+.img-type.main{background:var(--teal)}
+.img-type.aplus,.img-type.a+{background:var(--accent2);color:#fff}
 .ref-preview-btn{
   position:absolute;top:4px;right:4px;
   width:22px;height:22px;border-radius:4px;border:none;
@@ -237,22 +263,23 @@ html,body{margin:0;padding:0;height:100%;overflow:hidden;
 }
 .result-card .actions a:last-child,.result-card .actions button:last-child{border-right:none}
 .result-card .actions a:hover,.result-card .actions button:hover{
-  background:rgba(22,119,255,.1);color:var(--accent);
+  background:rgba(201,166,107,.12);color:var(--accent2);
 }
 
 /* ── Expert ── */
 .expert-tabs{display:flex;gap:4px;margin-bottom:12px;flex-wrap:wrap}
 .expert-tab{padding:5px 12px;border:1px solid var(--border);border-radius:4px;
-  background:var(--bg3);color:var(--muted);font-size:.72rem;cursor:pointer}
+  background:var(--bg2);color:var(--text-light);font-size:.72rem;cursor:pointer;transition:.15s}
+.expert-tab:hover{background:var(--bg4);border-color:var(--accent2);color:var(--text)}
 .expert-tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
-.expert-panel{background:var(--bg2);border-radius:8px;padding:14px;box-shadow:var(--shadow);margin-bottom:8px;border:1px solid var(--border)}
-.expert-label{font-size:.8rem;font-weight:700;margin-bottom:8px;color:var(--text)}
-.expert-card{background:var(--bg2);border-radius:8px;padding:12px;box-shadow:var(--shadow);margin-bottom:8px;border:1px solid var(--border)}
+.expert-panel{background:var(--bg2);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);margin-bottom:10px;border:1px solid var(--border-light)}
+.expert-label{font-size:.82rem;font-weight:700;margin-bottom:8px;color:var(--text);letter-spacing:.2px}
+.expert-card{background:var(--bg2);border-radius:var(--radius);padding:14px;box-shadow:var(--shadow);margin-bottom:10px;border:1px solid var(--border-light)}
 
 /* ── Misc ── */
-.badge{background:var(--accent);color:#fff;padding:1px 7px;border-radius:10px;
-  font-size:.62rem;margin-left:4px}
-.highlight{color:var(--accent);font-weight:600}
+.badge{background:var(--accent2);color:#fff;padding:1px 7px;border-radius:10px;
+  font-size:.62rem;margin-left:4px;font-weight:700;letter-spacing:.2px}
+.highlight{color:var(--accent2);font-weight:600}
 .score-bar{height:6px;background:var(--border);border-radius:3px;overflow:hidden;margin:4px 0;position:relative}
 .score-bar-fill{height:100%;background:var(--accent);border-radius:3px}
 .score-bar-fill.low{background:var(--red)}
@@ -264,7 +291,7 @@ html,body{margin:0;padding:0;height:100%;overflow:hidden;
 .data-table th{background:var(--bg3);padding:7px 10px;text-align:left;font-weight:600;
   border-bottom:2px solid var(--border);position:sticky;top:0;z-index:1;color:var(--muted)}
 .data-table td{padding:6px 10px;border-bottom:1px solid var(--border);color:var(--text)}
-.data-table tr:hover td{background:rgba(22,119,255,.05)}
+.data-table tr:hover td{background:var(--bg4)}
 .metric-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;margin-bottom:12px}
 .metric-card{background:var(--bg2);border-radius:8px;padding:12px;text-align:center;
   box-shadow:var(--shadow);border:1px solid var(--border)}
@@ -274,7 +301,8 @@ html,body{margin:0;padding:0;height:100%;overflow:hidden;
 /* ── Settings Modal ── */
 #settingsModal,#activateModal,#initGuideModal{
   display:none;position:fixed;inset:0;z-index:998;
-  background:rgba(0,0,0,.7);align-items:center;justify-content:center;
+  background:rgba(26,31,44,.45);align-items:center;justify-content:center;
+  backdrop-filter:blur(4px);
 }
 #settingsModal.open,#activateModal.open,#initGuideModal.open{display:flex}
 .settings-box{
@@ -301,15 +329,16 @@ html,body{margin:0;padding:0;height:100%;overflow:hidden;
   width:100%;padding:7px 10px;border:1px solid var(--border);border-radius:6px;
   background:var(--bg3);color:var(--text);font-size:.8rem;outline:none;
 }
-.settings-field input:focus{border-color:var(--accent)}
+.settings-field input:focus{border-color:var(--accent2);box-shadow:0 0 0 3px rgba(201,166,107,.15);outline:none}
 
 /* ── Image Preview Modal ── */
 #previewModal{
   display:none;position:fixed;inset:0;z-index:999;
-  background:rgba(0,0,0,.85);align-items:center;justify-content:center;
+  background:rgba(26,31,44,.82);align-items:center;justify-content:center;
+  backdrop-filter:blur(6px);
 }
 #previewModal.open{display:flex}
-#previewModal img{max-width:90vw;max-height:90vh;border-radius:8px;box-shadow:0 8px 40px rgba(0,0,0,.6)}
+#previewModal img{max-width:90vw;max-height:90vh;border-radius:8px;box-shadow:0 12px 48px rgba(0,0,0,.4)}
 #previewModal .close-btn{
   position:absolute;top:20px;right:24px;
   font-size:1.6rem;color:#fff;cursor:pointer;background:none;border:none;
@@ -381,7 +410,7 @@ html,body{margin:0;padding:0;height:100%;overflow:hidden;
           <span id="elapsedTime" style="font-size:.62rem;color:var(--muted);display:none;">⏱ 0s</span>
         </div>
         <div style="margin-top:8px;display:flex;gap:4px;">
-          <button onclick="clearAllCache()" style="width:100%;padding:8px 12px;border:1px solid rgba(239,68,68,.4);border-radius:6px;background:rgba(239,68,68,.12);color:#f87171;font-size:.7rem;cursor:pointer;transition:.15s;font-weight:600;" onmouseover="this.style.background='rgba(239,68,68,.22)';this.style.borderColor='rgba(239,68,68,.6)'" onmouseout="this.style.background='rgba(239,68,68,.12)';this.style.borderColor='rgba(239,68,68,.4)'" title="清除历史缓存、生成记录和图片记录">🗑 清除缓存记录</button>
+          <button onclick="clearAllCache()" style="width:100%;padding:8px 12px;border:1px solid rgba(185,28,28,.3);border-radius:6px;background:rgba(185,28,28,.06);color:var(--red);font-size:.7rem;cursor:pointer;transition:.15s;font-weight:600;" onmouseover="this.style.background='rgba(185,28,28,.12)';this.style.borderColor='rgba(185,28,28,.5)'" onmouseout="this.style.background='rgba(185,28,28,.06)';this.style.borderColor='rgba(185,28,28,.3)'" title="清除历史缓存、生成记录和图片记录">🗑 清除缓存记录</button>
         </div>
       </div>
 
@@ -395,6 +424,8 @@ html,body{margin:0;padding:0;height:100%;overflow:hidden;
     <div class="main-tabs-bar" id="mainTabs">
       <button class="main-tab active" onclick="switchMainTab('material')">&#x1F3A8; 产品素材生成</button>
       <button class="main-tab" onclick="switchMainTab('expert')">&#x1F9E0; Rufus &amp; COSMO 专家建议<span class="badge" id="expertBadge" style="display:none;">&#x2713;</span></button>
+      <button class="main-tab" onclick="switchMainTab('rufus')">&#x1F916; Rufus 调研</button>
+      <button class="main-tab" onclick="switchMainTab('sqp')">&#x1F4CA; SQP 品牌分析</button>
     </div>
 
     <div class="oa-content">
@@ -445,6 +476,95 @@ html,body{margin:0;padding:0;height:100%;overflow:hidden;
         <div id="expertEmpty" class="empty" style="padding:40px;"><div class="icon">&#x1F9E0;</div>Rufus & COSMO 专家建议将在输入 ASIN 后生成<br><small>含标题优化、五点分析、Q&A建议、卖点提炼、数据洞察</small></div>
       </div>
 
+      <!-- Tab Panel: Rufus 调研 (auto + manual) -->
+      <div id="mainTabRufus" class="main-tab-panel">
+        <div class="expert-panel">
+          <div class="expert-label">&#x1F916; Rufus 调研 · 自动 + 手动双模式</div>
+          <p style="font-size:.7rem;color:var(--muted);margin:4px 0 0;">
+            基于 rufus-listing-probe 方法论生成 10 个探针问题 &middot; 自动模式失败时一键切手动粘贴 &middot; 输出 GEO 6 维度审计报告
+          </p>
+        </div>
+
+        <!-- Step 1: 生成问题 -->
+        <div class="expert-card">
+          <div class="expert-label">&#x1F4CC; Step 1 &middot; 生成探针问题</div>
+          <div style="display:flex;gap:6px;align-items:center;margin:6px 0;">
+            <input type="text" id="rufusAsinInput" placeholder="ASIN (10位)" maxlength="10" style="flex:1;padding:7px 10px;border:1px solid var(--border);border-radius:6px;background:var(--bg3);color:var(--text);font-size:.78rem;">
+            <button class="btn-start" style="width:auto;padding:7px 14px;margin-top:0;" onclick="rufusGenerateQuestions()">&#x1F3AF; 生成 10 题</button>
+          </div>
+          <div id="rufusQuestionsArea" style="display:none;margin-top:8px;"></div>
+        </div>
+
+        <!-- Step 2: 自动模式 -->
+        <div class="expert-card">
+          <div class="expert-label">&#x1F680; Step 2 &middot; 自动模式（CDP 接管 Chrome）</div>
+          <div id="rufusChromeStatus" style="font-size:.7rem;color:var(--muted);margin-bottom:6px;">
+            &middot; 检测中&hellip;
+          </div>
+          <div id="rufusChromeHelp" style="display:none;font-size:.68rem;color:var(--muted);background:var(--bg3);padding:8px;border-radius:6px;margin-bottom:6px;line-height:1.5;">
+            <strong style="color:var(--accent2);">怎样开启自动模式：</strong><br>
+            1) 关闭所有 Chrome 窗口<br>
+            2) 双击运行项目目录下的 <code style="background:var(--bg);padding:1px 4px;border-radius:3px;">tools_user/start_chrome_for_rufus.bat</code><br>
+            3) 回到此处点「再次检测」
+          </div>
+          <div style="display:flex;gap:6px;align-items:center;">
+            <button class="header-chip" onclick="rufusCheckChrome()">&#x1F504; 再次检测</button>
+            <button class="header-chip primary" id="rufusAutoRunBtn" onclick="rufusAutoRun()" disabled>&#x25B6; 开始自动调研</button>
+            <span id="rufusAutoProgress" style="font-size:.68rem;color:var(--muted);"></span>
+          </div>
+        </div>
+
+        <!-- Step 3: 手动模式 -->
+        <div class="expert-card">
+          <div class="expert-label">&#x270D;&#xFE0F; Step 3 &middot; 手动粘贴（兜底方案）</div>
+          <div style="font-size:.68rem;color:var(--muted);margin-bottom:6px;line-height:1.5;">
+            在 Amazon 网页问完 Rufus 后，复制每题回答粘贴到对应框里。<br>
+            可以只填一部分 &mdash; 空着的题会被跳过但不影响报告生成。
+          </div>
+          <div id="rufusPasteForm" style="display:none;"></div>
+          <div id="rufusPasteEmpty" style="font-size:.7rem;color:var(--muted);text-align:center;padding:16px;">请先在 Step 1 生成问题</div>
+          <button class="btn-start" id="rufusPasteSubmitBtn" onclick="rufusPasteSubmit()" disabled style="margin-top:8px;">&#x1F4CA; 提交答案并生成报告</button>
+        </div>
+
+        <!-- Step 4: 报告 -->
+        <div id="rufusReportArea" style="display:none;"></div>
+      </div>
+
+      <!-- Tab Panel: SQP 品牌分析 -->
+      <div id="mainTabSqp" class="main-tab-panel">
+        <div class="expert-panel">
+          <div class="expert-label">&#x1F4CA; SQP 品牌搜索词周度分析</div>
+          <p style="font-size:.7rem;color:var(--muted);margin:4px 0 0;">
+            上传 Amazon Search Query Performance 周度 CSV（≥ 2 周可出完整 WoW 报告）&middot; 产出 6 份 CSV + 趋势图 + Markdown 报告
+          </p>
+        </div>
+
+        <div class="expert-card">
+          <div class="expert-label">&#x1F4E5; 上传 SQP CSV</div>
+          <div class="upload-zone" id="sqpDropZone" onclick="document.getElementById('sqpFileInput').click();">
+            <div class="icon">&#x1F4C4;</div>
+            点击或拖入 CSV 文件
+            <div class="hint">
+              文件名需含 <code>Week_YYYY_MM_DD</code>（Amazon 导出默认格式）<br>
+              至少 2 周才能出 WoW 新入列/跌出列 / 大盘偏离分析
+            </div>
+            <input type="file" id="sqpFileInput" accept=".csv" multiple onchange="sqpHandleFiles(event.target.files)">
+          </div>
+          <div id="sqpFilePreview" style="display:none;margin-top:8px;"></div>
+          <button class="btn-start" id="sqpUploadBtn" onclick="sqpDoUpload()" disabled>&#x1F680; 开始分析</button>
+        </div>
+
+        <!-- 结果区 -->
+        <div id="sqpResultArea" style="display:none;"></div>
+
+        <!-- 最近 sessions -->
+        <div class="expert-card">
+          <div class="expert-label">&#x1F4DA; 历史分析（最近 20 次）</div>
+          <div id="sqpSessionsList" style="font-size:.7rem;"></div>
+          <button class="header-chip" onclick="sqpLoadSessions()" style="margin-top:4px;">&#x1F504; 刷新</button>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
@@ -460,7 +580,7 @@ html,body{margin:0;padding:0;height:100%;overflow:hidden;
       <button class="btn-icon" onclick="closeInitGuide()" style="font-size:.8rem;">&#x2715;</button>
     </div>
     <div class="settings-body" style="max-height:70vh;overflow-y:auto;">
-      <div style="font-size:.75rem;color:var(--accent2);margin-bottom:12px;padding:10px;background:rgba(245,158,11,.08);border-radius:6px;">
+      <div style="font-size:.75rem;color:var(--accent2);margin-bottom:12px;padding:10px;background:rgba(201,166,107,.1);border-radius:6px;">
         首次使用请按以下步骤配置 API 和 MCP 服务，完成后即可正常使用全部功能。
       </div>
 
@@ -527,7 +647,7 @@ html,body{margin:0;padding:0;height:100%;overflow:hidden;
       <button class="btn btn-primary" onclick="submitActivation()" style="width:100%;padding:10px;">激活</button>
 
       <!-- Hint -->
-      <div style="margin-top:12px;padding:10px;background:rgba(22,119,255,.06);border:1px solid rgba(22,119,255,.2);border-radius:8px;text-align:left;">
+      <div style="margin-top:12px;padding:10px;background:rgba(201,166,107,.08);border:1px solid rgba(201,166,107,.25);border-radius:8px;text-align:left;">
         <div style="font-size:.7rem;font-weight:700;color:var(--accent);margin-bottom:4px;">如何获取激活密钥？</div>
         <div style="font-size:.65rem;color:var(--muted);line-height:1.5;">
           激活码采用 AES-256-GCM 本地验证，与机器码绑定。<br>
@@ -595,13 +715,13 @@ async function loadLicenseStatus() {
     } else if (data.status === 'trial') {
       var td = (data.days_left !== undefined) ? data.days_left : '';
       badge.textContent = '试用中' + (td !== '' ? ' · 剩余 ' + td + ' 天' : '');
-      badge.style.background = 'rgba(245,158,11,.15)';
+      badge.style.background = 'rgba(201,166,107,.18)';
       badge.style.color = 'var(--accent2)';
       btn.style.display = 'inline-block';
       checkFirstRunSetup();
     } else if (data.status === 'expired') {
       badge.textContent = '试用已到期';
-      badge.style.background = 'rgba(239,68,68,.15)';
+      badge.style.background = 'rgba(185,28,28,.12)';
       badge.style.color = 'var(--red)';
       btn.style.display = 'inline-block';
     } else if (data.status === 'none') {
@@ -720,9 +840,31 @@ function showToast(msg, type) {
 function switchMainTab(tab) {
   document.querySelectorAll('.main-tab').forEach(function(t){t.classList.remove('active');});
   document.querySelectorAll('.main-tab-panel').forEach(function(p){p.classList.remove('active');});
-  var tabMap = {material:'mainTabMaterial', expert:'mainTabExpert'};
-  document.querySelector('.main-tab[onclick*="'+tab+'"]').classList.add('active');
-  document.getElementById(tabMap[tab]).classList.add('active');
+  var tabMap = {
+    material: 'mainTabMaterial',
+    expert:   'mainTabExpert',
+    rufus:    'mainTabRufus',
+    sqp:      'mainTabSqp'
+  };
+  // Find the button whose onclick references this exact tab name
+  var tabs = document.querySelectorAll('.main-tab');
+  for (var i = 0; i < tabs.length; i++) {
+    var oc = tabs[i].getAttribute('onclick') || '';
+    if (oc.indexOf("'" + tab + "'") >= 0 || oc.indexOf('"' + tab + '"') >= 0) {
+      tabs[i].classList.add('active'); break;
+    }
+  }
+  var panel = document.getElementById(tabMap[tab]);
+  if (panel) panel.classList.add('active');
+  // Lazy init
+  if (tab === 'rufus') {
+    if (!window._rufusInited) { window._rufusInited = true; rufusCheckChrome(); }
+    var asinFld = document.getElementById('rufusAsinInput');
+    if (asinFld && !asinFld.value && currentAsin) asinFld.value = currentAsin;
+  }
+  if (tab === 'sqp') {
+    if (!window._sqpInited) { window._sqpInited = true; sqpLoadSessions(); sqpInitDragDrop(); }
+  }
 }
 
 // ── Expert Tab Switch ──
@@ -736,6 +878,509 @@ function switchExpertTab(tab) {
   var btns = document.querySelectorAll('#expertSubTabs .expert-tab');
   for (var i=0;i<btns.length;i++) { if (btns[i].textContent.indexOf(labels[tab])!==-1) btns[i].classList.add('active'); }
   document.getElementById(tabMap[tab]).style.display='block';
+}
+
+// ═══════════════════════════════════════════════════════════
+// Rufus 调研 · 自动 + 手动双模式
+// ═══════════════════════════════════════════════════════════
+var rufusQuestions = [];       // [{q, purpose, type}, ...]
+var rufusChromeOk  = false;
+
+async function rufusCheckChrome() {
+  var el = document.getElementById('rufusChromeStatus');
+  var help = document.getElementById('rufusChromeHelp');
+  var btn = document.getElementById('rufusAutoRunBtn');
+  el.innerHTML = '&#x231B; 检测中&hellip;';
+  try {
+    var r = await fetch('/api/rufus/chrome-check');
+    var d = await r.json();
+    if (d.available) {
+      rufusChromeOk = true;
+      el.innerHTML = '&#x2705; <span style="color:var(--green);">Chrome 可接管</span> · ' + escHtml(d.browser || '') + ' · port ' + d.port;
+      help.style.display = 'none';
+      if (rufusQuestions.length > 0) btn.disabled = false;
+    } else {
+      rufusChromeOk = false;
+      el.innerHTML = '&#x26A0;&#xFE0F; <span style="color:var(--warning);">Chrome 未开启调试端口</span>';
+      help.style.display = 'block';
+      btn.disabled = true;
+    }
+  } catch (e) {
+    rufusChromeOk = false;
+    el.innerHTML = '&#x274C; <span style="color:var(--red);">检测失败：' + escHtml(e.message) + '</span>';
+    btn.disabled = true;
+  }
+}
+
+async function rufusGenerateQuestions() {
+  var asin = document.getElementById('rufusAsinInput').value.trim().toUpperCase();
+  if (asin.length !== 10) { showToast('请输入 10 位 ASIN', 'error'); return; }
+  var area = document.getElementById('rufusQuestionsArea');
+  area.style.display = 'block';
+  area.innerHTML = '<div style="font-size:.7rem;color:var(--muted);">&#x231B; 正在基于已采集的 Listing context 生成探针问题&hellip;</div>';
+  try {
+    var r = await fetch('/api/rufus/probe-questions', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({asin: asin})
+    });
+    if (!r.ok) {
+      var err = await r.json();
+      area.innerHTML = '<div style="color:var(--red);font-size:.72rem;">' + escHtml(err.error || '生成失败') + '</div>'
+        + '<div style="color:var(--muted);font-size:.66rem;margin-top:4px;">请先在「产品素材生成」tab 提交此 ASIN 让系统采集 context</div>';
+      return;
+    }
+    var d = await r.json();
+    rufusQuestions = d.questions || [];
+    var pr = (d.probe || {}).priority || {};
+
+    var html = '<div style="background:var(--bg3);padding:8px;border-radius:6px;margin-bottom:8px;font-size:.66rem;color:var(--muted);line-height:1.5;">';
+    html += '<strong style="color:var(--accent);">&#x1F3AF; 优先攻击维度：</strong>';
+    html += ' <span style="color:var(--text);">' + escHtml(pr.primary || '') + '</span>';
+    if (pr.secondary) html += ' &middot; <span style="color:var(--text);">' + escHtml(pr.secondary) + '</span>';
+    if (pr.tertiary)  html += ' &middot; <span style="color:var(--text);">' + escHtml(pr.tertiary) + '</span>';
+    if (pr.reason)    html += '<div style="margin-top:4px;">' + escHtml(pr.reason) + '</div>';
+    html += '</div>';
+
+    html += '<div style="font-size:.68rem;color:var(--muted);margin-bottom:4px;">已生成 <strong style="color:var(--accent);">' + rufusQuestions.length + '</strong> 个探针问题：</div>';
+    for (var i = 0; i < rufusQuestions.length; i++) {
+      var q = rufusQuestions[i];
+      html += '<div style="padding:6px 8px;background:var(--bg3);border-radius:4px;margin-bottom:4px;font-size:.7rem;">';
+      html += '<div style="display:flex;align-items:flex-start;gap:6px;">';
+      html += '<span style="font-weight:700;color:var(--accent);min-width:24px;">Q' + (i + 1) + '</span>';
+      html += '<div style="flex:1;"><div style="color:var(--text);">' + escHtml(q.q) + '</div>';
+      html += '<div style="color:var(--muted);font-size:.62rem;margin-top:3px;">&#x1F3AF; ' + escHtml(q.purpose || '') + '</div>';
+      html += '</div></div></div>';
+    }
+    area.innerHTML = html;
+
+    // 同步到手动模式的粘贴表单
+    rufusRenderPasteForm();
+    // 启用自动按钮（如果 Chrome 已就绪）
+    if (rufusChromeOk) document.getElementById('rufusAutoRunBtn').disabled = false;
+    document.getElementById('rufusPasteSubmitBtn').disabled = false;
+    showToast('已生成 ' + rufusQuestions.length + ' 个探针问题', 'success');
+  } catch (e) {
+    area.innerHTML = '<div style="color:var(--red);font-size:.72rem;">请求失败：' + escHtml(e.message) + '</div>';
+  }
+}
+
+function rufusRenderPasteForm() {
+  var form = document.getElementById('rufusPasteForm');
+  var empty = document.getElementById('rufusPasteEmpty');
+  if (!rufusQuestions.length) { form.style.display = 'none'; empty.style.display = 'block'; return; }
+  form.style.display = 'block'; empty.style.display = 'none';
+  var html = '';
+  for (var i = 0; i < rufusQuestions.length; i++) {
+    var q = rufusQuestions[i];
+    html += '<div style="margin-bottom:10px;">';
+    html += '<div style="font-size:.68rem;color:var(--accent);font-weight:600;margin-bottom:3px;">Q' + (i + 1) + ' &middot; ' + escHtml(q.q) + '</div>';
+    html += '<textarea id="rufusPaste_' + i + '" rows="4" placeholder="粘贴 Rufus 对此问题的原文回复（可留空跳过）" '
+          + 'style="width:100%;padding:6px 8px;border:1px solid var(--border);border-radius:4px;font-size:.66rem;'
+          + 'background:var(--bg3);color:var(--text);font-family:inherit;resize:vertical;"></textarea>';
+    html += '</div>';
+  }
+  form.innerHTML = html;
+}
+
+async function rufusAutoRun() {
+  if (!rufusChromeOk)  { showToast('Chrome 未就绪，请先开启调试端口', 'error'); return; }
+  if (!rufusQuestions.length) { showToast('请先生成探针问题', 'error'); return; }
+  var asin = document.getElementById('rufusAsinInput').value.trim().toUpperCase();
+  var btn  = document.getElementById('rufusAutoRunBtn');
+  var prog = document.getElementById('rufusAutoProgress');
+  btn.disabled = true;
+  prog.textContent = '⏳ 自动调研中，预计 3–8 分钟（每题 15–40 秒间隔）…';
+
+  try {
+    var r = await fetch('/api/rufus/auto-run', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        asin: asin,
+        questions: rufusQuestions.map(function(q){ return q.q; }),
+        amazon_url: 'https://www.amazon.com/dp/' + asin,
+        min_interval: 15, max_interval: 40
+      })
+    });
+    var d = await r.json();
+    prog.textContent = '';
+    btn.disabled = false;
+
+    if (d.captcha_detected) {
+      showToast('⚠ 触发 CAPTCHA，已采集 ' + d.captured_count + ' / ' + d.total_questions + '。建议切换手动', 'error');
+    } else if (d.should_fallback_to_manual) {
+      showToast('自动采集不稳定（' + d.captured_count + '/' + d.total_questions + '），建议用手动模式补齐', 'error');
+    } else {
+      showToast('自动采集完成：' + d.captured_count + '/' + d.total_questions, 'success');
+    }
+    rufusRenderReport(d, asin);
+  } catch (e) {
+    prog.textContent = '';
+    btn.disabled = false;
+    showToast('自动模式失败：' + e.message, 'error');
+  }
+}
+
+async function rufusPasteSubmit() {
+  if (!rufusQuestions.length) { showToast('请先生成探针问题', 'error'); return; }
+  var asin = document.getElementById('rufusAsinInput').value.trim().toUpperCase();
+  var answers = [];
+  var filled = 0;
+  for (var i = 0; i < rufusQuestions.length; i++) {
+    var ta = document.getElementById('rufusPaste_' + i);
+    var v = ta ? ta.value.trim() : '';
+    answers.push(v);
+    if (v) filled++;
+  }
+  if (filled === 0) { showToast('请至少填 1 题', 'error'); return; }
+  var btn = document.getElementById('rufusPasteSubmitBtn');
+  btn.disabled = true; btn.textContent = '⏳ 生成报告中…';
+  try {
+    var r = await fetch('/api/rufus/paste-submit', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ asin: asin, questions: rufusQuestions.map(function(q){return q.q;}), answers: answers })
+    });
+    var d = await r.json();
+    if (!r.ok) throw new Error(d.error || '提交失败');
+    showToast('手动报告已生成：' + d.captured_count + '/' + d.total_questions, 'success');
+    rufusRenderReport(d, asin);
+  } catch (e) {
+    showToast(e.message, 'error');
+  } finally {
+    btn.disabled = false; btn.textContent = '📊 提交答案并生成报告';
+  }
+}
+
+function rufusRenderReport(d, asin) {
+  var area = document.getElementById('rufusReportArea');
+  area.style.display = 'block';
+  var ga = d.geo_audit || {};
+  var dims = ga.dimensions || {};
+  var summary = d.summary || {};
+
+  var grade = ga.overall_grade || '';
+  var scoreColor = (ga.total_score || 0) >= 80 ? 'var(--green)' : (ga.total_score || 0) >= 65 ? 'var(--accent2)' : 'var(--red)';
+
+  var html = '<div class="expert-panel"><div class="expert-label">📑 GEO 审计报告 · ' + escHtml(asin) + '</div>';
+  html += '<div style="font-size:.68rem;color:var(--muted);">模式：<strong style="color:var(--accent);">' + escHtml(d.mode || '') + '</strong> · 采集 ' + (d.captured_count || 0) + '/' + (d.total_questions || 0) + '</div></div>';
+
+  // 总分卡
+  html += '<div class="expert-card" style="text-align:center;">';
+  html += '<div class="expert-label">🏆 GEO 总分（基于 Rufus 证据）</div>';
+  html += '<div style="font-size:2.5rem;font-weight:800;color:' + scoreColor + ';">' + (ga.total_score || 0) + '<span style="font-size:.8rem;">/100</span></div>';
+  html += '<div style="font-size:.72rem;color:var(--muted);margin-top:4px;">' + escHtml(grade) + '</div></div>';
+
+  // 6 维度分数
+  html += '<div class="expert-card"><div class="expert-label">📐 6 维度评分</div>';
+  var dimLabels = {
+    scenario_coverage:       '场景覆盖',
+    decision_drivers:        '决策因素',
+    audience_match:          '人群匹配',
+    positioning:             '竞品定位',
+    user_language:           '买家语言',
+    ai_readable_structure:   '结构可读性'
+  };
+  for (var k in dimLabels) {
+    var dim = dims[k] || {};
+    var sc = dim.score || 0, mx = dim.max || 20;
+    var pct = mx > 0 ? Math.round(sc / mx * 100) : 0;
+    var barColor = pct >= 75 ? 'var(--green)' : pct >= 50 ? 'var(--accent2)' : 'var(--red)';
+    html += '<div style="margin-bottom:8px;">';
+    html += '<div style="display:flex;justify-content:space-between;font-size:.68rem;margin-bottom:3px;">';
+    html += '<span>' + dimLabels[k] + '</span>';
+    html += '<span style="color:' + barColor + ';font-weight:600;">' + sc + '/' + mx + '</span></div>';
+    html += '<div style="height:6px;background:var(--bg3);border-radius:3px;overflow:hidden;">';
+    html += '<div style="height:100%;width:' + pct + '%;background:' + barColor + ';"></div></div>';
+    if (dim.gap && dim.gap.length) {
+      html += '<div style="font-size:.6rem;color:var(--muted);margin-top:2px;">缺：' + escHtml(dim.gap.slice(0, 3).join('、')) + '</div>';
+    } else if (dim.note) {
+      html += '<div style="font-size:.6rem;color:var(--muted);margin-top:2px;">' + escHtml(dim.note) + '</div>';
+    }
+    html += '</div>';
+  }
+  html += '</div>';
+
+  // 建议
+  var recs = ga.recommendations || [];
+  if (recs.length) {
+    html += '<div class="expert-card" style="border-left:3px solid var(--accent2);"><div class="expert-label">🎯 基于 Rufus 证据的建议（按优先级）</div>';
+    for (var i = 0; i < recs.length; i++) {
+      var r = recs[i];
+      var icon = r.priority === 'high' ? '🔴' : r.priority === 'medium' ? '🟡' : '🟢';
+      html += '<div style="padding:6px 8px;background:var(--bg3);border-radius:4px;margin-bottom:4px;">';
+      html += '<div style="font-size:.7rem;"><span>' + icon + '</span> <strong>' + escHtml(r.area) + '</strong></div>';
+      html += '<div style="font-size:.68rem;color:var(--text);margin:3px 0;">' + escHtml(r.action) + '</div>';
+      if (r.evidence) html += '<div style="font-size:.6rem;color:var(--muted);">证据：' + escHtml(r.evidence) + '</div>';
+      html += '</div>';
+    }
+    html += '</div>';
+  }
+
+  // Rufus 信号
+  html += '<div class="expert-card"><div class="expert-label">📊 Rufus 信号摘要</div>';
+  html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:.66rem;">';
+
+  // 高频追问
+  html += '<div><div style="color:var(--muted);margin-bottom:4px;">高频追问（买家搜索意图）</div>';
+  var fu = summary.top_follow_ups || [];
+  if (fu.length) {
+    for (var j = 0; j < Math.min(fu.length, 6); j++) {
+      html += '<div style="margin-bottom:2px;">· ' + escHtml(fu[j][0]) + ' ×' + fu[j][1] + '</div>';
+    }
+  } else html += '<div style="color:var(--muted);">—</div>';
+  html += '</div>';
+
+  // 竞品品牌
+  html += '<div><div style="color:var(--muted);margin-bottom:4px;">竞品品牌</div>';
+  var br = summary.top_brands || [];
+  if (br.length) {
+    for (var j = 0; j < Math.min(br.length, 6); j++) {
+      html += '<div style="margin-bottom:2px;">· <strong>' + escHtml(br[j][0]) + '</strong> ×' + br[j][1] + '</div>';
+    }
+  } else html += '<div style="color:var(--muted);">—</div>';
+  html += '</div></div>';
+
+  // 决策因素 / 场景热图
+  html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;font-size:.66rem;">';
+  html += '<div><div style="color:var(--muted);margin-bottom:4px;">决策因素热度</div>';
+  var dh = summary.driver_heatmap || {};
+  var dhKeys = Object.keys(dh);
+  if (dhKeys.length) {
+    for (var j = 0; j < Math.min(dhKeys.length, 6); j++) {
+      html += '<div style="margin-bottom:2px;">· <code>' + dhKeys[j] + '</code> ×' + dh[dhKeys[j]] + '</div>';
+    }
+  } else html += '<div style="color:var(--muted);">—</div>';
+  html += '</div>';
+
+  html += '<div><div style="color:var(--muted);margin-bottom:4px;">场景热度</div>';
+  var sh = summary.scene_heatmap || {};
+  var shKeys = Object.keys(sh);
+  if (shKeys.length) {
+    for (var j = 0; j < Math.min(shKeys.length, 6); j++) {
+      html += '<div style="margin-bottom:2px;">· <code>' + shKeys[j] + '</code> ×' + sh[shKeys[j]] + '</div>';
+    }
+  } else html += '<div style="color:var(--muted);">—</div>';
+  html += '</div></div></div>';
+
+  // 下载报告链接
+  html += '<div class="expert-card"><div style="display:flex;gap:8px;align-items:center;">';
+  html += '<span style="font-size:.7rem;color:var(--muted);flex:1;">完整报告（含逐题原文）：</span>';
+  html += '<a href="' + (d.report_url || '') + '" target="_blank" class="header-chip primary" style="text-decoration:none;">📄 查看 Markdown</a>';
+  html += '</div></div>';
+
+  area.innerHTML = html;
+  // 滚到报告
+  area.scrollIntoView({behavior: 'smooth', block: 'start'});
+}
+
+// ═══════════════════════════════════════════════════════════
+// SQP 品牌分析
+// ═══════════════════════════════════════════════════════════
+var sqpFiles = [];
+
+function sqpInitDragDrop() {
+  var dz = document.getElementById('sqpDropZone');
+  if (!dz) return;
+  // Prevent browser from opening the file when drop misses the zone
+  if (!window._sqpGlobalDropGuard) {
+    window._sqpGlobalDropGuard = true;
+    ['dragover','drop'].forEach(function(evt){
+      window.addEventListener(evt, function(e){
+        // only swallow if dragging files
+        if (e.dataTransfer && e.dataTransfer.types && Array.prototype.indexOf.call(e.dataTransfer.types, 'Files') !== -1) {
+          e.preventDefault();
+        }
+      }, false);
+    });
+  }
+  dz.addEventListener('dragover', function(e){ e.preventDefault(); e.stopPropagation(); dz.classList.add('dragover'); });
+  dz.addEventListener('dragleave', function(e){ e.stopPropagation(); dz.classList.remove('dragover'); });
+  dz.addEventListener('drop', function(e){
+    e.preventDefault(); e.stopPropagation(); dz.classList.remove('dragover');
+    var files = [];
+    if (e.dataTransfer && e.dataTransfer.files) {
+      for (var i = 0; i < e.dataTransfer.files.length; i++) {
+        files.push(e.dataTransfer.files[i]);
+      }
+    }
+    console.log('[SQP] dropped', files.length, 'file(s):', files.map(function(f){return f.name;}));
+    sqpHandleFiles(files);
+  });
+}
+
+function sqpHandleFiles(fileList) {
+  var total = fileList ? fileList.length : 0;
+  var accepted = [];
+  var rejected = [];
+  for (var i = 0; i < total; i++) {
+    var f = fileList[i];
+    if (!f) continue;
+    var name = f.name || '';
+    var type = f.type || '';
+    // Accept: extension .csv (case-insensitive) OR type 含 csv OR 文件 size > 0 且后缀是 txt/csv/xls
+    var looksCsv =
+      /\.csv$/i.test(name) ||
+      /csv/i.test(type) ||
+      /\.(txt|tsv)$/i.test(name);
+    if (looksCsv) {
+      accepted.push(f);
+    } else {
+      rejected.push(name || '(no name)');
+    }
+  }
+  console.log('[SQP] handleFiles accepted', accepted.length, '/', total, 'rejected:', rejected);
+  sqpFiles = accepted;
+  var prev = document.getElementById('sqpFilePreview');
+  var btn = document.getElementById('sqpUploadBtn');
+  if (!sqpFiles.length) {
+    // 如果 fileList 本身非空但全被拒绝，显示提示
+    if (total > 0 && rejected.length > 0) {
+      prev.innerHTML = '<div style="font-size:.68rem;color:var(--red);">'
+        + '未识别为 CSV 的文件：' + escHtml(rejected.slice(0,3).join('、'))
+        + '<br><span style="color:var(--muted);">请确认文件扩展名为 .csv 或 .txt/.tsv</span></div>';
+      prev.style.display = 'block';
+    } else {
+      prev.style.display = 'none';
+    }
+    btn.disabled = true;
+    return;
+  }
+  var html = '<div style="font-size:.68rem;color:var(--muted);margin-bottom:4px;">已选 ' + sqpFiles.length + ' 个文件：</div>';
+  for (var i = 0; i < sqpFiles.length; i++) {
+    var ok = /Week_\d{4}_\d{2}_\d{2}/i.test(sqpFiles[i].name);
+    var icon = ok ? '✅' : '⚠️';
+    var tip = ok ? '' : '（文件名未含 Week_YYYY_MM_DD，可能解析失败）';
+    html += '<div style="font-size:.66rem;padding:3px 0;">' + icon + ' ' + escHtml(sqpFiles[i].name) + ' <span style="color:var(--muted);">' + tip + '</span></div>';
+  }
+  prev.innerHTML = html;
+  prev.style.display = 'block';
+  btn.disabled = false;
+}
+
+async function sqpDoUpload() {
+  if (!sqpFiles.length) return;
+  var btn = document.getElementById('sqpUploadBtn');
+  btn.disabled = true;
+  btn.textContent = '⏳ 分析中…';
+  var fd = new FormData();
+  for (var i = 0; i < sqpFiles.length; i++) fd.append('files', sqpFiles[i]);
+  try {
+    var r = await fetch('/api/sqp/upload', {method: 'POST', body: fd});
+    var d = await r.json();
+    if (!r.ok) throw new Error(d.error || '上传失败');
+    showToast('SQP 分析完成', 'success');
+    sqpRenderResult(d);
+    sqpLoadSessions();
+  } catch (e) {
+    showToast(e.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '🚀 开始分析';
+  }
+}
+
+function sqpRenderResult(d) {
+  var area = document.getElementById('sqpResultArea');
+  area.style.display = 'block';
+  var s = d.summary || {};
+  var html = '';
+
+  // 概览卡
+  html += '<div class="expert-card"><div class="expert-label">📋 本次分析概览</div>';
+  html += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;font-size:.7rem;">';
+  html += '<div style="padding:8px;background:var(--bg3);border-radius:4px;"><div style="color:var(--muted);font-size:.62rem;">分析周数</div><div style="font-size:1.2rem;font-weight:700;color:var(--accent);">' + (s.total_weeks || 0) + '</div></div>';
+  html += '<div style="padding:8px;background:var(--bg3);border-radius:4px;"><div style="color:var(--muted);font-size:.62rem;">高转化词</div><div style="font-size:1.2rem;font-weight:700;color:var(--green);">' + (s.high_conv_terms_count || 0) + '</div></div>';
+  html += '<div style="padding:8px;background:var(--bg3);border-radius:4px;"><div style="color:var(--muted);font-size:.62rem;">WoW 新入列</div><div style="font-size:1.2rem;font-weight:700;color:var(--accent2);">' + (s.wow_new_count || 0) + '</div></div>';
+  html += '<div style="padding:8px;background:var(--bg3);border-radius:4px;"><div style="color:var(--muted);font-size:.62rem;">WoW 跌出列</div><div style="font-size:1.2rem;font-weight:700;color:var(--red);">' + (s.wow_dropped_count || 0) + '</div></div>';
+  html += '</div></div>';
+
+  // 品牌总量
+  var bt = s.brand_totals_latest_week || {};
+  if (Object.keys(bt).length) {
+    html += '<div class="expert-card"><div class="expert-label">📈 最新一周品牌总量</div>';
+    html += '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;font-size:.66rem;">';
+    ['曝光','点击','加购','购买'].forEach(function(k){
+      html += '<div style="padding:6px 8px;background:var(--bg3);border-radius:4px;text-align:center;">';
+      html += '<div style="color:var(--muted);">' + k + '</div>';
+      html += '<div style="font-weight:700;color:var(--text);">' + (bt[k] || 0).toLocaleString() + '</div></div>';
+    });
+    html += '</div></div>';
+  }
+
+  // Top5 稳定词
+  var top5 = s.top5_terms || [];
+  if (top5.length) {
+    html += '<div class="expert-card"><div class="expert-label">⭐ 全周期 Top 5 稳定高价值词</div>';
+    html += '<div style="font-size:.68rem;">';
+    for (var i = 0; i < top5.length; i++) {
+      html += '<div style="padding:4px 0;">' + (i + 1) + '. <strong>' + escHtml(top5[i]) + '</strong></div>';
+    }
+    html += '</div></div>';
+  }
+
+  // 趋势图
+  var out = d.outputs || {};
+  if (out['sqp_top5_trend.png']) {
+    html += '<div class="expert-card"><div class="expert-label">📊 Top 5 词趋势图</div>';
+    html += '<img src="' + out['sqp_top5_trend.png'] + '" style="width:100%;border-radius:6px;">';
+    html += '</div>';
+  }
+
+  // 报告 + 下载
+  html += '<div class="expert-card"><div class="expert-label">📥 下载</div>';
+  html += '<div style="display:flex;gap:6px;flex-wrap:wrap;">';
+  var dlMap = {
+    'sqp_report.md': '📄 Markdown 报告',
+    'weekly_brand_portfolio.csv': '每周品牌快照',
+    'high_conv_terms.csv': '高转化词',
+    'wow_new_dropped.csv': '新入列/跌出列',
+    'wow_self_drops.csv': '和自己比',
+    'wow_market_deviation.csv': '和大盘比',
+    'top5_stable_terms.csv': 'Top5 明细'
+  };
+  for (var name in dlMap) {
+    if (out[name]) {
+      html += '<a href="' + out[name] + '" target="_blank" class="header-chip" style="text-decoration:none;">' + dlMap[name] + '</a>';
+    }
+  }
+  html += '</div></div>';
+
+  // 报告预览
+  if (d.session_id) {
+    html += '<div class="expert-card"><div class="expert-label">📖 完整报告</div>';
+    html += '<a href="/api/sqp/report/' + d.session_id + '" target="_blank" class="header-chip primary" style="text-decoration:none;">🔗 在新窗口打开 Markdown 报告</a>';
+    html += '</div>';
+  }
+
+  area.innerHTML = html;
+  area.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+async function sqpLoadSessions() {
+  var el = document.getElementById('sqpSessionsList');
+  el.innerHTML = '<span style="color:var(--muted);">加载中…</span>';
+  try {
+    var r = await fetch('/api/sqp/sessions');
+    var d = await r.json();
+    var ss = d.sessions || [];
+    if (!ss.length) {
+      el.innerHTML = '<span style="color:var(--muted);">暂无历史</span>';
+      return;
+    }
+    var html = '';
+    for (var i = 0; i < ss.length; i++) {
+      var s = ss[i];
+      html += '<div style="padding:4px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;">';
+      html += '<span style="flex:1;"><code>' + escHtml(s.session_id) + '</code> <span style="color:var(--muted);">· ' + escHtml((s.created_at || '').substring(0, 16).replace('T', ' ')) + ' · ' + s.upload_count + ' CSV</span></span>';
+      if (s.has_report) html += '<a href="/api/sqp/report/' + s.session_id + '" target="_blank" class="header-chip">查看</a>';
+      html += '</div>';
+    }
+    el.innerHTML = html;
+  } catch (e) {
+    el.innerHTML = '<span style="color:var(--red);">加载失败：' + escHtml(e.message) + '</span>';
+  }
 }
 
 // ── Settings Modal ──
@@ -1284,7 +1929,7 @@ function renderDataWarning(data) {
   var banner = document.createElement('div');
   banner.id = 'expertDataWarning';
   banner.style.cssText =
-    'background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.45);'+
+    'background:rgba(185,28,28,.08);border:1px solid rgba(185,28,28,.3);'+
     'border-left:4px solid var(--red);border-radius:6px;padding:10px 12px;'+
     'margin-bottom:10px;font-size:.72rem;color:var(--text);';
 
@@ -1359,7 +2004,7 @@ function renderTitleSuggestions(ts) {
     html += '<div class="expert-card" style="border-left:3px solid var(--accent2);"><div class="expert-label">⚠️ 标题缺失的高流量词</div>';
     html += '<div style="display:flex;flex-wrap:wrap;gap:4px;">';
     gaps.forEach(function(k){
-      html += '<span style="font-size:.64rem;background:rgba(245,158,11,.12);padding:3px 8px;border-radius:10px;color:var(--accent2);">'+escHtml(k)+'</span>';
+      html += '<span style="font-size:.64rem;background:rgba(201,166,107,.14);padding:3px 8px;border-radius:10px;color:var(--accent2);">'+escHtml(k)+'</span>';
     });
     html += '</div>';
     html += '<div style="font-size:.62rem;color:var(--muted);margin-top:6px;">以上关键词在标题中未被覆盖，建议融入以提升搜索曝光</div>';
@@ -1418,7 +2063,24 @@ function renderSellingPoints(sp) {
   var html = '';
   if (sp.top_3&&sp.top_3.length) {
     html += '<div class="expert-card" style="border-left:3px solid var(--green);"><div class="expert-label">🏆 Top 3 核心卖点</div>';
-    sp.top_3.forEach(function(t,i){ html += '<div style="display:flex;gap:8px;padding:4px 8px;background:var(--bg);border-radius:4px;margin-bottom:4px;"><span style="font-weight:700;color:var(--accent);">'+(i+1)+'</span><span style="font-size:.72rem;">'+escHtml(t||'')+'</span></div>'; });
+    sp.top_3.forEach(function(t,i){
+      // t 可能是 {text, source, cosmo_strength, ...} 也可能是字符串，做兼容
+      var text   = typeof t === 'string' ? t : (t && t.text) ? t.text : '';
+      var source = (t && t.source) ? t.source : '';
+      var strength = (t && t.cosmo_strength) ? t.cosmo_strength : '';
+      var strengthColor = strength === 'high' ? 'var(--green)' : strength === 'medium' ? 'var(--accent2)' : 'var(--red)';
+      var strengthLabel = strength === 'high' ? '强因果' : strength === 'medium' ? '部分因果' : strength === 'low' ? '弱因果' : '';
+      var hasQty = t && t.has_quantified_data;
+      html += '<div style="padding:8px 10px;background:var(--bg3);border-radius:6px;margin-bottom:6px;">'
+           + '<div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">'
+           + '<span style="font-weight:700;color:var(--accent2);">'+(i+1)+'.</span>'
+           + (source ? '<span style="font-size:.62rem;color:var(--muted);">'+escHtml(source)+'</span>' : '')
+           + (strengthLabel ? '<span style="font-size:.58rem;padding:1px 7px;border-radius:8px;background:rgba(26,31,44,.06);color:'+strengthColor+';font-weight:600;">'+strengthLabel+'</span>' : '')
+           + (hasQty ? '<span style="font-size:.58rem;padding:1px 7px;border-radius:8px;background:rgba(21,128,61,.1);color:var(--green);font-weight:600;">含量化</span>' : '')
+           + '</div>'
+           + '<div style="font-size:.72rem;color:var(--text);line-height:1.5;">'+escHtml(text)+'</div>'
+           + '</div>';
+    });
     html += '</div>';
   }
   var pts = sp.extracted_points||[];
@@ -1529,14 +2191,14 @@ function renderDataInsights(di) {
     html += '<div style="margin-top:8px;font-size:.62rem;color:var(--muted);">COSMO 意图标签</div>';
     html += '<div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:3px;">';
     ms.cosmo_intents.forEach(function(ci){
-      html += '<span style="font-size:.58rem;background:rgba(22,119,255,.12);padding:2px 7px;border-radius:8px;color:var(--accent);">' + escHtml(ci) + '</span>';
+      html += '<span style="font-size:.58rem;background:rgba(201,166,107,.14);padding:2px 7px;border-radius:8px;color:var(--accent2);">' + escHtml(ci) + '</span>';
     });
     html += '</div>';
   }
   html += '</div>';
 
   // Right: Recommendations
-  html += '<div class="expert-card" style="border:1px solid rgba(245,158,11,.3);"><div style="font-size:.7rem;font-weight:700;color:var(--accent2);margin-bottom:8px;">🎯 行动建议</div>';
+  html += '<div class="expert-card" style="border:1px solid rgba(201,166,107,.35);"><div style="font-size:.7rem;font-weight:700;color:var(--accent2);margin-bottom:8px;">🎯 行动建议</div>';
   (di.recommendations||[]).forEach(function(r){
     var icon = r.priority==='high'?'🔴':r.priority==='medium'?'🟡':'🟢';
     html += '<div style="display:flex;gap:6px;padding:4px 0;border-bottom:1px solid var(--border);font-size:.66rem;align-items:flex-start;">';
