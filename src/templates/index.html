@@ -1,0 +1,1556 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BSC OPC Agent OS Personal</title>
+<style>
+/* ── Reset & Variables ── */
+*{box-sizing:border-box}
+:root{
+  --bg:#0f1117;--bg2:#1a1d27;--bg3:#22263a;--text:#e2e8f0;--muted:#8892a4;
+  --border:#2d3348;--accent:#1677ff;--accent2:#f59e0b;
+  --green:#22c55e;--red:#ef4444;
+  --sidebar-w:260px;--header-h:52px;--tabs-h:44px;
+  --shadow:0 2px 8px rgba(0,0,0,.4);
+}
+html,body{margin:0;padding:0;height:100%;overflow:hidden;
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  font-size:16px;color:var(--text);background:var(--bg)}
+
+/* ── Header ── */
+.oa-header{
+  position:fixed;top:0;left:0;right:0;height:var(--header-h);
+  background:var(--bg2);color:var(--text);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 20px;z-index:100;border-bottom:1px solid var(--border);
+  box-shadow:0 2px 12px rgba(0,0,0,.5)
+}
+.oa-header h1{font-size:.95rem;font-weight:700;margin:0;letter-spacing:.5px}
+.oa-header h1 span{color:var(--accent2)}
+
+/* Header chip buttons — unified look */
+.header-chip{
+  font-size:.64rem;padding:4px 12px;border-radius:999px;
+  border:1px solid var(--border);background:var(--bg3);color:var(--muted);
+  cursor:pointer;font-weight:600;transition:.15s;letter-spacing:.2px;
+}
+.header-chip:hover{background:rgba(22,119,255,.08);color:var(--text);border-color:rgba(22,119,255,.3)}
+.header-chip.primary{border-color:rgba(22,119,255,.35);background:rgba(22,119,255,.1);color:var(--accent)}
+.header-chip.warn{border-color:rgba(245,158,11,.35);background:rgba(245,158,11,.12);color:var(--accent2)}
+#licenseBadge{
+  font-size:.62rem;padding:4px 12px;border-radius:999px;font-weight:600;
+  letter-spacing:.2px;transition:.15s;
+}
+
+.oa-body{display:flex;height:100vh;padding-top:var(--header-h);overflow:hidden}
+
+/* ── Sidebar ── */
+.oa-sidebar{
+  width:var(--sidebar-w);flex-shrink:0;
+  background:var(--bg2);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;overflow:hidden
+}
+.sidebar-scroll{flex:1;overflow-y:auto;overflow-x:hidden}
+.sidebar-scroll::-webkit-scrollbar{width:4px}
+.sidebar-scroll::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.sidebar-block{padding:12px;border-bottom:1px solid var(--border)}
+.sidebar-section-label{
+  font-size:.68rem;font-weight:700;color:var(--muted);
+  padding:10px 12px 5px;text-transform:uppercase;letter-spacing:.8px
+}
+
+/* ── Main Content ── */
+.oa-main{flex:1;overflow:hidden;background:var(--bg);display:flex;flex-direction:column}
+.oa-content{flex:1;overflow-y:auto;padding:16px}
+.oa-content::-webkit-scrollbar{width:6px}
+.oa-content::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+
+/* ── Horizontal Tab Bar ── */
+.main-tabs-bar{
+  height:var(--tabs-h);
+  background:var(--bg2);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;overflow-x:auto;flex-shrink:0;
+  padding:0 4px;gap:0;
+}
+.main-tabs-bar::-webkit-scrollbar{height:3px}
+.main-tabs-bar::-webkit-scrollbar-thumb{background:var(--border)}
+.main-tab{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:0 13px;height:100%;border:none;
+  background:transparent;color:var(--muted);
+  font-size:.74rem;cursor:pointer;transition:.15s;
+  white-space:nowrap;border-bottom:2px solid transparent;flex-shrink:0;
+}
+.main-tab:hover{color:var(--text);background:rgba(255,255,255,.04)}
+.main-tab.active{color:var(--accent);border-bottom:2px solid var(--accent);background:rgba(22,119,255,.06)}
+
+/* ── Main Panel ── */
+.main-tab-panel{display:none}
+.main-tab-panel.active{display:block}
+
+/* ── Upload Zone ── */
+.upload-zone{
+  border:2px dashed var(--border);border-radius:8px;
+  padding:14px 12px;text-align:center;cursor:pointer;transition:.2s;
+  background:var(--bg3);font-size:.78rem;color:var(--text)
+}
+.upload-zone.dragover{border-color:var(--accent);background:rgba(22,119,255,.08)}
+.upload-zone .icon{font-size:1.5rem;margin-bottom:4px}
+.upload-zone .hint{font-size:.68rem;color:var(--muted);margin-top:4px;line-height:1.4}
+.upload-zone input[type=file]{display:none}
+.preview-thumbs{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.preview-thumbs img{width:48px;height:48px;object-fit:cover;border-radius:6px;
+  border:2px solid transparent;cursor:pointer;transition:.2s}
+.preview-thumbs img:hover,.preview-thumbs img.selected{border-color:var(--accent)}
+
+/* ── Form ── */
+.form-row{display:flex;gap:6px;margin:8px 0}
+.form-row input{flex:1;min-width:0;padding:7px 10px;border:1px solid var(--border);
+  border-radius:6px;font-size:.8rem;outline:none;
+  background:var(--bg3);color:var(--text)}
+.form-row input:focus{border-color:var(--accent)}
+.form-row select{padding:7px 8px;border:1px solid var(--border);border-radius:6px;
+  font-size:.78rem;background:var(--bg3);color:var(--text);min-width:58px}
+.asin-divider{text-align:center;font-size:.68rem;color:var(--muted);margin:6px 0}
+.btn-start{
+  width:100%;padding:8px;border:none;border-radius:6px;
+  background:var(--accent2);color:#fff;font-size:.82rem;font-weight:600;
+  cursor:pointer;transition:.2s;margin-top:4px
+}
+.btn-start:hover{opacity:.9}
+.btn{padding:7px 16px;border:none;border-radius:6px;font-size:.8rem;font-weight:600;cursor:pointer;transition:.2s}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-icon{background:rgba(255,255,255,.1);color:var(--text);border:none;border-radius:6px;
+  padding:6px 10px;cursor:pointer;font-size:.9rem}
+.btn-icon:hover{background:rgba(255,255,255,.18)}
+
+/* ── Progress Panel ── */
+.step{display:flex;align-items:flex-start;gap:8px;padding:3px 0;font-size:.72rem}
+.step-dot{width:8px;height:8px;border-radius:50%;background:var(--border);flex-shrink:0;margin-top:4px}
+.step-dot.active{background:var(--accent);box-shadow:0 0 0 3px rgba(22,119,255,.25)}
+.step-dot.done{background:var(--green)}
+.step-dot.error{background:var(--red);box-shadow:0 0 0 3px rgba(239,68,68,.25)}
+.step-label{font-weight:600;font-size:.72rem;color:var(--text)}
+.step-msg{color:var(--muted);font-size:.65rem}
+.progress-bar{height:4px;background:var(--border);border-radius:2px;overflow:hidden;margin-top:6px}
+.progress-bar-fill{height:100%;background:var(--accent);transition:width .5s}
+
+/* ── Image Workspace ── */
+.image-workspace{background:var(--bg2);border-radius:8px;padding:14px;
+  box-shadow:var(--shadow);margin-top:12px;border:1px solid var(--border)}
+.workspace-title{font-size:.85rem;font-weight:700;margin:0 0 10px;color:var(--text);
+  display:flex;align-items:center;gap:6px}
+.ref-image-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px}
+.prototype-hint{display:none;font-size:.7rem;color:var(--accent2);margin-bottom:8px}
+.prototype-hint.show{display:block}
+.prompt-list{display:flex;flex-direction:column;gap:8px}
+.result-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
+
+/* ── Prompt Cards ── */
+.prompt-card{
+  background:var(--bg2);border:1px solid var(--border);border-radius:8px;
+  padding:12px;box-shadow:var(--shadow);
+}
+.ptype{
+  font-size:.7rem;font-weight:700;color:var(--accent2);
+  text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;
+}
+.copy-area{display:flex;gap:8px;align-items:flex-start}
+.copy-btn{
+  flex-shrink:0;width:28px;height:28px;border:1px solid var(--border);
+  border-radius:6px;background:var(--bg3);color:var(--muted);
+  cursor:pointer;font-size:.8rem;display:flex;align-items:center;justify-content:center;
+  transition:.15s;padding:0;margin-top:2px;
+}
+.copy-btn:hover{border-color:var(--accent);color:var(--accent);background:rgba(22,119,255,.1)}
+.ptext{
+  flex:1;min-height:120px;padding:8px 10px;
+  background:var(--bg3);color:var(--text);
+  border:1px solid var(--border);border-radius:6px;
+  font-size:.72rem;line-height:1.6;resize:vertical;
+  font-family:inherit;width:100%;
+  white-space:pre-wrap;word-break:break-word;overflow-wrap:break-word;
+  overflow-x:hidden;
+}
+.ptext:focus{outline:none;border-color:var(--accent)}
+.pmeta{font-size:.65rem;color:var(--muted);margin-top:6px}
+.pactions{margin-top:8px}
+.btn-send-chatgpt{
+  width:100%;padding:7px 12px;border:none;border-radius:6px;
+  background:var(--accent);color:#fff;font-size:.75rem;font-weight:600;
+  cursor:pointer;transition:.2s;
+}
+.btn-send-chatgpt:hover:not(:disabled){opacity:.85}
+.btn-send-chatgpt:disabled{
+  background:var(--bg3);color:var(--muted);
+  border:1px solid var(--border);cursor:not-allowed;
+}
+
+/* ── Reference Image Cards ── */
+.ref-image-card{
+  position:relative;border-radius:8px;overflow:hidden;
+  border:2px solid transparent;cursor:pointer;
+  background:var(--bg3);transition:.2s;
+}
+.ref-image-card:hover{border-color:var(--accent)}
+.ref-image-card.selected{border-color:var(--accent2);box-shadow:0 0 0 2px rgba(245,158,11,.3)}
+.ref-image-card img{width:100%;aspect-ratio:1;object-fit:cover;display:block}
+.img-type{
+  position:absolute;top:4px;left:4px;
+  font-size:.58rem;font-weight:700;padding:2px 6px;border-radius:4px;
+  background:rgba(22,119,255,.85);color:#fff;pointer-events:none;
+}
+.img-type.main{background:rgba(22,119,255,.85)}
+.img-type.aplus,.img-type.a+{background:rgba(245,158,11,.85);color:#fff}
+.ref-preview-btn{
+  position:absolute;top:4px;right:4px;
+  width:22px;height:22px;border-radius:4px;border:none;
+  background:rgba(0,0,0,.5);color:#fff;font-size:.65rem;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  opacity:0;transition:.15s;padding:0;
+}
+.ref-image-card:hover .ref-preview-btn{opacity:1}
+.img-name{
+  font-size:.58rem;color:var(--muted);padding:3px 6px 4px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  background:var(--bg2);border-top:1px solid var(--border);
+}
+
+/* ── Result Cards ── */
+.result-card{
+  background:var(--bg2);border:1px solid var(--border);border-radius:8px;
+  overflow:hidden;position:relative;
+}
+.result-card img{width:100%;display:block;cursor:pointer;transition:.2s}
+.result-card .label{
+  font-size:.6rem;color:var(--muted);padding:4px 8px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  border-bottom:1px solid var(--border);background:var(--bg3);
+}
+.result-card .actions{display:flex;gap:0;border-top:1px solid var(--border)}
+.result-card .actions a,.result-card .actions button{
+  flex:1;padding:6px 4px;border:none;border-right:1px solid var(--border);
+  background:var(--bg3);color:var(--muted);font-size:.65rem;cursor:pointer;
+  text-decoration:none;text-align:center;transition:.15s;display:block;
+}
+.result-card .actions a:last-child,.result-card .actions button:last-child{border-right:none}
+.result-card .actions a:hover,.result-card .actions button:hover{
+  background:rgba(22,119,255,.1);color:var(--accent);
+}
+
+/* ── Expert ── */
+.expert-tabs{display:flex;gap:4px;margin-bottom:12px;flex-wrap:wrap}
+.expert-tab{padding:5px 12px;border:1px solid var(--border);border-radius:4px;
+  background:var(--bg3);color:var(--muted);font-size:.72rem;cursor:pointer}
+.expert-tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.expert-panel{background:var(--bg2);border-radius:8px;padding:14px;box-shadow:var(--shadow);margin-bottom:8px;border:1px solid var(--border)}
+.expert-label{font-size:.8rem;font-weight:700;margin-bottom:8px;color:var(--text)}
+.expert-card{background:var(--bg2);border-radius:8px;padding:12px;box-shadow:var(--shadow);margin-bottom:8px;border:1px solid var(--border)}
+
+/* ── Misc ── */
+.badge{background:var(--accent);color:#fff;padding:1px 7px;border-radius:10px;
+  font-size:.62rem;margin-left:4px}
+.highlight{color:var(--accent);font-weight:600}
+.score-bar{height:6px;background:var(--border);border-radius:3px;overflow:hidden;margin:4px 0;position:relative}
+.score-bar-fill{height:100%;background:var(--accent);border-radius:3px}
+.score-bar-fill.low{background:var(--red)}
+.score-bar-fill.mid{background:var(--accent2)}
+.empty{text-align:center;padding:28px 16px;color:var(--muted);font-size:.8rem}
+.empty .icon{font-size:1.8rem;margin-bottom:6px}
+.data-table{overflow-x:auto}
+.data-table table{width:100%;border-collapse:collapse;font-size:.72rem}
+.data-table th{background:var(--bg3);padding:7px 10px;text-align:left;font-weight:600;
+  border-bottom:2px solid var(--border);position:sticky;top:0;z-index:1;color:var(--muted)}
+.data-table td{padding:6px 10px;border-bottom:1px solid var(--border);color:var(--text)}
+.data-table tr:hover td{background:rgba(22,119,255,.05)}
+.metric-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;margin-bottom:12px}
+.metric-card{background:var(--bg2);border-radius:8px;padding:12px;text-align:center;
+  box-shadow:var(--shadow);border:1px solid var(--border)}
+.metric-value{font-size:1.4rem;font-weight:700;color:var(--accent)}
+.metric-label{font-size:.65rem;color:var(--muted);margin-top:3px}
+
+/* ── Settings Modal ── */
+#settingsModal,#activateModal,#initGuideModal{
+  display:none;position:fixed;inset:0;z-index:998;
+  background:rgba(0,0,0,.7);align-items:center;justify-content:center;
+}
+#settingsModal.open,#activateModal.open,#initGuideModal.open{display:flex}
+.settings-box{
+  background:var(--bg2);border:1px solid var(--border);border-radius:12px;
+  padding:0;width:520px;max-width:96vw;max-height:88vh;overflow:hidden;
+  display:flex;flex-direction:column;box-shadow:var(--shadow);
+}
+.settings-head{
+  padding:16px 20px 12px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  flex-shrink:0;
+}
+.settings-body{flex:1;overflow-y:auto;padding:16px 20px}
+.settings-footer{
+  padding:12px 20px;border-top:1px solid var(--border);display:flex;gap:8px;flex-shrink:0;
+}
+.settings-section-title{
+  font-size:.68rem;font-weight:700;color:var(--accent2);letter-spacing:.04em;
+  text-transform:uppercase;margin-bottom:10px;margin-top:4px;
+}
+.settings-field{margin-bottom:12px}
+.settings-field label{font-size:.72rem;color:var(--muted);display:block;margin-bottom:4px}
+.settings-field input,.settings-field select{
+  width:100%;padding:7px 10px;border:1px solid var(--border);border-radius:6px;
+  background:var(--bg3);color:var(--text);font-size:.8rem;outline:none;
+}
+.settings-field input:focus{border-color:var(--accent)}
+
+/* ── Image Preview Modal ── */
+#previewModal{
+  display:none;position:fixed;inset:0;z-index:999;
+  background:rgba(0,0,0,.85);align-items:center;justify-content:center;
+}
+#previewModal.open{display:flex}
+#previewModal img{max-width:90vw;max-height:90vh;border-radius:8px;box-shadow:0 8px 40px rgba(0,0,0,.6)}
+#previewModal .close-btn{
+  position:absolute;top:20px;right:24px;
+  font-size:1.6rem;color:#fff;cursor:pointer;background:none;border:none;
+  opacity:.7;transition:.15s;
+}
+#previewModal .close-btn:hover{opacity:1}
+
+/* ── Toast ── */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:9999;padding:10px 24px;border-radius:8px;font-size:.82rem;color:#fff;font-weight:600;pointer-events:none;transition:opacity .3s;opacity:0}
+</style>
+</head>
+<body>
+<!-- ── Header ── -->
+<div class="oa-header">
+  <h1>&#x1F6CD;&#xFE0F; BSC <span>OPC Agent OS</span></h1>
+  <div style="display:flex;align-items:center;gap:6px;">
+    <button class="header-chip primary" onclick="openInitGuide()">系统初始化</button>
+    <span id="licenseBadge">加载中...</span>
+    <button id="btnActivate" class="header-chip warn" onclick="openActivationDialog()" style="display:none;">激活</button>
+    <button class="btn-icon" onclick="openSettings()" title="设置">&#x2699;&#xFE0F;</button>
+  </div>
+</div>
+
+<!-- ── Body ── -->
+<div class="oa-body">
+
+  <!-- LEFT SIDEBAR -->
+  <div class="oa-sidebar">
+    <div class="sidebar-scroll">
+
+      <!-- Input Block -->
+      <div class="sidebar-block">
+        <div style="font-size:.82rem;font-weight:700;margin-bottom:8px;color:var(--accent);">Amazon Agent</div>
+        <div class="upload-zone" id="uploadZone">
+          <div class="icon">&#x1F4E4;</div>
+          <strong style="font-size:.78rem;">拖拽产品图到此处</strong>
+          <div class="hint">或点击上传 jpg / png / webp<br>作为 GPT Image-2 视觉参考</div>
+          <input type="file" id="fileInput" multiple accept=".jpg,.jpeg,.png,.webp">
+        </div>
+        <div class="preview-thumbs" id="previewThumbs"></div>
+        <div class="asin-divider">&#x2015; 或输入 ASIN 从亚马逊采集 &#x2015;</div>
+        <div class="form-row">
+          <input type="text" id="asinInput" placeholder="B0XXXXXX" maxlength="15">
+          <select id="marketplaceSelect">
+            <option value="US">US</option><option value="UK">UK</option><option value="DE">DE</option>
+            <option value="FR">FR</option><option value="JP">JP</option><option value="CA">CA</option>
+            <option value="AU">AU</option><option value="IT">IT</option><option value="ES">ES</option>
+            <option value="MX">MX</option>
+          </select>
+        </div>
+        <button class="btn-start" id="startBtn" onclick="startJob()">&#x1F4E5; 开始采集</button>
+        <div id="asinCategoryInfo" style="margin-top:6px;padding:6px 10px;background:var(--bg);border-radius:6px;font-size:.7rem;color:var(--muted);display:none;"></div>
+      </div>
+
+      <!-- Task Progress Block -->
+      <div class="sidebar-section-label">任务进度模块</div>
+      <div class="sidebar-block progress-panel" id="progressPanel">
+        <div id="steps">
+          <div class="step" id="stepCollect"><div class="step-dot"></div><div class="step-info"><div class="step-label">采集图片</div><div class="step-msg">等待开始</div></div></div>
+          <div class="step" id="stepMcp"><div class="step-dot"></div><div class="step-info"><div class="step-label">商品分析</div><div class="step-msg">等待开始</div></div></div>
+          <div class="step" id="stepExpert"><div class="step-dot"></div><div class="step-info"><div class="step-label">Rufus &amp; COSMO</div><div class="step-msg">等待开始</div></div></div>
+          <div class="step" id="stepPrompt"><div class="step-dot"></div><div class="step-info"><div class="step-label">提示词生成</div><div class="step-msg">等待开始</div></div></div>
+          <div class="step" id="stepGenerate"><div class="step-dot"></div><div class="step-info" style="flex:1"><div class="step-label">图片生成</div><div class="step-msg">等待触发生成</div><div id="genTaskList" style="margin-top:4px;display:none;"></div></div></div>
+          <div class="step" id="stepDone"><div class="step-dot"></div><div class="step-info"><div class="step-label">任务完成</div><div class="step-msg">等待完成</div></div></div>
+        </div>
+        <div class="progress-bar"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:3px;">
+          <span id="progressPercent" style="font-size:.68rem;color:var(--muted);">0%</span>
+          <span id="elapsedTime" style="font-size:.62rem;color:var(--muted);display:none;">⏱ 0s</span>
+        </div>
+        <div style="margin-top:8px;display:flex;gap:4px;">
+          <button onclick="clearAllCache()" style="width:100%;padding:8px 12px;border:1px solid rgba(239,68,68,.4);border-radius:6px;background:rgba(239,68,68,.12);color:#f87171;font-size:.7rem;cursor:pointer;transition:.15s;font-weight:600;" onmouseover="this.style.background='rgba(239,68,68,.22)';this.style.borderColor='rgba(239,68,68,.6)'" onmouseout="this.style.background='rgba(239,68,68,.12)';this.style.borderColor='rgba(239,68,68,.4)'" title="清除历史缓存、生成记录和图片记录">🗑 清除缓存记录</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="oa-main">
+
+    <!-- Horizontal Tab Bar -->
+    <div class="main-tabs-bar" id="mainTabs">
+      <button class="main-tab active" onclick="switchMainTab('material')">&#x1F3A8; 产品素材生成</button>
+      <button class="main-tab" onclick="switchMainTab('expert')">&#x1F9E0; Rufus &amp; COSMO 专家建议<span class="badge" id="expertBadge" style="display:none;">&#x2713;</span></button>
+    </div>
+
+    <div class="oa-content">
+
+      <!-- Tab Panel: 产品素材生成 -->
+      <div id="mainTabMaterial" class="main-tab-panel active">
+        <div style="padding:0 2px">
+
+          <div class="image-workspace" style="margin-top:0">
+            <div class="workspace-title">&#x1F4F7; 产品参考图片 <span class="badge" id="refImageCount">0</span></div>
+            <div class="prototype-hint" id="prototypeHint">&#x1F4CC; 点击图片设为<strong>产品原型</strong> — GPT Image-2 将以此图为参考生成新图</div>
+            <div class="ref-image-grid" id="refImageGrid">
+              <div class="empty"><div class="icon">&#x1F4F7;</div>请上传产品图片，或输入 ASIN 后点击「开始采集」<br>点击图片即可设为 GPT Image-2 生成原型</div>
+            </div>
+          </div>
+
+          <div class="image-workspace">
+            <div class="workspace-title">&#x1F4DD; GPT Image-2 提示词 <span class="badge" id="promptCount">0</span></div>
+            <div class="prompt-list" id="promptList">
+              <div class="empty"><div class="icon">&#x1F4A1;</div>提示词将在提交后自动生成<br><small>融合 Wiki 知识库 + MCP 商品语义</small></div>
+            </div>
+          </div>
+
+          <div class="image-workspace">
+            <div class="workspace-title">&#x1F5BC;&#xFE0F; 生成结果 <span class="badge" id="resultCount">0</span></div>
+            <div class="result-grid" id="resultGrid">
+              <div class="empty"><div class="icon">&#x1F5BC;&#xFE0F;</div>生成图片将在此展示<br><small>支持 PNG / PSD 格式下载</small></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Tab Panel: Rufus & COSMO 专家建议 -->
+      <div id="mainTabExpert" class="main-tab-panel">
+        <div class="expert-tabs" id="expertSubTabs">
+          <button class="expert-tab active" onclick="switchExpertTab('title')">&#x1F4DD; 标题优化</button>
+          <button class="expert-tab" onclick="switchExpertTab('bullets')">&#x1F4CB; 五点分析</button>
+          <button class="expert-tab" onclick="switchExpertTab('qa')">&#x2753; Q&A 建议</button>
+          <button class="expert-tab" onclick="switchExpertTab('selling')">&#x1F4A1; 卖点提炼</button>
+          <button class="expert-tab" onclick="switchExpertTab('insights')">&#x1F4CA; 数据洞察</button>
+        </div>
+        <div class="expert-panel" id="expertTabTitle" style="display:block;"></div>
+        <div class="expert-panel" id="expertTabBullets" style="display:none;"></div>
+        <div class="expert-panel" id="expertTabQa" style="display:none;"></div>
+        <div class="expert-panel" id="expertTabSelling" style="display:none;"></div>
+        <div class="expert-panel" id="expertTabInsights" style="display:none;"></div>
+        <div id="expertEmpty" class="empty" style="padding:40px;"><div class="icon">&#x1F9E0;</div>Rufus & COSMO 专家建议将在输入 ASIN 后生成<br><small>含标题优化、五点分析、Q&A建议、卖点提炼、数据洞察</small></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Image Preview Modal -->
+<div id="previewModal"><button class="close-btn" onclick="closePreview()">&times;</button><img id="previewImg" src="" alt=""></div>
+
+<!-- System Init Guide Modal -->
+<div id="initGuideModal">
+  <div class="settings-box" style="width:640px;">
+    <div class="settings-head">
+      <h3 style="margin:0;font-size:.9rem;">系统初始化 — 配置指南</h3>
+      <button class="btn-icon" onclick="closeInitGuide()" style="font-size:.8rem;">&#x2715;</button>
+    </div>
+    <div class="settings-body" style="max-height:70vh;overflow-y:auto;">
+      <div style="font-size:.75rem;color:var(--accent2);margin-bottom:12px;padding:10px;background:rgba(245,158,11,.08);border-radius:6px;">
+        首次使用请按以下步骤配置 API 和 MCP 服务，完成后即可正常使用全部功能。
+      </div>
+
+      <div class="settings-section-title">Step 1: 注册 APIMart API（图片生成）<span style="font-size:.6rem;color:var(--red);margin-left:6px;font-size:.7rem;">必选</span></div>
+      <div style="font-size:.72rem;color:var(--muted);margin-bottom:8px;">GPT Image-2 图像生成服务，用于将提示词转换为产品图片。</div>
+      <a href="https://apimart.ai/register?aff=iJpswH" target="_blank" style="display:inline-block;padding:6px 16px;background:var(--accent);color:#fff;border-radius:6px;text-decoration:none;font-size:.74rem;font-weight:600;margin-bottom:4px;">注册 APIMart API</a>
+      <div style="font-size:.65rem;color:var(--muted);margin-bottom:16px;">注册后在后台获取 API Key，填入设置页面。</div>
+
+      <div class="settings-section-title">Step 2: 注册 SIF MCP（流量分析）<span style="font-size:.6rem;color:var(--red);margin-left:6px;font-size:.7rem;">必选</span></div>
+      <div style="font-size:.72rem;color:var(--muted);margin-bottom:8px;">亚马逊广告流量分析与关键词运营平台。</div>
+      <a href="https://www.sif.com?utm=BSC168" target="_blank" style="display:inline-block;padding:6px 16px;background:var(--accent);color:#fff;border-radius:6px;text-decoration:none;font-size:.74rem;font-weight:600;margin-bottom:4px;">注册 SIF MCP</a>
+      <div style="font-size:.65rem;color:var(--muted);margin-bottom:16px;">注册后获取 Endpoint 和 API Key，填入设置页面。</div>
+
+      <div class="settings-section-title">Step 3: 注册 卖家精灵 MCP（关键词/竞品）<span style="font-size:.6rem;color:var(--accent2);margin-left:6px;font-size:.7rem;">可选</span></div>
+      <div style="font-size:.72rem;color:var(--muted);margin-bottom:8px;">亚马逊关键词研究与竞品分析工具，非必填。</div>
+      <a href="https://open.sellersprite.com/invite/AHS/sign/up" target="_blank" style="display:inline-block;padding:6px 16px;background:var(--accent);color:#fff;border-radius:6px;text-decoration:none;font-size:.74rem;font-weight:600;margin-bottom:4px;">注册 卖家精灵 MCP</a>
+      <div style="font-size:.65rem;color:var(--muted);margin-bottom:16px;">注册后获取 API 凭证，填入设置页面。</div>
+
+      <div class="settings-section-title">Step 4: 注册 Sorftime MCP（市场数据）<span style="font-size:.6rem;color:var(--red);margin-left:6px;font-size:.7rem;">必选</span></div>
+      <div style="font-size:.72rem;color:var(--muted);margin-bottom:8px;">亚马逊市场数据与产品分析平台。</div>
+      <a href="https://sorftime.com/mcp?tag=MjAyNjA1MDcxNzU4Mjk5NzAwMjk~" target="_blank" style="display:inline-block;padding:6px 16px;background:var(--accent);color:#fff;border-radius:6px;text-decoration:none;font-size:.74rem;font-weight:600;margin-bottom:4px;">注册 Sorftime MCP</a>
+      <div style="font-size:.65rem;color:var(--muted);margin-bottom:16px;">注册后获取 Endpoint 和 API Key，填入设置页面。</div>
+
+      <div class="settings-section-title">Step 5: 配置系统</div>
+      <div style="font-size:.72rem;color:var(--muted);margin-bottom:8px;">将以上获取的 API Key 和 Endpoint 填入系统设置，点击测试连接验证。</div>
+      <button onclick="closeInitGuide();openSettings();" style="padding:6px 16px;background:var(--accent2);color:#fff;border:none;border-radius:6px;font-size:.74rem;font-weight:600;cursor:pointer;">打开设置</button>
+
+      <div style="margin-top:16px;padding:10px;background:rgba(34,197,94,.08);border-radius:6px;font-size:.68rem;color:var(--green);">
+        提示：所有 API Key 仅本地存储，不会上传到任何第三方服务器。
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Activation Modal -->
+<div id="activateModal">
+  <div class="settings-box" style="width:480px;">
+    <div class="settings-head">
+      <h3 style="margin:0;font-size:.9rem;">软件激活</h3>
+      <button class="btn-icon" onclick="closeActivateModal()" style="font-size:.8rem;">&#x2715;</button>
+    </div>
+    <div class="settings-body">
+      <!-- Free Trial -->
+      <div style="text-align:center;padding:14px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.25);border-radius:8px;margin-bottom:12px;">
+        <div style="font-size:.85rem;font-weight:700;color:var(--green);margin-bottom:4px;">免费试用 3 天</div>
+        <div style="font-size:.68rem;color:var(--muted);margin-bottom:10px;">无需激活密钥，立即体验全部功能</div>
+        <button onclick="startTrialFromModal()" id="btnStartTrial" style="padding:8px 24px;background:var(--green);color:#fff;border:none;border-radius:6px;font-size:.78rem;font-weight:600;cursor:pointer;">开始免费试用</button>
+      </div>
+
+      <div style="text-align:center;font-size:.7rem;color:var(--muted);margin-bottom:12px;">— 或输入激活密钥 —</div>
+
+      <div style="text-align:center;margin-bottom:10px;">
+        <div style="font-size:.68rem;color:var(--muted);margin-bottom:4px;">机器码 (激活需要)</div>
+        <div style="display:flex;align-items:center;justify-content:center;gap:6px;">
+          <span id="activateMid" style="font-size:.82rem;font-weight:700;color:var(--accent2);padding:6px 10px;background:var(--bg3);border-radius:6px;cursor:pointer;" onclick="copyMachineId()" title="点击复制">加载中...</span>
+          <button onclick="copyMachineId()" title="复制机器码" style="padding:5px 8px;border:1px solid var(--border);border-radius:6px;background:var(--bg3);color:var(--text);cursor:pointer;font-size:.7rem;">📋</button>
+        </div>
+      </div>
+
+      <div class="settings-field">
+        <input type="text" id="activateKeyInput" placeholder="粘贴激活密钥到此处..." style="font-family:Consolas,monospace;text-align:center;">
+      </div>
+      <div id="activateStatus" style="font-size:.68rem;text-align:center;margin:8px 0;"></div>
+      <button class="btn btn-primary" onclick="submitActivation()" style="width:100%;padding:10px;">激活</button>
+
+      <!-- Hint -->
+      <div style="margin-top:12px;padding:10px;background:rgba(22,119,255,.06);border:1px solid rgba(22,119,255,.2);border-radius:8px;text-align:left;">
+        <div style="font-size:.7rem;font-weight:700;color:var(--accent);margin-bottom:4px;">如何获取激活密钥？</div>
+        <div style="font-size:.65rem;color:var(--muted);line-height:1.5;">
+          激活码采用 AES-256-GCM 本地验证，与机器码绑定。<br>
+          使用仓库内 <code style="color:var(--accent2)">recovery/tools/generate_license.py</code> 脚本离线生成：<br>
+          <code style="display:block;margin-top:6px;padding:4px 8px;background:var(--bg3);border-radius:4px;font-size:.62rem;color:var(--text);">python generate_license.py &lt;机器码&gt; &lt;天数&gt;</code>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Settings Modal -->
+<div id="settingsModal">
+  <div class="settings-box">
+    <div class="settings-head">
+      <h3 style="margin:0;font-size:.9rem;">&#x2699;&#xFE0F; 设置</h3>
+      <button class="btn-icon" onclick="closeSettings()" style="font-size:.8rem;">&#x2715;</button>
+    </div>
+    <div class="settings-body">
+      <div class="settings-section-title">APIMart 配置 <span style="font-size:.6rem;color:var(--red);">必选</span></div>
+      <div class="settings-field"><label>API Key</label><div style="position:relative;"><input type="password" id="cfgApimartKey" placeholder="sk-..." style="padding-right:36px;"><span onclick="togglePwd('cfgApimartKey')" style="position:absolute;right:8px;top:7px;cursor:pointer;font-size:.8rem;opacity:.5;">👁</span></div></div>
+      <div class="settings-field"><label>Base URL</label><input type="text" id="cfgApimartUrl" placeholder="https://api.apimart.ai"></div>
+      <div class="settings-field"><label>Model</label><div style="display:flex;gap:4px;"><select id="cfgApimartModel" style="flex:1;padding:7px 10px;border:1px solid var(--border);border-radius:6px;background:var(--bg3);color:var(--text);font-size:.8rem;outline:none;"></select><button onclick="fetchModels()" title="从 API 平台获取可用模型列表" style="padding:4px 8px;border:1px solid var(--border);border-radius:4px;background:var(--bg3);color:var(--text);cursor:pointer;font-size:.7rem;">🔄</button></div></div>
+      <div class="settings-field"><label>输出分辨率</label><select id="cfgApimartResolution" style="width:100%;padding:7px 10px;border:1px solid var(--border);border-radius:6px;background:var(--bg3);color:var(--text);font-size:.8rem;outline:none;"><option value="1k">1K — 标清 (1024px)</option><option value="2k">2K — 高清 (2048px)</option><option value="4k">4K — 超清 (4096px)</option></select></div>
+      <div class="settings-field"><label>输出质量</label><select id="cfgApimartQuality" style="width:100%;padding:7px 10px;border:1px solid var(--border);border-radius:6px;background:var(--bg3);color:var(--text);font-size:.8rem;outline:none;"><option value="standard">标准</option><option value="high">高质量</option></select></div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;"><button onclick="testApi('apimart')" id="btnTestApimart" style="padding:4px 12px;border:1px solid var(--border);border-radius:4px;background:var(--bg3);color:var(--text);font-size:.65rem;cursor:pointer;">🔗 测试连接</button><span id="statusApimart" style="font-size:.62rem;"></span></div>
+
+      <div class="settings-section-title" style="margin-top:16px;">SIF MCP 配置 <span style="font-size:.6rem;color:var(--red);">必选</span></div>
+      <div class="settings-field"><label>Endpoint</label><input type="text" id="cfgSifEndpoint" placeholder="https://mcp.sif.com/mcp"></div>
+      <div class="settings-field"><label>API Key</label><div style="position:relative;"><input type="password" id="cfgSifKey" placeholder="SIFmcp..."><span onclick="togglePwd('cfgSifKey')" style="position:absolute;right:8px;top:7px;cursor:pointer;font-size:.8rem;opacity:.5;">👁</span></div></div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;"><button onclick="testApi('sif')" id="btnTestSif" style="padding:4px 12px;border:1px solid var(--border);border-radius:4px;background:var(--bg3);color:var(--text);font-size:.65rem;cursor:pointer;">🔗 测试连接</button><span id="statusSif" style="font-size:.62rem;"></span></div>
+
+      <div class="settings-section-title" style="margin-top:16px;">Sorftime MCP 配置 <span style="font-size:.6rem;color:var(--red);">必选</span></div>
+      <div class="settings-field"><label>Endpoint</label><input type="text" id="cfgSorftimeEndpoint" placeholder="https://mcp.sorftime.com"></div>
+      <div class="settings-field"><label>API Key</label><div style="position:relative;"><input type="password" id="cfgSorftimeKey" placeholder="bmi4..."><span onclick="togglePwd('cfgSorftimeKey')" style="position:absolute;right:8px;top:7px;cursor:pointer;font-size:.8rem;opacity:.5;">👁</span></div></div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;"><button onclick="testApi('sorftime')" id="btnTestSorftime" style="padding:4px 12px;border:1px solid var(--border);border-radius:4px;background:var(--bg3);color:var(--text);font-size:.65rem;cursor:pointer;">🔗 测试连接</button><span id="statusSorftime" style="font-size:.62rem;"></span></div>
+
+      <div class="settings-section-title" style="margin-top:16px;">卖家精灵 MCP 配置 <span style="font-size:.6rem;color:var(--muted);">可选</span></div>
+      <div class="settings-field"><label>Endpoint</label><input type="text" id="cfgSellerspriteEndpoint" placeholder="https://open.sellersprite.com"></div>
+      <div class="settings-field"><label>API Key</label><div style="position:relative;"><input type="password" id="cfgSellerspriteKey" placeholder="ss-..."><span onclick="togglePwd('cfgSellerspriteKey')" style="position:absolute;right:8px;top:7px;cursor:pointer;font-size:.8rem;opacity:.5;">👁</span></div></div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;"><button onclick="testApi('sellersprite')" id="btnTestSellersprite" style="padding:4px 12px;border:1px solid var(--border);border-radius:4px;background:var(--bg3);color:var(--text);font-size:.65rem;cursor:pointer;">🔗 测试连接</button><span id="statusSellersprite" style="font-size:.62rem;"></span></div>
+    </div>
+    <div class="settings-footer">
+      <button class="btn btn-primary" onclick="saveSettings()">&#x1F4BE; 保存</button>
+      <button class="btn" onclick="closeSettings()">取消</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── License Status ──
+async function loadLicenseStatus() {
+  try {
+    var res = await fetch('/api/license-status');
+    var data = await res.json();
+    var badge = document.getElementById('licenseBadge');
+    var btn = document.getElementById('btnActivate');
+    if (data.status === 'active') {
+      var days = (data.days_left !== undefined) ? data.days_left : '';
+      badge.textContent = '已激活' + (days !== '' ? ' · 剩余 ' + days + ' 天' : '');
+      badge.style.background = 'rgba(34,197,94,.15)';
+      badge.style.color = 'var(--green)';
+      btn.style.display = 'none';
+      checkFirstRunSetup();
+    } else if (data.status === 'trial') {
+      var td = (data.days_left !== undefined) ? data.days_left : '';
+      badge.textContent = '试用中' + (td !== '' ? ' · 剩余 ' + td + ' 天' : '');
+      badge.style.background = 'rgba(245,158,11,.15)';
+      badge.style.color = 'var(--accent2)';
+      btn.style.display = 'inline-block';
+      checkFirstRunSetup();
+    } else if (data.status === 'expired') {
+      badge.textContent = '试用已到期';
+      badge.style.background = 'rgba(239,68,68,.15)';
+      badge.style.color = 'var(--red)';
+      btn.style.display = 'inline-block';
+    } else if (data.status === 'none') {
+      badge.textContent = '未激活 · 可试用3天';
+      badge.style.background = 'var(--bg3)';
+      badge.style.color = 'var(--muted)';
+      btn.style.display = 'inline-block';
+      // Auto-open activation dialog for first-time users
+      setTimeout(function(){ openActivationDialog(); }, 500);
+    } else {
+      badge.textContent = '未激活';
+      badge.style.background = 'var(--bg3)';
+      badge.style.color = 'var(--muted)';
+      btn.style.display = 'none';
+    }
+  } catch(e) {}
+}
+function openActivationDialog() {
+  document.getElementById('activateModal').classList.add('open');
+  document.getElementById('activateMid').textContent = '加载中...';
+  document.getElementById('activateStatus').textContent = '';
+  document.getElementById('activateKeyInput').value = '';
+  fetch('/api/license-status').then(function(r){return r.json();}).then(function(d){
+    document.getElementById('activateMid').textContent = d.mid || 'Unknown';
+  }).catch(function(){
+    document.getElementById('activateMid').textContent = '获取失败';
+  });
+}
+function closeActivateModal() { document.getElementById('activateModal').classList.remove('open'); }
+function copyMachineId() {
+  var mid = document.getElementById('activateMid').textContent;
+  navigator.clipboard.writeText(mid).then(function(){showToast('机器码已复制','success');});
+}
+async function startTrialFromModal() {
+  var btn = document.getElementById('btnStartTrial');
+  btn.disabled = true; btn.textContent = '正在激活试用...';
+  try {
+    var res = await fetch('/api/trial-start', {method:'POST'});
+    var data = await res.json();
+    if (data.status === 'ok') {
+      showToast('试用已开始 · 3天', 'success');
+      setTimeout(function(){ closeActivateModal(); loadLicenseStatus(); }, 800);
+    } else {
+      showToast(data.message||'失败', 'error');
+      btn.disabled = false; btn.textContent = '开始免费试用';
+    }
+  } catch(e) {
+    showToast('请求失败', 'error');
+    btn.disabled = false; btn.textContent = '开始免费试用';
+  }
+}
+// First-run: check required settings
+async function checkFirstRunSetup() {
+  try {
+    var res = await fetch('/api/settings');
+    var cfg = await res.json();
+    var missing = [];
+    // Redacted values (containing ***) mean it IS configured — just hidden for security
+    var hasApimart = cfg.apimart && cfg.apimart.api_key && cfg.apimart.api_key.length > 0;
+    var hasSif = cfg.sif_mcp && cfg.sif_mcp.endpoint && cfg.sif_mcp.endpoint.length > 0;
+    var hasSorftime = cfg.sorftime_mcp && cfg.sorftime_mcp.endpoint && cfg.sorftime_mcp.endpoint.length > 0;
+    if (!hasApimart) missing.push('APIMart API Key');
+    if (!hasSif) missing.push('SIF MCP Endpoint');
+    if (!hasSorftime) missing.push('Sorftime MCP Endpoint');
+    if (missing.length > 0) {
+      showToast('请先完成系统初始化配置: ' + missing.join(', '), 'error');
+      setTimeout(function(){ openInitGuide(); }, 1500);
+    }
+  } catch(e) {}
+}
+function submitActivation() {
+  var key = document.getElementById('activateKeyInput').value.trim();
+  var statusEl = document.getElementById('activateStatus');
+  if (!key) { statusEl.textContent = '请输入激活密钥'; statusEl.style.color = 'var(--red)'; return; }
+  statusEl.textContent = '验证中...'; statusEl.style.color = 'var(--accent2)';
+  fetch('/api/activate', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({code:key})})
+    .then(function(r){return r.json();})
+    .then(function(d){
+      if (d.status === 'ok') {
+        statusEl.textContent = '激活成功！到期: ' + d.exp_date + ' · 剩余: ' + d.days_left + ' 天';
+        statusEl.style.color = 'var(--green)';
+        setTimeout(function(){ closeActivateModal(); loadLicenseStatus(); }, 1500);
+      } else {
+        statusEl.textContent = d.message || '激活失败';
+        statusEl.style.color = 'var(--red)';
+      }
+    })
+    .catch(function(e){ statusEl.textContent = '请求失败: ' + e.message; statusEl.style.color = 'var(--red)'; });
+}
+loadLicenseStatus();
+
+// ── State ──
+var currentJobId = null;
+var currentAsin = null;
+var selectedPrototype = null;
+var expertData = null;
+var genCount = {};
+var eventSource = null;
+
+// ── Helpers ──
+function escHtml(s) { return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+function showToast(msg, type) {
+  var t = document.getElementById('toast');
+  if (!t) {
+    t = document.createElement('div'); t.id = 'toast'; t.className = 'toast';
+    document.querySelector('.oa-sidebar').appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.background = type==='success'?'var(--green)':type==='error'?'var(--red)':'var(--accent)';
+  t.style.opacity = '1';
+  clearTimeout(t._tid);
+  t._tid = setTimeout(function(){t.style.opacity='0';},5000);
+}
+
+// ── Tab Navigation ──
+function switchMainTab(tab) {
+  document.querySelectorAll('.main-tab').forEach(function(t){t.classList.remove('active');});
+  document.querySelectorAll('.main-tab-panel').forEach(function(p){p.classList.remove('active');});
+  var tabMap = {material:'mainTabMaterial', expert:'mainTabExpert'};
+  document.querySelector('.main-tab[onclick*="'+tab+'"]').classList.add('active');
+  document.getElementById(tabMap[tab]).classList.add('active');
+}
+
+// ── Expert Tab Switch ──
+function switchExpertTab(tab) {
+  document.querySelectorAll('#expertSubTabs .expert-tab').forEach(function(t){t.classList.remove('active');});
+  ['expertTabTitle','expertTabBullets','expertTabQa','expertTabSelling','expertTabInsights'].forEach(function(id){
+    document.getElementById(id).style.display='none';
+  });
+  var tabMap = {title:'expertTabTitle', bullets:'expertTabBullets', qa:'expertTabQa', selling:'expertTabSelling', insights:'expertTabInsights'};
+  var labels = {title:'标题', bullets:'五点', qa:'Q&A', selling:'卖点', insights:'数据洞察'};
+  var btns = document.querySelectorAll('#expertSubTabs .expert-tab');
+  for (var i=0;i<btns.length;i++) { if (btns[i].textContent.indexOf(labels[tab])!==-1) btns[i].classList.add('active'); }
+  document.getElementById(tabMap[tab]).style.display='block';
+}
+
+// ── Settings Modal ──
+function togglePwd(fid) {
+  var el = document.getElementById(fid);
+  el.type = el.type === 'password' ? 'text' : 'password';
+}
+
+// ── API Test ──
+async function testApi(service) {
+  var statusEl = document.getElementById('status'+service.charAt(0).toUpperCase()+service.slice(1));
+  var btnEl = document.getElementById('btnTest'+service.charAt(0).toUpperCase()+service.slice(1));
+  statusEl.textContent = '⏳ 检测中...'; statusEl.style.color = 'var(--accent2)';
+  btnEl.disabled = true;
+  // Collect current field values for testing (even if unsaved)
+  var body = {};
+  if (service === 'apimart') {
+    body.apimart = {api_key: document.getElementById('cfgApimartKey').value, base_url: document.getElementById('cfgApimartUrl').value};
+  } else if (service === 'sif') {
+    body.sif_mcp = {endpoint: document.getElementById('cfgSifEndpoint').value, api_key: document.getElementById('cfgSifKey').value, enabled: true};
+  } else if (service === 'sorftime') {
+    body.sorftime_mcp = {endpoint: document.getElementById('cfgSorftimeEndpoint').value, api_key: document.getElementById('cfgSorftimeKey').value, enabled: true};
+  } else if (service === 'sellersprite') {
+    body.sellersprite_mcp = {endpoint: document.getElementById('cfgSellerspriteEndpoint').value, api_key: document.getElementById('cfgSellerspriteKey').value, enabled: true};
+  }
+  try {
+    var res = await fetch('/api/test-connection/'+service, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)});
+    var data = await res.json();
+    if (data.status === 'ok') {
+      statusEl.textContent = '✅ ' + data.message; statusEl.style.color = 'var(--green)';
+    } else {
+      statusEl.textContent = '❌ ' + (data.message||'Failed'); statusEl.style.color = 'var(--red)';
+    }
+  } catch(e) {
+    statusEl.textContent = '❌ ' + e.message; statusEl.style.color = 'var(--red)';
+  }
+  btnEl.disabled = false;
+}
+
+// ── Fetch Models ──
+async function fetchModels(silent) {
+  var sel = document.getElementById('cfgApimartModel');
+  var currentVal = sel.value;
+  var key = document.getElementById('cfgApimartKey').value;
+  var base = document.getElementById('cfgApimartUrl').value;
+  if (!silent) sel.innerHTML = '<option>⏳ 获取中...</option>';
+  try {
+    var res = await fetch('/api/list-models', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({api_key:key, base_url:base})});
+    var data = await res.json();
+    var models = data.models||[];
+    if (models.length > 0) {
+      sel.innerHTML = models.map(function(m){return '<option value="'+m+'"'+(m===currentVal?' selected':'')+'>'+m+'</option>';}).join('');
+      if (!silent) showToast('已加载 ' + models.length + ' 个模型', 'success');
+    } else {
+      // Keep current value
+      sel.innerHTML = '<option value="'+currentVal+'">'+currentVal+' (API unavailable)</option>';
+      if (!silent && data.error) showToast(data.error, 'error');
+    }
+  } catch(e) {
+    sel.innerHTML = '<option value="'+currentVal+'">'+currentVal+'</option>';
+    if (!silent) showToast('获取模型列表失败', 'error');
+  }
+}
+
+function openSettings() {
+  document.getElementById('settingsModal').classList.add('open');
+  fetch('/api/settings').then(function(r){return r.json();}).then(function(cfg){
+    var am = cfg.apimart||{};
+    // Show redacted keys so user knows they're configured
+    document.getElementById('cfgApimartKey').value = am.api_key||'';
+    document.getElementById('cfgApimartUrl').value = am.base_url||'';
+    document.getElementById('cfgApimartResolution').value = am.resolution||'1k';
+    document.getElementById('cfgApimartQuality').value = am.quality||'high';
+    // Populate model dropdown with saved value
+    var savedModel = am.model||'gpt-image-2-official';
+    var modelSel = document.getElementById('cfgApimartModel');
+    modelSel.innerHTML = '<option value="'+savedModel+'">'+savedModel+'</option>';
+    // Fetch model list in background
+    fetchModels(true);
+    var sf = cfg.sif_mcp||{};
+    document.getElementById('cfgSifEndpoint').value = sf.endpoint||'';
+    document.getElementById('cfgSifKey').value = sf.api_key||'';
+    var st = cfg.sorftime_mcp||{};
+    document.getElementById('cfgSorftimeEndpoint').value = st.endpoint||'';
+    document.getElementById('cfgSorftimeKey').value = st.api_key||'';
+    var ss = cfg.sellersprite_mcp||{};
+    document.getElementById('cfgSellerspriteEndpoint').value = ss.endpoint||'';
+    document.getElementById('cfgSellerspriteKey').value = ss.api_key||'';
+    // Clear test statuses
+    document.getElementById('statusApimart').textContent = '';
+    document.getElementById('statusSif').textContent = '';
+    document.getElementById('statusSorftime').textContent = '';
+    document.getElementById('statusSellersprite').textContent = '';
+  }).catch(function(){});
+}
+function closeSettings() { document.getElementById('settingsModal').classList.remove('open'); }
+function _saveKey(formValue) {
+  // Don't overwrite real key with redacted placeholder
+  if (!formValue || formValue.indexOf('***') !== -1) return null;  // null = skip this field
+  return formValue;
+}
+function saveSettings() {
+  var sifEndpoint = document.getElementById('cfgSifEndpoint').value.trim();
+  var sifKey = document.getElementById('cfgSifKey').value.trim();
+  // Only update key if user actually typed a new one (not redacted)
+  sifKey = _saveKey(sifKey);
+  if (sifKey && sifEndpoint && !sifEndpoint.includes('secret-key=')) {
+    sifEndpoint = sifEndpoint + '?secret-key=' + sifKey;
+  }
+  // Build data object, omitting redacted/unmodified keys
+  var data = {
+    apimart: {base_url:document.getElementById('cfgApimartUrl').value, model:document.getElementById('cfgApimartModel').value, resolution:document.getElementById('cfgApimartResolution').value, quality:document.getElementById('cfgApimartQuality').value},
+    sif_mcp: {endpoint: sifEndpoint, enabled: !!sifEndpoint},
+    sorftime_mcp: {endpoint:document.getElementById('cfgSorftimeEndpoint').value, enabled:!!document.getElementById('cfgSorftimeEndpoint').value},
+    sellersprite_mcp: {endpoint:document.getElementById('cfgSellerspriteEndpoint').value, enabled:!!document.getElementById('cfgSellerspriteEndpoint').value}
+  };
+  // Only include keys that user actually changed (not redacted)
+  var ak = _saveKey(document.getElementById('cfgApimartKey').value);
+  if (ak !== null) data.apimart.api_key = ak;
+  if (sifKey !== null) data.sif_mcp.api_key = sifKey;
+  var stk = _saveKey(document.getElementById('cfgSorftimeKey').value);
+  if (stk !== null) data.sorftime_mcp.api_key = stk;
+  var ssk = _saveKey(document.getElementById('cfgSellerspriteKey').value);
+  if (ssk !== null) data.sellersprite_mcp.api_key = ssk;
+  fetch('/api/settings', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data)})
+    .then(function(r){return r.json();}).then(function(d){if(d.status==='saved'){closeSettings();showToast('设置已保存','success');}})
+    .catch(function(e){alert('保存失败: '+e.message);});
+}
+document.getElementById('settingsModal').addEventListener('click', function(e){if(e.target===this)closeSettings();});
+document.getElementById('activateModal').addEventListener('click', function(e){if(e.target===this)closeActivateModal();});
+document.getElementById('initGuideModal').addEventListener('click', function(e){if(e.target===this)closeInitGuide();});
+function openInitGuide() { document.getElementById('initGuideModal').classList.add('open'); }
+function closeInitGuide() { document.getElementById('initGuideModal').classList.remove('open'); }
+
+// ── Clear Cache ──
+async function clearAllCache() {
+  if (!confirm('确认清除所有历史缓存、生成记录和图片记录？此操作不可恢复。')) return;
+  var btn = event.target;
+  btn.disabled = true; btn.textContent = '⏳ 正在清除...';
+  try {
+    var res = await fetch('/api/clear-cache', {method:'POST'});
+    var data = await res.json();
+    if (data.status === 'cleared') {
+      showToast('已清除：' + (data.cleared.prompts||0) + ' 缓存 + ' + (data.cleared.input||0) + ' 图片 + ' + (data.cleared.output||0) + ' 输出', 'success');
+      // Reset UI
+      currentJobId = null; currentAsin = null; selectedPrototype = null; expertData = null; genCount = {};
+      document.getElementById('refImageCount').textContent = '0';
+      document.getElementById('promptCount').textContent = '0';
+      document.getElementById('resultCount').textContent = '0';
+      document.getElementById('promptList').innerHTML = '<div class="empty"><div class="icon">💡</div>提示词将在提交后自动生成<br><small>融合 Wiki 知识库 + MCP 商品语义</small></div>';
+      document.getElementById('refImageGrid').innerHTML = '<div class="empty"><div class="icon">📷</div>请上传产品图片，或输入 ASIN 后点击「开始采集」<br>点击图片即可设为 GPT Image-2 生成原型</div>';
+      document.getElementById('resultGrid').innerHTML = '<div class="empty"><div class="icon">🖼️</div>生成图片将在此展示<br><small>支持 PNG / PSD 格式下载</small></div>';
+      document.getElementById('prototypeHint').classList.remove('show');
+      document.getElementById('expertBadge').style.display = 'none';
+      document.getElementById('expertEmpty').style.display = 'block';
+      var warn = document.getElementById('expertDataWarning');
+      if (warn) warn.remove();
+      ['expertTabTitle','expertTabBullets','expertTabQa','expertTabSelling','expertTabInsights'].forEach(function(id){document.getElementById(id).innerHTML='';});
+      document.getElementById('asinCategoryInfo').style.display = 'none';
+      resetProgress();
+    }
+  } catch(e) { showToast('清除失败: '+e.message, 'error'); }
+  finally { btn.disabled = false; btn.textContent = '🗑 清除缓存记录'; }
+}
+
+// ── Image Preview Modal ──
+function previewImage(url, name) {
+  document.getElementById('previewModal').classList.add('open');
+  document.getElementById('previewImg').src = url;
+}
+function closePreview() { document.getElementById('previewModal').classList.remove('open'); }
+document.getElementById('previewModal').addEventListener('click', function(e){if(e.target===this)closePreview();});
+
+// ── Upload Zone ──
+var uploadedFiles = [];
+(function(){
+  var zone = document.getElementById('uploadZone');
+  var input = document.getElementById('fileInput');
+  zone.addEventListener('click', function(){ input.click(); });
+  zone.addEventListener('dragover', function(e){ e.preventDefault(); zone.classList.add('dragover'); });
+  zone.addEventListener('dragleave', function(){ zone.classList.remove('dragover'); });
+  zone.addEventListener('drop', function(e){
+    e.preventDefault(); zone.classList.remove('dragover');
+    handleFiles(e.dataTransfer.files);
+  });
+  input.addEventListener('change', function(){ handleFiles(input.files); });
+})();
+
+function handleFiles(files) {
+  for (var i=0;i<files.length;i++) {
+    var f = files[i];
+    if (!f.type.match(/image\/(jpeg|png|webp)/)) continue;
+    if (!uploadedFiles.some(function(uf){return uf.name===f.name && uf.size===f.size;})) {
+      uploadedFiles.push(f);
+    }
+  }
+  renderUploadThumbs();
+}
+
+function renderUploadThumbs() {
+  var container = document.getElementById('previewThumbs');
+  container.innerHTML = uploadedFiles.map(function(f,i){
+    var url = URL.createObjectURL(f);
+    return '<img src="'+url+'" alt="'+f.name+'" title="'+f.name+'" onclick="selectUploadedFile('+i+')" class="'+(selectedPrototype&&selectedPrototype._uploadIndex===i?'selected':'')+'">';
+  }).join('');
+}
+
+function selectUploadedFile(index) {
+  var f = uploadedFiles[index];
+  selectedPrototype = {url:URL.createObjectURL(f), filename:f.name, type:'uploaded', _uploadIndex:index};
+  renderUploadThumbs();
+  // Refresh prompt buttons
+  var btns = document.querySelectorAll('.btn-send-chatgpt');
+  btns.forEach(function(b){if(b.disabled){b.disabled=false;b.textContent='🚀 发送生成';}});
+  showToast('已选择: '+f.name,'success');
+}
+
+// ── Job Flow ──
+var progressTimer = null;
+var progressStartTime = null;
+function startProgressTimer() {
+  progressStartTime = Date.now();
+  document.getElementById('elapsedTime').style.display = 'inline';
+  if (progressTimer) clearInterval(progressTimer);
+  progressTimer = setInterval(function(){
+    var elapsed = Math.round((Date.now() - progressStartTime) / 1000);
+    var min = Math.floor(elapsed / 60);
+    var sec = elapsed % 60;
+    document.getElementById('elapsedTime').textContent = '⏱ ' + (min > 0 ? min + 'm ' : '') + sec + 's';
+  }, 1000);
+}
+function stopProgressTimer() {
+  if (progressTimer) { clearInterval(progressTimer); progressTimer = null; }
+}
+
+async function startJob() {
+  var asin = document.getElementById('asinInput').value.trim();
+  var marketplace = document.getElementById('marketplaceSelect').value;
+  if (!asin) { alert('请输入 ASIN'); return; }
+  var btn = document.getElementById('startBtn');
+  btn.disabled = true; btn.textContent = '⏳ 采集中...';
+  resetProgress();
+  startProgressTimer();
+  var formData = new FormData();
+  formData.append('asin', asin); formData.append('marketplace', marketplace);
+  // Append uploaded files if any
+  uploadedFiles.forEach(function(f){
+    formData.append('images', f);
+  });
+  try {
+    var res = await fetch('/api/submit', {method:'POST', body:formData});
+    var data = await res.json();
+    if (data.error) { alert(data.error); btn.disabled=false; btn.textContent='📥 开始采集'; return; }
+    currentJobId = data.job_id;
+    startSSE(currentJobId);
+  } catch(e) { alert('提交失败: '+e.message); btn.disabled=false; btn.textContent='📥 开始采集'; }
+}
+
+function startSSE(jobId) {
+  if (eventSource) eventSource.close();
+  eventSource = new EventSource('/api/stream/' + jobId);
+  eventSource.onmessage = function(e) {
+    var msg = JSON.parse(e.data);
+    updateProgress(msg);
+    if (msg.step==='mcp'&&msg.progress>=40) loadAsinCategory(jobId);
+    if (msg.step==='expert'&&msg.progress>=55) loadExpert(jobId);
+    if (msg.step==='prompt'&&msg.progress>=90) { document.getElementById('startBtn').disabled=false; document.getElementById('startBtn').textContent='📥 开始采集'; loadRefImages(jobId); loadPrompts(jobId); loadExpert(jobId); markStepDone('stepDone'); document.getElementById('progressFill').style.width='100%'; document.getElementById('progressPercent').textContent='100%'; stopProgressTimer(); }
+    if (msg.step==='error') { eventSource.close(); document.getElementById('startBtn').disabled=false; document.getElementById('startBtn').textContent='📥 开始采集'; stopProgressTimer(); }
+  };
+  eventSource.onerror = function() { setTimeout(function(){if(eventSource&&eventSource.readyState===EventSource.CLOSED)document.getElementById('startBtn').disabled=false;},3000); };
+}
+
+// ── Progress ──
+var stepMap = {collect:'stepCollect',mcp:'stepMcp',expert:'stepExpert',prompt:'stepPrompt',generate:'stepGenerate'};
+function updateProgress(msg) {
+  var stepKey = stepMap[msg.step]; if (!stepKey) return;
+  var allSteps = ['stepCollect','stepMcp','stepExpert','stepPrompt','stepGenerate','stepDone'];
+  var stepOrder = ['collect','mcp','expert','prompt','generate'];
+  var currentIdx = stepOrder.indexOf(msg.step);
+  allSteps.forEach(function(id,i){
+    var dot = document.querySelector('#'+id+' .step-dot');
+    dot.className = 'step-dot';
+    if (i<currentIdx) dot.classList.add('done');
+    else if (i===currentIdx && msg.step!=='error') dot.classList.add('active');
+  });
+  var msgEl = document.querySelector('#'+stepKey+' .step-msg');
+  if (msgEl) msgEl.textContent = msg.message;
+  if (msg.step==='prompt'&&msg.progress>=85) {
+    var pDot = document.querySelector('#stepPrompt .step-dot');
+    if (pDot) pDot.className = 'step-dot done';
+  }
+  document.getElementById('progressFill').style.width = msg.progress+'%';
+  document.getElementById('progressPercent').textContent = msg.progress+'%';
+}
+function resetProgress() {
+  ['stepCollect','stepMcp','stepExpert','stepPrompt','stepGenerate','stepDone'].forEach(function(id){
+    document.querySelector('#'+id+' .step-dot').className = 'step-dot';
+    document.querySelector('#'+id+' .step-msg').textContent = '等待开始';
+  });
+  document.getElementById('progressFill').style.width='0%';
+  document.getElementById('progressPercent').textContent='0%';
+  document.getElementById('elapsedTime').style.display = 'none';
+  document.getElementById('elapsedTime').textContent = '⏱ 0s';
+  document.getElementById('genTaskList').innerHTML='';
+  document.getElementById('genTaskList').style.display='none';
+  stopProgressTimer();
+}
+function markStepDone(stepId) {
+  var dot = document.querySelector('#'+stepId+' .step-dot');
+  if (dot) dot.className = 'step-dot done';
+}
+
+// ── Category Info ──
+async function loadAsinCategory(jobId) {
+  try {
+    var res = await fetch('/api/context/'+jobId);
+    var ctx = await res.json();
+    if (ctx.category) {
+      var el = document.getElementById('asinCategoryInfo');
+      el.style.display='block';
+      el.innerHTML = '📂 ' + escHtml(ctx.category) + (ctx.price?' | 💰 '+escHtml(ctx.price):'');
+    }
+  } catch(e){}
+}
+
+// ── Reference Images ──
+async function loadRefImages(jobId) {
+  try {
+    var statusRes = await fetch('/api/status/'+jobId);
+    var status = await statusRes.json();
+    var asin = status.asin;
+    if (!asin) return;
+    currentAsin = asin;
+    var res = await fetch('/api/images/'+asin);
+    var data = await res.json();
+    renderRefImages(data.images||[]);
+    await loadResultsByAsin(asin);
+  } catch(e){}
+}
+
+function renderRefImages(images) {
+  var refOnly = images.filter(function(img){return img.type!=='generated'&&!(img.url||'').includes('/output/');});
+  document.getElementById('refImageCount').textContent = refOnly.length + ' 张';
+  var container = document.getElementById('refImageGrid');
+  var hint = document.getElementById('prototypeHint');
+  if (refOnly.length===0) {
+    container.innerHTML='<div class="empty"><div class="icon">📷</div>请上传产品图片，或输入 ASIN 后点击「开始采集」<br>点击图片即可设为 GPT Image-2 生成原型</div>';
+    hint.classList.remove('show');
+    return;
+  }
+  hint.classList.add('show');
+  container.innerHTML = refOnly.map(function(img){
+    return '<div class="ref-image-card'+(selectedPrototype&&selectedPrototype.url===img.url?' selected':'')+'" onclick="selectPrototype(\''+img.url.replace(/'/g,"\\'")+'\',\''+img.filename.replace(/'/g,"\\'")+'\',\''+img.type+'\')" title="点击选为产品原型"><span class="img-type '+(img.type==='main'?'main':'aplus')+'">'+(img.type==='main'?'主图':'A+')+'</span><button class="ref-preview-btn" onclick="event.stopPropagation();previewImage(\''+img.url.replace(/'/g,"\\'")+'\',\''+img.filename.replace(/'/g,"\\'")+'\')" title="预览大图">🔍</button><img src="'+img.url+'" alt="'+img.filename+'" loading="lazy"><div class="img-name" title="'+img.filename+'">'+img.filename+'</div></div>';
+  }).join('');
+}
+
+function selectPrototype(url, filename, type) {
+  selectedPrototype = {url:url, filename:filename, type:type};
+  if (currentJobId) {
+    loadRefImages(currentJobId);
+    loadPrompts(currentJobId);
+  }
+}
+
+// ── Prompts ──
+async function loadPrompts(jobId) {
+  try {
+    var res = await fetch('/api/prompts/'+jobId);
+    var data = await res.json();
+    var list = data.prompts||[];
+    document.getElementById('promptCount').textContent = list.length;
+    var container = document.getElementById('promptList');
+    container.innerHTML = list.map(function(p,i){
+      var protoText = selectedPrototype ? ' · 原型: ' + selectedPrototype.filename : '';
+      return '<div class="prompt-card"><div class="ptype">'+p.type+' · '+p.aspect+'</div><div style="display:flex;align-items:flex-start;gap:6px;"><textarea class="ptext" id="promptText_'+i+'" rows="6" style="flex:1;">'+escHtml(p.prompt)+'</textarea><button class="copy-btn" onclick="copyPrompt('+i+')" title="复制" style="margin-top:2px;">📋</button></div><div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px;"><div class="pmeta" style="margin:0;">Prompt #'+(i+1)+' · 面向 gpt-image-2'+protoText+'</div></div><div class="pactions"><button class="btn-send-chatgpt" onclick="sendToChatGPT('+i+')">🚀 发送生成'+((genCount[i]||0)>0?' (已生成' + genCount[i] + '次)':'')+'</button></div></div>';
+    }).join('');
+    initGenTaskList(list);
+    if (list.length>0) switchMainTab('material');
+  } catch(e){}
+}
+
+function copyPrompt(i) {
+  var ta = document.getElementById('promptText_'+i);
+  if (ta) { ta.select(); navigator.clipboard.writeText(ta.value).then(function(){showToast('已复制','success');}); }
+}
+
+// ── Image Generation ──
+async function sendToChatGPT(promptIndex) {
+  if (!currentAsin) { alert('任务状态丢失，请重新提交'); return; }
+  var textarea = document.getElementById('promptText_'+promptIndex);
+  var editedPrompt = textarea?textarea.value.trim():'';
+  if (!editedPrompt) { alert('提示词为空，请检查'); return; }
+
+  showToast('图片生成速度取决于 GPT Image-2 平台，预计 10-60 秒，请耐心等待…', 'info');
+
+  var genDot = document.querySelector('#stepGenerate .step-dot');
+  if (genDot) genDot.className = 'step-dot active';
+  var genMsg = document.querySelector('#stepGenerate .step-msg');
+  if (genMsg) genMsg.textContent = '正在生成...';
+
+  var startTime = Date.now();
+  var currentStatus = 'uploading';
+  updateGenTask(promptIndex, 'uploading', 0);
+  var thisBtn = document.querySelectorAll('.btn-send-chatgpt')[promptIndex];
+  if (thisBtn) { thisBtn.disabled=true; thisBtn.textContent='⏳ 生成中 0s...'; }
+  var timerInterval = setInterval(function(){
+    var elapsed = Math.round((Date.now()-startTime)/1000);
+    if (elapsed>2) currentStatus = 'generating';
+    updateGenTask(promptIndex, currentStatus, elapsed);
+    if (thisBtn) { thisBtn.textContent='⏳ 生成中 ' + elapsed + 's...'; }
+  }, 1000);
+
+  try {
+    var res = await fetch('/api/send-to-chatgpt', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({asin:currentAsin,prompt_index:promptIndex,prompt_text:editedPrompt,prototype_image_url:(selectedPrototype&&selectedPrototype.type!=='uploaded')?selectedPrototype.url:'',prototype_filename:selectedPrototype?selectedPrototype.filename:''})
+    });
+    clearInterval(timerInterval);
+    var data = await res.json();
+    if (data.error) { updateGenTask(promptIndex,'failed'); alert('生成失败: '+data.error); }
+    else {
+      var elapsed = Math.round((Date.now()-startTime)/1000);
+      updateGenTask(promptIndex,'done',elapsed);
+      if (genDot) genDot.className = 'step-dot done';
+      if (genMsg) genMsg.textContent = '✓ 已完成 ('+elapsed+'s)';
+      showToast('✅ 图片已生成 ('+elapsed+'秒)','success');
+      genCount[promptIndex] = (genCount[promptIndex]||0) + 1;
+      addResultCard(data.url, data.filename, currentAsin);
+      markStepDone('stepDone');
+    }
+  } catch(e) {
+    clearInterval(timerInterval);
+    updateGenTask(promptIndex,'failed');
+    alert('请求失败: '+e.message);
+  } finally {
+    if (thisBtn) { thisBtn.disabled=false; thisBtn.textContent='🚀 发送生成'+((genCount[promptIndex]||0)>0?' (已生成' + genCount[promptIndex] + '次)':''); }
+  }
+}
+
+// ── Gen Task List ──
+function initGenTaskList(prompts) {
+  var el = document.getElementById('genTaskList');
+  if (!el||!prompts||prompts.length===0) { if(el)el.style.display='none'; return; }
+  el.style.display='block';
+  el.innerHTML = prompts.map(function(p,i){
+    return '<div style="display:flex;align-items:center;gap:6px;padding:2px 0;" id="genTask_'+i+'"><span style="width:8px;height:8px;border-radius:50%;background:var(--border);flex-shrink:0;" id="genDot_'+i+'"></span><span style="font-size:.6rem;color:var(--muted);flex:1;">'+escHtml((p.type||'')+' '+(p.aspect||''))+'</span><span style="font-size:.58rem;color:var(--muted);" id="genStatus_'+i+'">待生成</span></div>';
+  }).join('');
+}
+
+function updateGenTask(index, status, elapsed) {
+  var dot = document.getElementById('genDot_'+index);
+  var st = document.getElementById('genStatus_'+index);
+  if (dot) {
+    dot.style.background = status==='done'?'var(--green)':status==='generating'?'var(--accent)':status==='uploading'?'var(--accent2)':status==='failed'?'var(--red)':'var(--border)';
+  }
+  if (st) {
+    if (status==='done') { st.textContent='✓ 完成'; st.style.color='var(--green)'; }
+    else if (status==='generating') { st.textContent='⏳ '+(elapsed||'')+'s'; st.style.color='var(--accent)'; }
+    else if (status==='uploading') { st.textContent='↑ 上传中'; st.style.color='var(--accent2)'; }
+    else if (status==='failed') { st.textContent='✗ 失败'; st.style.color='var(--red)'; }
+  }
+}
+
+// ── Results ──
+async function loadResultsByAsin(asin) {
+  if (!asin) return;
+  currentAsin = asin;
+  try {
+    var imgRes = await fetch('/api/images/'+asin);
+    var imgData = await imgRes.json();
+    var allImages = imgData.images||[];
+    var generated = allImages.filter(function(img){return img.url&&img.url.includes('/output/');});
+    document.getElementById('resultCount').textContent = generated.length;
+    var container = document.getElementById('resultGrid');
+    // Don't wipe cards added by addResultCard — only render if grid is empty or has only the old empty-state
+    var existingCards = container.querySelectorAll('.result-card');
+    if (existingCards.length > 0) return; // Keep live-added cards, just update count above
+    if (generated.length===0) {
+      container.innerHTML = '<div class="empty"><div class="icon">🖼️</div>生成图片将在此展示<br><small>选中产品原型图 + 点击提示词按钮来生成</small></div>';
+      return;
+    }
+    container.innerHTML = generated.map(function(g){
+      return '<div class="result-card"><span class="label">'+g.filename+'</span><img src="'+g.url+'" alt="'+g.filename+'" loading="lazy" onclick="previewImage(\''+g.url+'\',\''+g.filename+'\')" title="点击预览"><div class="actions"><a class="dl-png" href="'+g.url+'" download>📥 导出PNG图片</a><a class="dl-psd" href="#" data-name="'+g.filename.replace('.png','')+'" data-asin="'+asin+'" onclick="exportPSD(this.dataset.name,this.dataset.asin);return false;">📦 导出PSD图片</a></div></div>';
+    }).join('');
+  } catch(e) {}
+}
+
+function addResultCard(url, filename, asin) {
+  var container = document.getElementById('resultGrid');
+  var emptyEl = container.querySelector('.empty');
+  if (emptyEl) emptyEl.remove();
+  var card = document.createElement('div');
+  card.className = 'result-card';
+  card.innerHTML = '<span class="label">'+filename+'</span><img src="'+url+'" alt="'+filename+'" loading="lazy" onclick="previewImage(\''+url+'\',\''+filename+'\')" title="点击预览"><div class="actions"><a class="dl-png" href="'+url+'" download>📥 导出PNG图片</a><a class="dl-psd" href="#" data-name="'+filename.replace('.png','')+'" data-asin="'+asin+'" onclick="exportPSD(this.dataset.name,this.dataset.asin);return false;">📦 导出PSD图片</a></div>';
+  container.insertBefore(card, container.firstChild);
+  // Scroll result into view
+  card.scrollIntoView({behavior:'smooth',block:'nearest'});
+  var badge = document.getElementById('resultCount');
+  badge.textContent = (parseInt(badge.textContent)||0) + 1;
+}
+
+async function exportPSD(name, asin) {
+  try {
+    var res = await fetch('/api/export-psd', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name_stem:name,asin:asin})});
+    if (res.ok) {
+      var blob = await res.blob();
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url; a.download = name+'.psd';
+      document.body.appendChild(a); a.click();
+      document.body.removeChild(a); URL.revokeObjectURL(url);
+      showToast('PSD 导出成功','success');
+    } else { alert('PSD导出失败，请稍后再试'); }
+  } catch(e) { alert('PSD导出失败: '+e.message); }
+}
+
+// ── Expert Suggestions ──
+async function loadExpert(jobId) {
+  try {
+    var res = await fetch('/api/expert-suggestions/'+jobId);
+    var data = await res.json();
+    if (data.error) return;
+    expertData = data;
+    document.getElementById('expertEmpty').style.display = 'none';
+    document.getElementById('expertBadge').style.display = 'inline-block';
+    renderDataWarning(data);
+    renderTitleSuggestions(data.title_suggestion);
+    renderBulletsAnalysis(data.bullets_analysis);
+    renderQaSuggestions(data.qa_suggestions);
+    renderSellingPoints(data.selling_points);
+    renderDataInsights(data.data_insights);
+  } catch(e){}
+}
+
+// Shown above the expert panels when MCP data is missing so users never
+// mistake template fallback for real analysis.
+function renderDataWarning(data) {
+  var existing = document.getElementById('expertDataWarning');
+  if (existing) existing.remove();
+  if (!data || !data.is_template_fallback) return;
+
+  var dq = data.data_quality || {};
+  var fails = [].concat(dq.sif_fail||[], dq.sorftime_fail||[]);
+  var ok = [].concat(dq.sif_ok||[], dq.sorftime_ok||[]);
+
+  var banner = document.createElement('div');
+  banner.id = 'expertDataWarning';
+  banner.style.cssText =
+    'background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.45);'+
+    'border-left:4px solid var(--red);border-radius:6px;padding:10px 12px;'+
+    'margin-bottom:10px;font-size:.72rem;color:var(--text);';
+
+  var html =
+    '<div style="font-weight:700;color:var(--red);margin-bottom:4px;">'+
+    '⚠️ 本次输出为模板占位文案，并非基于真实商品数据</div>'+
+    '<div style="color:var(--muted);line-height:1.5;">'+
+    'MCP 数据采集未能为该 ASIN 拿到实际字段（标题/五点/关键词均为空），'+
+    '下方所有建议都只是模板填空，换任何 ASIN 都一样。请检查 MCP 连通性与配额。</div>';
+
+  if (fails.length) {
+    html += '<details style="margin-top:6px;"><summary style="cursor:pointer;'+
+            'font-size:.68rem;color:var(--muted);">失败的数据源（'+
+            fails.length+'）</summary>'+
+            '<ul style="margin:4px 0 0 18px;padding:0;font-size:.66rem;'+
+            'color:var(--muted);">';
+    fails.forEach(function(f){ html += '<li>'+escHtml(String(f))+'</li>'; });
+    html += '</ul></details>';
+  }
+  if (ok.length) {
+    html += '<div style="margin-top:4px;font-size:.66rem;color:var(--green);">'+
+            '✓ 成功的数据源：'+ok.map(escHtml).join(', ')+'</div>';
+  }
+  banner.innerHTML = html;
+
+  // Insert above the expert sub-tabs so it's always visible
+  var subTabs = document.getElementById('expertSubTabs');
+  if (subTabs && subTabs.parentNode) {
+    subTabs.parentNode.insertBefore(banner, subTabs);
+  }
+}
+
+function renderTitleSuggestions(ts) {
+  var el = document.getElementById('expertTabTitle');
+  if (!ts) { el.innerHTML='<div class="empty">标题建议暂不可用</div>'; return; }
+  var ca = ts.cosmo_analysis||{};
+  var html = '';
+
+  // ── Score + Grade card ──
+  var sc = ca.title_score||0;
+  var scColor = sc>=80?'var(--green)':sc>=60?'var(--accent2)':'var(--red)';
+  html += '<div class="expert-card" style="text-align:center;">';
+  html += '<div class="expert-label">📊 标题 COSMO 评分</div>';
+  html += '<div style="font-size:2.2rem;font-weight:800;color:'+scColor+';">'+sc+'<span style="font-size:.8rem;">/100</span></div>';
+  html += '<div style="font-size:.8rem;font-weight:600;color:'+scColor+';margin:4px 0;">'+escHtml(ca.title_grade||'')+'</div>';
+  html += '<div style="font-size:.62rem;color:var(--muted);">'+escHtml(ca.improvement||'')+'</div>';
+  html += '</div>';
+
+  // ── Structure check cards ──
+  html += '<div class="expert-card"><div class="expert-label">🔍 标题结构检测</div>';
+  (ca.structure_checks||[]).forEach(function(c){
+    var icon = c.present ? '✅' : '❌';
+    var col = c.present ? 'var(--green)' : 'var(--red)';
+    html += '<div style="display:flex;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid var(--border);font-size:.7rem;">';
+    html += '<span>'+icon+'</span>';
+    html += '<span style="font-weight:600;min-width:80px;">'+escHtml(c.element)+'</span>';
+    html += '<span style="color:'+col+';flex:1;">'+escHtml(c.detail)+'</span>';
+    html += '</div>';
+  });
+  html += '<div style="font-size:.65rem;color:var(--muted);margin-top:6px;">通过 ' + ca.present_count + '/' + ca.total_checks + ' 项检测</div>';
+  html += '</div>';
+
+  // ── Original title ──
+  html += '<div class="expert-card"><div class="expert-label">📌 原始标题（Amazon Listing）</div>';
+  html += '<p style="color:var(--text);font-size:.78rem;line-height:1.5;">'+escHtml(ts.original||'')+'</p>';
+  html += '<div style="font-size:.62rem;color:var(--muted);margin-top:4px;">数据来源：' + escHtml(ca.data_note||'MCP采集') + '</div>';
+  html += '</div>';
+
+  // ── Keyword gaps ──
+  var gaps = ca.keyword_gaps||[];
+  if (gaps.length > 0) {
+    html += '<div class="expert-card" style="border-left:3px solid var(--accent2);"><div class="expert-label">⚠️ 标题缺失的高流量词</div>';
+    html += '<div style="display:flex;flex-wrap:wrap;gap:4px;">';
+    gaps.forEach(function(k){
+      html += '<span style="font-size:.64rem;background:rgba(245,158,11,.12);padding:3px 8px;border-radius:10px;color:var(--accent2);">'+escHtml(k)+'</span>';
+    });
+    html += '</div>';
+    html += '<div style="font-size:.62rem;color:var(--muted);margin-top:6px;">以上关键词在标题中未被覆盖，建议融入以提升搜索曝光</div>';
+    html += '</div>';
+  }
+
+  // ── Suggestions ──
+  html += '<div class="expert-card" style="border-left:3px solid var(--accent);"><div class="expert-label">💡 优化建议</div>';
+  (ca.suggestions||[]).forEach(function(s,i){
+    html += '<div style="display:flex;gap:6px;padding:3px 0;font-size:.7rem;"><span style="color:var(--accent);">'+(i+1)+'.</span><span>'+escHtml(s)+'</span></div>';
+  });
+  html += '</div>';
+
+  // ── Optimized preview ──
+  html += '<div class="expert-card" style="border-left:3px solid var(--green);"><span class="expert-label">✅ 优化标题参考（中文）</span><div style="display:flex;align-items:flex-start;gap:6px;"><p id="optTitleZh" class="highlight" style="font-size:.78rem;flex:1;margin:0;">'+escHtml(ts.optimized||'')+'</p><button class="copy-btn" onclick="navigator.clipboard.writeText(document.getElementById(\'optTitleZh\').textContent);showToast(\'已复制\',\'success\')" title="复制">📋</button></div></div>';
+  html += '<div class="expert-card"><span class="expert-label">🌐 English Title Suggestion</span><div style="display:flex;align-items:flex-start;gap:6px;"><p id="optTitleEn" style="font-size:.76rem;flex:1;margin:0;">'+escHtml(ts.en_optimized||'')+'</p><button class="copy-btn" onclick="navigator.clipboard.writeText(document.getElementById(\'optTitleEn\').textContent);showToast(\'Copied\',\'success\')" title="复制">📋</button></div></div>';
+
+  el.innerHTML = html;
+}
+
+function renderBulletsAnalysis(ba) {
+  var el = document.getElementById('expertTabBullets');
+  if (!ba||!ba.bullets) { el.innerHTML='<div class="empty">五点分析暂不可用</div>'; return; }
+  var scCls = ba.overall_score<40?'color:var(--red);':ba.overall_score<70?'color:var(--accent2);':'color:var(--green);';
+  var html = '<div class="expert-card"><div class="expert-label">📊 综合评估</div><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:1.8rem;font-weight:700;'+scCls+'">'+ba.overall_score+'</span><span style="font-size:.75rem;">/ 100</span><span style="font-size:.7rem;color:var(--muted);">'+escHtml(ba.summary||'')+'</span></div></div>';
+  for (var i=0;i<ba.bullets.length;i++) {
+    var b = ba.bullets[i];
+    var sc = b.cosmo_score;
+    var barCls = sc<40?'low':sc<70?'mid':'';
+    var scColor = sc<40?'var(--red)':sc<70?'var(--accent2)':'var(--green)';
+    html += '<div class="expert-card"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;"><h4 style="margin:0;font-size:.74rem;">Bullet '+(b.index||'?')+' <span style="font-weight:400;color:var(--muted);">— '+escHtml(b.type||'')+'</span></h4><span style="font-size:.68rem;color:'+scColor+';font-weight:600;">COSMO '+sc+'/100</span></div>';
+    html += '<div class="score-bar" style="margin-bottom:4px;"><div class="score-bar-fill '+barCls+'" style="width:'+sc+'%;"></div></div>';
+    html += '<div style="font-size:.68rem;color:var(--muted);margin-bottom:4px;">原始: '+escHtml(b.original)+'</div>';
+    html += '<div style="background:var(--bg);padding:6px 8px;border-radius:4px;margin-bottom:4px;"><span style="font-size:.62rem;color:var(--muted);">建议（中文）</span><div style="display:flex;align-items:flex-start;gap:6px;"><p style="font-size:.72rem;margin:0;flex:1;">'+escHtml(b.suggestion_zh||'')+'</p><button class="copy-btn" onclick="navigator.clipboard.writeText(this.parentElement.querySelector(\'p\').textContent);showToast(\'已复制\',\'success\')" title="复制">📋</button></div></div>';
+    html += '<div style="padding:4px 8px;"><span style="font-size:.62rem;color:var(--muted);">Suggestion (English)</span><div style="display:flex;align-items:flex-start;gap:6px;"><p style="font-size:.68rem;margin:0;color:var(--muted);flex:1;">'+escHtml(b.suggestion_en||'')+'</p><button class="copy-btn" onclick="navigator.clipboard.writeText(this.parentElement.querySelector(\'p\').textContent);showToast(\'Copied\',\'success\')" title="复制">📋</button></div></div></div>';
+  }
+  el.innerHTML = html;
+}
+
+function renderQaSuggestions(qs) {
+  var el = document.getElementById('expertTabQa');
+  if (!qs||!qs.qa_pairs) { el.innerHTML='<div class="empty">Q&A建议暂不可用</div>'; return; }
+  var html = '<div class="expert-card"><div class="expert-label">🤖 Rufus 智能 Q&A</div><p style="font-size:.7rem;color:var(--muted);margin:0;">共 '+qs.total+' 组优化问答</p></div>';
+  for (var i=0;i<qs.qa_pairs.length;i++) {
+    var q = qs.qa_pairs[i];
+    var qid = 'qa'+i;
+    html += '<div class="expert-card"><div style="margin-bottom:6px;"><span style="font-weight:600;font-size:.72rem;">🇨🇳 Q'+(i+1)+'</span><div style="font-size:.7rem;color:var(--accent);margin:3px 0;">'+escHtml(q.q_zh||'')+'</div><div style="display:flex;align-items:flex-start;gap:6px;"><div id="'+qid+'_zh_a" style="font-size:.74rem;flex:1;">'+escHtml(q.a_zh||'')+'</div><button class="copy-btn" onclick="navigator.clipboard.writeText(document.getElementById(\''+qid+'_zh_a\').textContent);showToast(\'已复制\',\'success\')" title="复制">📋</button></div></div>';
+    html += '<div style="background:var(--bg);padding:6px 10px;border-radius:4px;"><span style="font-weight:600;font-size:.68rem;">🇺🇸 Q'+(i+1)+'</span><div style="font-size:.66rem;color:var(--accent2);margin:2px 0;">'+escHtml(q.q_en||'')+'</div><div style="display:flex;align-items:flex-start;gap:6px;"><div id="'+qid+'_en_a" style="font-size:.7rem;flex:1;">'+escHtml(q.a_en||'')+'</div><button class="copy-btn" onclick="navigator.clipboard.writeText(document.getElementById(\''+qid+'_en_a\').textContent);showToast(\'Copied\',\'success\')" title="复制">📋</button></div></div></div>';
+  }
+  el.innerHTML = html;
+}
+
+function renderSellingPoints(sp) {
+  var el = document.getElementById('expertTabSelling');
+  if (!sp) { el.innerHTML='<div class="empty">卖点分析暂不可用</div>'; return; }
+  var html = '';
+  if (sp.top_3&&sp.top_3.length) {
+    html += '<div class="expert-card" style="border-left:3px solid var(--green);"><div class="expert-label">🏆 Top 3 核心卖点</div>';
+    sp.top_3.forEach(function(t,i){ html += '<div style="display:flex;gap:8px;padding:4px 8px;background:var(--bg);border-radius:4px;margin-bottom:4px;"><span style="font-weight:700;color:var(--accent);">'+(i+1)+'</span><span style="font-size:.72rem;">'+escHtml(t||'')+'</span></div>'; });
+    html += '</div>';
+  }
+  var pts = sp.extracted_points||[];
+  if (pts.length) {
+    html += '<div class="expert-card"><div class="expert-label">🔍 COSMO 强度评估</div>';
+    pts.forEach(function(p){
+      var sc = p.cosmo_strength||0;
+      var barCls = sc<50?'low':sc<70?'mid':'';
+      html += '<div style="margin-bottom:6px;padding:6px 8px;background:var(--bg);border-radius:4px;"><div style="display:flex;align-items:center;gap:6px;margin-bottom:2px;"><span style="font-size:.66rem;font-weight:600;">强度: '+sc+'/100</span><div class="score-bar" style="flex:1;margin:0;"><div class="score-bar-fill '+barCls+'" style="width:'+sc+'%;"></div></div></div><p style="font-size:.7rem;margin:2px 0;">'+escHtml(p.text||'')+'</p></div>';
+    });
+    html += '</div>';
+  }
+  if (sp.cosmo_advice) {
+    html += '<div class="expert-card" style="border-left:3px solid var(--accent2);"><div class="expert-label">🤖 COSMO 专项建议</div><p style="font-size:.72rem;">'+escHtml(sp.cosmo_advice)+'</p></div>';
+  }
+  el.innerHTML = html||'<div class="empty">卖点分析数据不足</div>';
+}
+
+function renderDataInsights(di) {
+  var el = document.getElementById('expertTabInsights');
+  if (!di) { el.innerHTML='<div class="empty">数据洞察暂不可用</div>'; return; }
+  var ov = di.overview||{};
+  var kw = di.keyword_health||{};
+  var bh = di.bullets_health||{};
+  var ms = di.market_signals||{};
+  var html = '';
+
+  // ═══ Page title ═══
+  html += '<div style="margin-bottom:10px;">';
+  html += '<div style="font-size:.85rem;font-weight:700;color:var(--text);">📊 数据洞察面板</div>';
+  html += '<div style="font-size:.65rem;color:var(--muted);margin-top:2px;">' + escHtml(di.data_quality_note||'') + '</div>';
+  html += '</div>';
+
+  // ═══ TOP ROW: 2-column dashboard ═══
+  html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">';
+
+  // Left: Listing Health Score card
+  var score = bh.avg_score || 0;
+  var scoreCls = score >= 70 ? 'var(--green)' : score >= 45 ? 'var(--accent2)' : 'var(--red)';
+  var grade = score >= 70 ? 'A' : score >= 55 ? 'B' : score >= 40 ? 'C' : 'D';
+  html += '<div class="expert-card" style="text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;">';
+  html += '<div style="font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Listing 健康评分</div>';
+  html += '<div style="width:80px;height:80px;border-radius:50%;border:4px solid ' + scoreCls + ';display:flex;align-items:center;justify-content:center;margin:4px 0;">';
+  html += '<span style="font-size:1.8rem;font-weight:800;color:' + scoreCls + ';">' + score + '</span>';
+  html += '</div>';
+  html += '<span style="font-size:.8rem;font-weight:700;color:' + scoreCls + ';">等级 ' + grade + '</span>';
+  html += '<span style="font-size:.6rem;color:var(--muted);margin-top:2px;">' + (score >= 55 ? 'Rufus 推荐优先级较高' : score >= 40 ? '中等偏下 · 有改善空间' : '需重点关注优化') + '</span>';
+  html += '</div>';
+
+  // Right: Quick Stats
+  html += '<div class="expert-card">';
+  html += '<div style="font-size:.7rem;font-weight:700;color:var(--text);margin-bottom:8px;">⚡ 关键指标</div>';
+  html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:.68rem;">';
+  html += '<div><span style="color:var(--muted);">类目</span><br><span style="color:var(--text);font-weight:600;">' + escHtml((ov.category||'—').substring(0,25)) + '</span></div>';
+  html += '<div><span style="color:var(--muted);">品牌</span><br><span style="color:var(--text);font-weight:600;">' + escHtml(ov.brand||'未识别') + '</span></div>';
+  html += '<div><span style="color:var(--muted);">价格</span><br><span style="color:var(--accent2);font-weight:700;">' + escHtml(ov.price||'—') + '</span></div>';
+  html += '<div><span style="color:var(--muted);">评分</span><br><span style="color:var(--text);font-weight:600;">' + escHtml(ov.rating||'—') + '</span></div>';
+  html += '<div><span style="color:var(--muted);">流量词</span><br><span style="color:var(--accent);font-weight:700;">' + kw.total + ' 个</span></div>';
+  html += '<div><span style="color:var(--muted);">多样性</span><br><span style="color:var(--text);font-weight:600;">' + escHtml(kw.diversity||'—') + '</span></div>';
+  html += '</div></div>';
+
+  html += '</div>'; // end top row
+
+  // ═══ MIDDLE ROW: Bullets detail + Keyword radar ═══
+  html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">';
+
+  // Left: Bullets breakdown
+  html += '<div class="expert-card"><div style="font-size:.7rem;font-weight:700;color:var(--text);margin-bottom:8px;">📝 五点评分明细</div>';
+  (bh.details||[]).forEach(function(d){
+    var barCls = d.score >= 70 ? '' : d.score >= 50 ? 'mid' : 'low';
+    var col = d.score >= 70 ? 'var(--green)' : d.score >= 50 ? 'var(--accent2)' : 'var(--red)';
+    html += '<div style="margin-bottom:6px;">';
+    html += '<div style="display:flex;justify-content:space-between;font-size:.6rem;margin-bottom:2px;">';
+    html += '<span style="color:var(--muted);">Bullet ' + d.index + '</span>';
+    html += '<span style="font-weight:600;color:' + col + ';">' + d.score + '/100</span>';
+    html += '</div>';
+    html += '<div style="height:4px;background:var(--border);border-radius:2px;overflow:hidden;">';
+    html += '<div style="height:100%;width:' + d.score + '%;background:' + col + ';border-radius:2px;transition:width .5s;"></div>';
+    html += '</div>';
+    html += '</div>';
+  });
+  html += '<div style="font-size:.62rem;color:var(--muted);margin-top:6px;padding:4px 6px;background:var(--bg);border-radius:4px;">' + escHtml(bh.judgment||'') + '</div>';
+  html += '</div>';
+
+  // Right: Keywords
+  html += '<div class="expert-card"><div style="font-size:.7rem;font-weight:700;color:var(--text);margin-bottom:8px;">🔑 流量词覆盖</div>';
+  html += '<div style="font-size:.64rem;color:var(--muted);margin-bottom:6px;">' + escHtml(kw.coverage_judgment||'') + '</div>';
+  html += '<div class="data-table" style="max-height:180px;overflow-y:auto;"><table>';
+  html += '<tr><th>#</th><th>关键词</th><th>独立词</th></tr>';
+  (kw.top5||[]).forEach(function(k,i){
+    html += '<tr><td style="color:var(--muted);">' + (i+1) + '</td><td>' + escHtml(k) + '</td><td style="color:var(--muted);">✓</td></tr>';
+  });
+  html += '</table></div>';
+  html += '</div>';
+
+  html += '</div>'; // end middle row
+
+  // ═══ BOTTOM: Market + Recommendations ═══
+  html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">';
+
+  // Left: Market context
+  html += '<div class="expert-card"><div style="font-size:.7rem;font-weight:700;color:var(--text);margin-bottom:8px;">📡 市场环境</div>';
+  html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:.66rem;">';
+  html += '<div><span style="color:var(--muted);">数据源</span><br><span style="color:var(--accent2);font-weight:600;">' + escHtml(ms.mcp_sources||'—') + '</span></div>';
+  html += '<div><span style="color:var(--muted);">数据质量</span><br><span style="color:var(--accent);font-weight:600;">' + escHtml(ms.data_quality||'—') + '</span></div>';
+  html += '</div>';
+  if ((ms.cosmo_intents||[]).length > 0) {
+    html += '<div style="margin-top:8px;font-size:.62rem;color:var(--muted);">COSMO 意图标签</div>';
+    html += '<div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:3px;">';
+    ms.cosmo_intents.forEach(function(ci){
+      html += '<span style="font-size:.58rem;background:rgba(22,119,255,.12);padding:2px 7px;border-radius:8px;color:var(--accent);">' + escHtml(ci) + '</span>';
+    });
+    html += '</div>';
+  }
+  html += '</div>';
+
+  // Right: Recommendations
+  html += '<div class="expert-card" style="border:1px solid rgba(245,158,11,.3);"><div style="font-size:.7rem;font-weight:700;color:var(--accent2);margin-bottom:8px;">🎯 行动建议</div>';
+  (di.recommendations||[]).forEach(function(r){
+    var icon = r.priority==='high'?'🔴':r.priority==='medium'?'🟡':'🟢';
+    html += '<div style="display:flex;gap:6px;padding:4px 0;border-bottom:1px solid var(--border);font-size:.66rem;align-items:flex-start;">';
+    html += '<span style="flex-shrink:0;width:20px;text-align:center;">' + icon + '</span>';
+    html += '<div style="flex:1;"><span style="font-weight:600;color:var(--text);">' + escHtml(r.area) + '</span>';
+    html += '<div style="color:var(--muted);font-size:.62rem;">' + escHtml(r.action) + '</div></div>';
+    html += '</div>';
+  });
+  html += '</div>';
+
+  html += '</div>'; // end bottom row
+
+  el.innerHTML = html;
+}
+</script>
+</body>
+</html>
